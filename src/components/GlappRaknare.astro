@@ -102,7 +102,7 @@ const data = {
     $('g-conv').innerHTML = [
       [nf(people), 'personer över jämförelsenivån'],
       [dec(Math.max(0, st.u - st[lvl])), 'procentenheter över jämförelsenivån'],
-      [dec((hrs * AR) / 1e9) + ' mdr', `arbetstimmar per år (${AR} arbetsdagar)`],
+      [nf((hrs * AR) / 1e6) + ' milj.', `arbetstimmar per år (${AR} arbetsdagar)`],
     ].map(([b, s]) => `<div><b>${b}</b><span>${s}</span></div>`).join('');
     for (const b of document.querySelectorAll<HTMLButtonElement>('#g-lvl button')) b.setAttribute('aria-pressed', String(b.dataset.k === lvl));
     cur.hrs = hrs;
