@@ -2,7 +2,8 @@
 // Arbetskraftsglappet: förlorade arbetstimmar per dag mot vald jämförelsenivå.
 // Värdena kommer från src/data/aku.json (SCB, hämtas automatiskt), glapp.json och motsvarar.json.
 import glapp from '../data/glapp.json';
-import motsvarar from '../data/motsvarar.json';
+import motsvarData from '../data/motsvarar.json';
+const motsvarar = motsvarData.enheter;
 import aku from '../data/aku.json';
 
 const MAN = ['januari','februari','mars','april','maj','juni','juli','augusti','september','oktober','november','december'];
@@ -14,6 +15,7 @@ const exempel = jamforelser.filter((j: any) => j.exempel).map((j: any) => j.namn
 const data = {
   glapp: { ...glapp, jamforelser, standard, arbetskraft: aku.arbetskraft, arbetsloshet: aku.arbetsloshet },
   motsvarar,
+  lyft: motsvarData.lyft,
 };
 ---
 <div class="calc" aria-labelledby="gap-h">
@@ -21,6 +23,7 @@ const data = {
 <h2 id="gap-h" style="font-size:20px;margin-bottom:12px">Arbetskraftsglappet</h2>
 <div class="big" id="g-hours">0</div>
 <div class="unit">arbetstimmar går förlorade varje arbetsdag</div>
+<p class="lyft" id="g-lyft" aria-live="polite"></p>
 <div class="rows" id="g-rows" role="list"></div>
 <div class="conv" id="g-conv"></div>
 <div class="what" aria-labelledby="what-h">
@@ -29,12 +32,14 @@ const data = {
 {motsvarar.map((m) => <button type="button" data-k={m.id}>{m.namn}</button>)}
 </div>
 <div class="res" id="w-res" aria-live="polite"></div>
-<div class="assume"><label for="w-h" style="margin:0;font-weight:400">Antagande, arbetstimmar per enhet:</label><input id="w-h" type="number" inputmode="numeric" min="0.1" step="any"><span id="w-note"></span></div>
+<div class="assume"><label for="w-h" style="margin:0;font-weight:400">Arbetstimmar per enhet:</label><input id="w-h" type="number" inputmode="numeric" min="0.1" step="any"><span id="w-note"></span></div>
+<p class="note" style="margin-top:6px">Metod: {motsvarData.metod.beskrivning} Källa: {motsvarData.metod.kalla} Siffrorna är grova och går att ändra.</p>
 </div>
 <details class="note"><summary>Källor</summary>
 <p>Faktisk arbetslöshet och arbetskraft: SCB, arbetskraftsundersökningarna (AKU), {manad(aku.period)}. Säsongrensade och utjämnade värden, 15–74 år.</p>
 {jamforelser.map((j: any) => <p>{j.namn}: {j.auto ? `SCB, AKU. Uppmättes ${manad(aku.lagstaSedan.period)}.` : j.kalla}</p>)}
 {exempel.length > 0 && <p>Exempelvärden som ännu inte är kontrollerade: {exempel.join(', ')}.</p>}
+<p>Malmbanan: {motsvarData.lyft.kalla}</p>
 <p>Alla värden går att ändra.</p>
 </details>
 </div>
@@ -56,12 +61,21 @@ const data = {
 
 <script>
   type Jmf = { id: string; namn: string; varde: number };
-  type Mot = { id: string; namn: string; enhet: string; timmar: number; not: string };
+  type Mot = { id: string; namn: string; enhet: string; timmar: number; not: string; kalla: string };
   const $ = (id: string) => document.getElementById(id)!;
-  const { glapp, motsvarar } = JSON.parse($('glapp-data').textContent || '{}') as {
+  const { glapp, motsvarar, lyft } = JSON.parse($('glapp-data').textContent || '{}') as {
     glapp: { standard: string; arbetskraft: number; arbetsloshet: number; timmarPerDag: number; arbetsdagarPerAr: number; jamforelser: Jmf[] };
     motsvarar: Mot[];
+    lyft: { namn: string; timmar: number; tillagg: string; kalla: string };
   };
+  const ORD = ['', '', 'andra', 'tredje', 'fjärde', 'femte', 'sjätte', 'sjunde', 'åttonde', 'nionde', 'tionde'];
+  function lyftText(hrs: number) {
+    if (hrs <= 0) return '';
+    const d = lyft.timmar / hrs;
+    const n = Math.round(d);
+    const nar = d < 1.5 ? 'Varje arbetsdag' : `Var ${n <= 10 ? ORD[n] : n + ':e'} arbetsdag`;
+    return `${nar} går lika mycket arbetstid förlorad som ${lyft.namn} kräver. ${lyft.tillagg}`;
+  }
   const LV = glapp.jamforelser;
   const D: Record<string, number> = { lf: glapp.arbetskraft, u: glapp.arbetsloshet, h: glapp.timmarPerDag };
   for (const j of LV) D[j.id] = j.varde;
@@ -90,7 +104,7 @@ const data = {
     $('w-res').innerHTML = `${fmt(n)} <small>${esc(c.enhet)}, varje arbetsdag. På ett år: ${fmt(n * AR)}.</small>`;
     const wh = $('w-h') as HTMLInputElement;
     if (document.activeElement !== wh) wh.value = String(per);
-    $('w-note').textContent = c.not + ' Grov uppskattning, ändra gärna.';
+    $('w-note').textContent = `${c.not} Källa: ${c.kalla}`;
     for (const b of document.querySelectorAll<HTMLButtonElement>('#w-chips button')) b.setAttribute('aria-pressed', String(b.dataset.k === c.id));
     try { localStorage.setItem('rer-what', JSON.stringify({ k: cur.k, h: cur.h })); } catch (e) {}
   }
@@ -100,6 +114,8 @@ const data = {
     const people = gap(st[lvl]);
     const hrs = people * st.h;
     $('g-hours').textContent = nf(hrs);
+    $('g-lyft').textContent = lyftText(hrs);
+    $('g-lyft').title = lyft.kalla;
     const max = Math.max(1, ...LV.map((j) => gap(st[j.id]) * st.h));
     $('g-rows').innerHTML = LV.map((j) => {
       const v = gap(st[j.id]) * st.h;
