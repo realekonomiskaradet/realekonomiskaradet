@@ -126,3 +126,18 @@ details.note p{margin:4px 0}
 .fraga-lankar a{display:inline-flex;align-items:center;min-height:44px;padding:8px 16px;border:2px solid var(--main);border-radius:4px;text-decoration:none;font-weight:600}
 .fraga-lankar a:hover{background:var(--soft)}
 :root[data-theme=dark] .fraga-lankar a{border-color:#5fb9c9}
+.linje{margin:0 0 24px;max-width:760px}
+.linje svg{width:100%;height:auto;font:12px "Public Sans",system-ui,sans-serif}
+.linje text{fill:var(--mute)}
+.linje .grid{stroke:var(--line)}
+.linje .ref{stroke:var(--acc);stroke-dasharray:4 4}
+.linje .reftext{fill:var(--acc);font-weight:600}
+.linje .serie{fill:none;stroke:var(--main);stroke-width:2.5}
+:root[data-theme=dark] .linje .serie{stroke:#5fb9c9}
+.linje .punkt{fill:var(--main)}
+.linje figcaption{font-size:14px;color:var(--mute)}
+.lista{display:grid;gap:0;border-top:1px solid var(--line);max-width:880px}
+.lista article{display:grid;grid-template-columns:1fr auto;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
+.lista h3{margin:0 0 4px}
+.lista p{margin:0;color:var(--mute)}
+.lista .meta{font-size:14px;color:var(--mute);white-space:nowrap}

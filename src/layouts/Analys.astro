@@ -1,0 +1,18 @@
+---
+// Layout för analyser och debattartiklar.
+import Bas from './Bas.astro';
+const { frontmatter: f } = Astro.props;
+const datum = new Date(f.datum).toLocaleDateString('sv-SE', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Bas titel={f.titel} beskrivning={f.ingress}>
+<div class="sub"><div class="band"><div class="wrap">
+<a class="back" href="/analys/">← Analys</a>
+<h1>{f.titel}</h1>
+{f.ingress && <p class="lead" style="opacity:1;margin:0">{f.ingress}</p>}
+<p style="margin:12px 0 0;font-size:14px;opacity:.85">{f.forfattare ?? 'Erik Arnell'} · {datum}{f.publicerad && ` · Publicerad i ${f.publicerad}`}</p>
+</div></div></div>
+<div class="band"><div class="wrap prose">
+<slot />
+{f.ramverk && <p class="note" style="margin-top:32px">Bygger på <a href="/ramverket/">ramverket</a>, punkt {f.ramverk.join(', ')}.</p>}
+</div></div>
+</Bas>

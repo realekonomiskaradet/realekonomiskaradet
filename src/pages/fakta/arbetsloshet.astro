@@ -1,0 +1,40 @@
+---
+import Bas from '../../layouts/Bas.astro';
+import Linje from '../../components/Linje.astro';
+import aku from '../../data/aku.json';
+import glapp from '../../data/glapp.json';
+const MAN = ['januari','februari','mars','april','maj','juni','juli','augusti','september','oktober','november','december'];
+const manad = (p: string) => `${MAN[Number(p.slice(5)) - 1]} ${p.slice(0, 4)}`;
+const nf = (n: number) => Math.round(n).toLocaleString('sv-SE');
+const dec = (n: number) => n.toLocaleString('sv-SE', { maximumFractionDigits: 1 });
+const ki = glapp.jamforelser.find((j: any) => j.id === 'ki')!;
+const fr = glapp.jamforelser.find((j: any) => j.id === 'fr')!;
+const serie = aku.historik as [string, number][];
+const ettArSedan = serie[serie.length - 13];
+---
+<Bas titel="Arbetslöshet" beskrivning="Arbetslösheten i Sverige, månad för månad, med officiell statistik från SCB.">
+<div class="sub"><div class="band"><div class="wrap">
+<a class="back" href="/fakta/">← Fakta</a>
+<h1>Arbetslöshet</h1>
+<p class="lead" style="opacity:1;margin:0">{dec(aku.arbetsloshet)} procent av arbetskraften var arbetslös i {manad(aku.period)}. Det är {nf(aku.arbetslosa)} personer som vill och kan arbeta men inte har ett jobb.</p>
+</div></div></div>
+<div class="band"><div class="wrap prose">
+<div class="conv" style="max-width:760px;margin-bottom:28px">
+<div><b>{dec(aku.arbetsloshet)} %</b><span>arbetslöshet, {manad(aku.period)}</span></div>
+<div><b>{dec(ettArSedan[1])} %</b><span>för ett år sedan</span></div>
+<div><b>{dec(aku.lagstaSedan.varde)} %</b><span>lägsta sedan 2001, uppmätt {manad(aku.lagstaSedan.period)}</span></div>
+</div>
+<Linje serie={serie} etikett="Arbetslöshet i procent av arbetskraften, 15–74 år, säsongrensad, de senaste fem åren" referens={[{ varde: ki.varde, namn: 'KI:s jämviktsnivå' }, { varde: fr.varde, namn: 'Friktionsnivå' }]} />
+
+<h3>Så läser du siffran</h3>
+<p>Arbetslös är den som saknar arbete, har sökt arbete de senaste fyra veckorna och kan börja inom två veckor. Arbetskraften är de som arbetar plus de arbetslösa. Siffran är säsongrensad, så att till exempel sommarjobb inte påverkar jämförelsen mellan månader.</p>
+<p>Konjunkturinstitutet bedömer att en arbetslöshet på {dec(ki.varde)} procent är förenlig med stabil inflation. Det kallas jämviktsarbetslöshet. Friktionsnivån, {dec(fr.varde)} procent, är RER:s antagande om den arbetslöshet som finns även när det finns jobb till alla: människor som byter jobb, flyttar eller just har gått ut skolan.</p>
+<p>Skillnaden mellan faktisk arbetslöshet och friktionsnivån är arbetstid som går förlorad. På <a href="/">startsidan</a> kan du räkna ut hur mycket.</p>
+
+<h3>Vad säger ramverket?</h3>
+<p>Ingen myndighet har i uppdrag att hålla arbetslösheten låg. Arbetslösheten används som buffert mot inflation. Se <a href="/ramverket/">Ramverket</a>, punkt 7, och <a href="/kunskapsbank/vem-ansvarar/">Vem ansvarar för sysselsättningen?</a></p>
+
+<h3>Källa</h3>
+<p>{aku.kalla} Hämtad {aku.hamtad}. Uppdateras automatiskt varje månad. Jämviktsnivån: {ki.kalla}</p>
+</div></div>
+</Bas>

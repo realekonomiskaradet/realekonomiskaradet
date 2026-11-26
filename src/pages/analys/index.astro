@@ -1,0 +1,30 @@
+---
+import Bas from '../../layouts/Bas.astro';
+// Varje text är en Markdown-fil i den här mappen. Se README för mall.
+const filer = import.meta.glob('./*.md', { eager: true }) as Record<string, any>;
+const texter = Object.entries(filer)
+  .map(([fil, m]) => ({ url: m.url ?? `/analys/${fil.slice(2, -3)}/`, ...m.frontmatter }))
+  .filter((t) => !t.utkast)
+  .sort((a, b) => String(b.datum).localeCompare(String(a.datum)));
+const datum = (d: string) => new Date(d).toLocaleDateString('sv-SE', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Bas titel="Analys" beskrivning="Analyser och debattartiklar från Realekonomiska rådet.">
+<div class="sub"><div class="band"><div class="wrap">
+<h1>Analys</h1>
+<p class="lead" style="opacity:1;margin:0">Kommentarer till Riksbankens räntebesked, Konjunkturinstitutets prognoser, budgeten och ny statistik. Alla texter utgår från <a href="/ramverket/" style="color:inherit">ramverket</a>.</p>
+</div></div></div>
+<div class="band"><div class="wrap">
+{texter.length === 0 && <p>De första texterna publiceras här under början av 2027.</p>}
+<div class="lista">
+{texter.map((t) => (
+  <article>
+    <div>
+      <h3><a href={t.externLank ?? t.url}>{t.titel}</a></h3>
+      <p>{t.ingress}</p>
+    </div>
+    <div class="meta">{t.publicerad ? `${t.publicerad}, ` : ''}{datum(t.datum)}</div>
+  </article>
+))}
+</div>
+</div></div>
+</Bas>
