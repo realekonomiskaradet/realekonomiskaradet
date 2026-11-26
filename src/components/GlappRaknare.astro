@@ -10,9 +10,10 @@ const MAN = ['januari','februari','mars','april','maj','juni','juli','augusti','
 const manad = (p: string) => `${MAN[Number(p.slice(5)) - 1]} ${p.slice(0, 4)}`;
 const jamforelser = glapp.jamforelser.map((j: any) =>
   j.auto ? { ...j, varde: aku.lagstaSedan.varde } : j);
+const standard = (jamforelser.find((j: any) => j.standard) || jamforelser[0]).id;
 const exempel = jamforelser.filter((j: any) => j.exempel).map((j: any) => j.namn);
 const data = {
-  glapp: { ...glapp, jamforelser, arbetskraft: aku.arbetskraft, arbetsloshet: aku.arbetsloshet },
+  glapp: { ...glapp, jamforelser, standard, arbetskraft: aku.arbetskraft, arbetsloshet: aku.arbetsloshet },
   motsvarar,
   lyft: motsvarData.lyft,
 };
@@ -46,7 +47,7 @@ const data = {
 <div>
 <label id="lvl-l">Jämför med</label>
 <div class="seg" id="g-lvl" role="group" aria-labelledby="lvl-l">
-{jamforelser.map((j: any, i: number) => <button type="button" data-k={j.id} aria-pressed={i === 0 ? 'true' : 'false'}>{j.namn}</button>)}
+{jamforelser.map((j: any) => <button type="button" data-k={j.id} aria-pressed={j.id === standard ? 'true' : 'false'}>{j.namn}</button>)}
 </div>
 </div>
 <div><label for="g-lf">Arbetskraften, antal personer</label><input id="g-lf" data-f="lf" type="number" inputmode="numeric" min="0" step="10000"></div>
@@ -63,7 +64,7 @@ const data = {
   type Mot = { id: string; namn: string; enhet: string; timmar: number; not: string; kalla: string };
   const $ = (id: string) => document.getElementById(id)!;
   const { glapp, motsvarar, lyft } = JSON.parse($('glapp-data').textContent || '{}') as {
-    glapp: { arbetskraft: number; arbetsloshet: number; timmarPerDag: number; arbetsdagarPerAr: number; jamforelser: Jmf[] };
+    glapp: { standard: string; arbetskraft: number; arbetsloshet: number; timmarPerDag: number; arbetsdagarPerAr: number; jamforelser: Jmf[] };
     motsvarar: Mot[];
     lyft: { namn: string; timmar: number; tillagg: string; kalla: string };
   };
@@ -81,7 +82,7 @@ const data = {
   const AR = glapp.arbetsdagarPerAr;
 
   const st: Record<string, number> = { ...D };
-  let lvl = LV[0].id;
+  let lvl = glapp.standard || LV[0].id;
   const cur: { k: string; hrs: number; h: Record<string, number> } = { k: motsvarar[0].id, hrs: 0, h: {} };
   try {
     const w = JSON.parse(localStorage.getItem('rer-what') || 'null');
