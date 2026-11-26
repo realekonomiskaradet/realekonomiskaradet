@@ -1,0 +1,111 @@
+---
+// Arbetskraftsglappet: förlorade arbetstimmar per dag mot vald jämförelsenivå.
+// Värdena kommer från src/data/glapp.json och src/data/motsvarar.json.
+import glapp from '../data/glapp.json';
+import motsvarar from '../data/motsvarar.json';
+const data = { glapp, motsvarar };
+---
+<div class="calc" aria-labelledby="gap-h">
+<div>
+<h2 id="gap-h" style="font-size:20px;margin-bottom:12px">Arbetskraftsglappet</h2>
+<div class="big" id="g-hours">0</div>
+<div class="unit">arbetstimmar går förlorade varje arbetsdag</div>
+<div class="rows" id="g-rows" role="list"></div>
+<div class="conv" id="g-conv"></div>
+<div class="what" aria-labelledby="what-h">
+<h3 id="what-h" style="margin-bottom:10px">Vad motsvarar det?</h3>
+<div class="chips" id="w-chips" role="group" aria-label="Välj jämförelse">
+{motsvarar.map((m) => <button type="button" data-k={m.id}>{m.namn}</button>)}
+</div>
+<div class="res" id="w-res" aria-live="polite"></div>
+<div class="assume"><label for="w-h" style="margin:0;font-weight:400">Antagande, arbetstimmar per enhet:</label><input id="w-h" type="number" inputmode="numeric" min="0.1" step="any"><span id="w-note"></span></div>
+</div>
+{glapp.exempel && <p class="note">Räkneexempel med exempelvärden. I drift hämtas uppgifterna från SCB:s arbetskraftsundersökningar (AKU) och Konjunkturinstitutet.</p>}
+</div>
+<div class="inp">
+<div>
+<label id="lvl-l">Jämför med</label>
+<div class="seg" id="g-lvl" role="group" aria-labelledby="lvl-l">
+{glapp.jamforelser.map((j, i) => <button type="button" data-k={j.id} aria-pressed={i === 0 ? 'true' : 'false'}>{j.namn}</button>)}
+</div>
+</div>
+<div><label for="g-lf">Arbetskraften, antal personer</label><input id="g-lf" data-f="lf" type="number" inputmode="numeric" min="0" step="10000"></div>
+<div><label for="g-u">Faktisk arbetslöshet, procent</label><input id="g-u" data-f="u" type="number" inputmode="decimal" min="0" max="40" step="0.1"></div>
+{glapp.jamforelser.map((j) => <div><label for={`g-${j.id}`}>{j.etikett}</label><input id={`g-${j.id}`} data-f={j.id} type="number" inputmode="decimal" min="0" max="40" step="0.1"></div>)}
+<div><label for="g-h">Timmar per arbetsdag</label><input id="g-h" data-f="h" type="number" inputmode="decimal" min="1" max="12" step="0.5"></div>
+<p class="note" style="margin:0"><button type="button" id="g-reset" class="knapp">Återställ värdena</button></p>
+</div>
+</div>
+<script type="application/json" id="glapp-data" set:html={JSON.stringify(data)}></script>
+
+<script>
+  type Jmf = { id: string; namn: string; varde: number };
+  type Mot = { id: string; namn: string; enhet: string; timmar: number; not: string };
+  const $ = (id: string) => document.getElementById(id)!;
+  const { glapp, motsvarar } = JSON.parse($('glapp-data').textContent || '{}') as {
+    glapp: { arbetskraft: number; arbetsloshet: number; timmarPerDag: number; arbetsdagarPerAr: number; jamforelser: Jmf[] };
+    motsvarar: Mot[];
+  };
+  const LV = glapp.jamforelser;
+  const D: Record<string, number> = { lf: glapp.arbetskraft, u: glapp.arbetsloshet, h: glapp.timmarPerDag };
+  for (const j of LV) D[j.id] = j.varde;
+  const AR = glapp.arbetsdagarPerAr;
+
+  let st: Record<string, number> = { ...D };
+  let lvl = LV[0].id;
+  const cur: { k: string; hrs: number; h: Record<string, number> } = { k: motsvarar[0].id, hrs: 0, h: {} };
+  try {
+    const s = JSON.parse(localStorage.getItem('rer-gap') || 'null');
+    if (s) st = { ...D, ...s };
+    const w = JSON.parse(localStorage.getItem('rer-what') || 'null');
+    if (w) { cur.k = w.k || cur.k; cur.h = w.h || {}; }
+  } catch (e) {}
+
+  const inputs = [...document.querySelectorAll<HTMLInputElement>('.calc input[data-f]')];
+  for (const i of inputs) i.value = String(st[i.dataset.f!]);
+  const nf = (n: number) => Math.round(n).toLocaleString('sv-SE');
+  const dec = (n: number) => n.toLocaleString('sv-SE', { maximumFractionDigits: 1 });
+  const gap = (lev: number) => Math.max(0, ((st.u - lev) / 100) * st.lf);
+  const esc = (t: string) => t.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
+  function what() {
+    const c = motsvarar.find((x) => x.id === cur.k) || motsvarar[0];
+    const per = cur.h[c.id] || c.timmar;
+    const n = cur.hrs / per;
+    const fmt = (v: number) => (v >= 100 ? nf(v) : dec(v));
+    $('w-res').innerHTML = `${fmt(n)} <small>${esc(c.enhet)}, varje arbetsdag. På ett år: ${fmt(n * AR)}.</small>`;
+    const wh = $('w-h') as HTMLInputElement;
+    if (document.activeElement !== wh) wh.value = String(per);
+    $('w-note').textContent = c.not + ' Grov uppskattning, ändra gärna.';
+    for (const b of document.querySelectorAll<HTMLButtonElement>('#w-chips button')) b.setAttribute('aria-pressed', String(b.dataset.k === c.id));
+    try { localStorage.setItem('rer-what', JSON.stringify({ k: cur.k, h: cur.h })); } catch (e) {}
+  }
+
+  function draw() {
+    for (const i of inputs) { const v = parseFloat(i.value); st[i.dataset.f!] = isFinite(v) ? v : D[i.dataset.f!]; }
+    try { localStorage.setItem('rer-gap', JSON.stringify(st)); } catch (e) {}
+    const people = gap(st[lvl]);
+    const hrs = people * st.h;
+    $('g-hours').textContent = nf(hrs);
+    const max = Math.max(1, ...LV.map((j) => gap(st[j.id]) * st.h));
+    $('g-rows').innerHTML = LV.map((j) => {
+      const v = gap(st[j.id]) * st.h;
+      return `<div class="row${j.id === lvl ? ' on' : ''}" role="listitem"><span>${esc(j.namn)} (${dec(st[j.id])} %)</span><div class="track"><div class="fill" style="width:${((v / max) * 100).toFixed(1)}%"></div></div><span class="v">${nf(v)} h</span></div>`;
+    }).join('');
+    $('g-conv').innerHTML = [
+      [nf(people), 'personer över jämförelsenivån'],
+      [dec(Math.max(0, st.u - st[lvl])), 'procentenheter över jämförelsenivån'],
+      [dec((hrs * AR) / 1e9) + ' mdr', `arbetstimmar per år (${AR} arbetsdagar)`],
+    ].map(([b, s]) => `<div><b>${b}</b><span>${s}</span></div>`).join('');
+    for (const b of document.querySelectorAll<HTMLButtonElement>('#g-lvl button')) b.setAttribute('aria-pressed', String(b.dataset.k === lvl));
+    cur.hrs = hrs;
+    what();
+  }
+
+  $('g-lvl').addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest('button'); if (b) { lvl = b.dataset.k!; draw(); } });
+  $('w-chips').addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest('button'); if (b) { cur.k = b.dataset.k!; what(); } });
+  $('w-h').addEventListener('input', () => { const v = parseFloat(($('w-h') as HTMLInputElement).value); if (isFinite(v) && v > 0) { cur.h[cur.k] = v; what(); } });
+  for (const i of inputs) i.addEventListener('input', draw);
+  $('g-reset').addEventListener('click', () => { for (const i of inputs) i.value = String(D[i.dataset.f!]); cur.h = {}; draw(); });
+  draw();
+</script>

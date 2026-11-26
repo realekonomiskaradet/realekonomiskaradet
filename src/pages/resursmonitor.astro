@@ -1,0 +1,25 @@
+---
+import Bas from '../layouts/Bas.astro';
+import matt from '../data/matt.json';
+---
+<Bas titel="Resursmonitor">
+<div class="sub"><div class="band"><div class="wrap">
+<h1>Resursmonitor</h1>
+<p class="lead" style="opacity:1;margin:0">Vad har Sverige för förmåga, och hur mycket av den används? Monitorn redovisar arbetskraft, kapacitet, energi och material. Statens budgetsaldo kommer sist.</p>
+</div></div></div>
+<div class="band"><div class="wrap">
+<h2>Mått och källor</h2>
+<p style="max-width:70ch">Varje mått har en egen metodsida med definition, källa och kända svagheter. Första utgåvan publiceras i mars 2027.</p>
+<table class="stack">
+<thead><tr><th>Område</th><th>Mått</th><th>Källa</th><th>Frekvens</th><th>Status</th></tr></thead>
+<tbody>
+{matt.map((m) => (
+  <tr>
+    <td data-l="Område">{m.omrade}</td><td data-l="Mått">{m.matt}</td><td data-l="Källa">{m.kalla}</td><td data-l="Frekvens">{m.frekvens}</td>
+    <td data-l="Status"><span class={m.status === 'Prototyp' ? 'tag live' : 'tag'}>{m.status}</span></td>
+  </tr>
+))}
+</tbody>
+</table>
+</div></div>
+</Bas>

@@ -1,0 +1,14 @@
+{
+  "kommentar": "Exempelvärden. Ersätts av automatiskt hämtade data från SCB och KI.",
+  "exempel": true,
+  "arbetskraft": 5950000,
+  "arbetsloshet": 8.7,
+  "timmarPerDag": 8,
+  "arbetsdagarPerAr": 220,
+  "jamforelser": [
+    { "id": "ki", "namn": "KI:s jämviktsskattning", "etikett": "Jämviktsarbetslöshet enligt KI, procent", "varde": 7.3 },
+    { "id": "low", "namn": "Lägsta sedan 1993", "etikett": "Lägsta arbetslöshet sedan 1993, procent", "varde": 6.0 },
+    { "id": "pw", "namn": "Lägsta under efterkrigstiden", "etikett": "Lägsta arbetslöshet under efterkrigstiden, procent", "varde": 1.6 },
+    { "id": "fr", "namn": "Friktionsnivå", "etikett": "Friktionsnivå, procent", "varde": 3.0 }
+  ]
+}

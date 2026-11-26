@@ -1,0 +1,9 @@
+[
+  { "id": "op", "namn": "Höftledsoperationer", "enhet": "höftledsoperationer, inklusive eftervård", "timmar": 60, "not": "Operation, vårdtid och rehabilitering." },
+  { "id": "lgh", "namn": "Lägenheter", "enhet": "lägenheter på 70 kvadratmeter", "timmar": 1500, "not": "Arbete på byggarbetsplatsen." },
+  { "id": "rals", "namn": "Kilometer järnväg", "enhet": "kilometer ny dubbelspårig järnväg", "timmar": 60000, "not": "Bana, el och signaler, ej projektering." },
+  { "id": "dron", "namn": "Drönare", "enhet": "drönare för försvaret", "timmar": 25, "not": "Mindre drönare, montering och test." },
+  { "id": "fsk", "namn": "Förskolor", "enhet": "nya förskolor med sex avdelningar", "timmar": 45000, "not": "Byggnaden, ej personal." },
+  { "id": "lar", "namn": "Lärarår", "enhet": "lärare i tjänst under ett helt läsår", "timmar": 1700, "not": "En heltidstjänst under ett år." },
+  { "id": "hem", "namn": "Hemtjänstbesök", "enhet": "hemtjänstbesök på en timme", "timmar": 1.25, "not": "Besöket och resan dit." }
+]

@@ -1,0 +1,18 @@
+---
+// Layout för textsidor skrivna i Markdown.
+import Bas from './Bas.astro';
+const { frontmatter } = Astro.props;
+const titel = frontmatter?.titel ?? '';
+const ingress = frontmatter?.ingress;
+const tillbaka = frontmatter?.tillbaka;
+---
+<Bas titel={titel} beskrivning={ingress}>
+<div class="sub"><div class="band"><div class="wrap">
+{tillbaka && <a class="back" href={tillbaka[0]}>← {tillbaka[1]}</a>}
+<h1>{titel}</h1>
+{ingress && <p class="lead" style="opacity:1;margin:0">{ingress}</p>}
+</div></div></div>
+<div class="band"><div class="wrap prose">
+<slot />
+</div></div>
+</Bas>

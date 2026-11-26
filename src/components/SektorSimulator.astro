@@ -1,0 +1,42 @@
+---
+// Förenklad simulator för sektorsbalanserna. Startvärden kan ändras här.
+const start = { w: 7, d: 0.5, x: 5 };
+---
+<div class="sim" data-start={JSON.stringify(start)}>
+<div class="inp">
+<div><label for="s-w">Hushållens och företagens önskade sparande, procent av BNP</label><input id="s-w" type="range" min="0" max="12" step="0.5"><output id="s-wo"></output></div>
+<div><label for="s-d">Statens underskott, procent av BNP</label><input id="s-d" type="range" min="-4" max="10" step="0.5"><output id="s-do"></output></div>
+<div><label for="s-x">Bytesbalansens överskott, procent av BNP</label><input id="s-x" type="range" min="-6" max="10" step="0.5"><output id="s-xo"></output></div>
+<p class="note" style="margin:0">Förenklad modell. Svaret gäller ett år. Startvärdena är exempel nära Sveriges läge under senare år: små underskott i staten, stort överskott mot utlandet.</p>
+</div>
+<div>
+<div class="sb" id="s-bars"></div>
+<div class="verdict" id="s-v" aria-live="polite"></div>
+</div>
+</div>
+
+<script>
+  const $ = (id: string) => document.getElementById(id)!;
+  const box = document.querySelector<HTMLElement>('.sim')!;
+  const sv: Record<string, number> = JSON.parse(box.dataset.start || '{}');
+  const keys = ['w', 'd', 'x'];
+  for (const k of keys) ($('s-' + k) as HTMLInputElement).value = String(sv[k]);
+  const dec = (v: number) => v.toLocaleString('sv-SE', { maximumFractionDigits: 1 });
+  const pc = (v: number) => (v > 0 ? '+' : '') + dec(v) + ' %';
+  function sim() {
+    for (const k of keys) { sv[k] = parseFloat(($('s-' + k) as HTMLInputElement).value); $('s-' + k + 'o').textContent = dec(sv[k]) + ' %'; }
+    const act = sv.d + sv.x, gap = sv.w - act;
+    const R: [string, number, number | null][] = [['Staten', -sv.d, null], ['Hushåll och företag', act, sv.w], ['Utlandet', -sv.x, null]];
+    const m = 12, pos = (v: number) => 50 + (Math.max(-m, Math.min(m, v)) / m) * 50;
+    $('s-bars').innerHTML = R.map(([t, v, w]) => {
+      const a = pos(Math.min(0, v)), b = pos(Math.max(0, v));
+      return `<div class="sbr"><span>${t}</span><div class="axis"><i class="${v < 0 ? 'neg' : ''}" style="left:${a}%;width:${b - a}%"></i>${w !== null ? `<b style="left:calc(${pos(w)}% - 1px)" title="Önskat sparande"></b>` : ''}</div><span class="v" style="text-align:right">${pc(v)}</span></div>`;
+    }).join('') + '<p class="note" style="margin:0">Staplarna summerar alltid till noll. Det svarta strecket visar hushållens och företagens önskade sparande.</p>';
+    const v = $('s-v');
+    if (gap > 0.05) { v.className = 'verdict'; v.innerHTML = `<b>Glapp: ${dec(gap)} procent av BNP.</b> Hushåll och företag vill spara mer än staten och utlandet tillför. Antingen minskar de sina utgifter, och då faller försäljning och sysselsättning tills inkomsterna har sjunkit så mycket att sparönskan krymper, eller så lånar de för att hålla uppe utgifterna, och då växer de privata skulderna.`; }
+    else if (gap < -0.05) { v.className = 'verdict ok'; v.innerHTML = `<b>Överskott: ${dec(-gap)} procent av BNP.</b> Det tillförs mer än hushåll och företag vill spara. De spenderar mer. Om ekonomin redan är fullt sysselsatt stiger priserna.`; }
+    else { v.className = 'verdict ok'; v.innerHTML = '<b>I balans.</b> Det sparande som tillförs motsvarar det önskade sparandet.'; }
+  }
+  for (const k of keys) $('s-' + k).addEventListener('input', sim);
+  sim();
+</script>

@@ -1,0 +1,21 @@
+---
+import Bas from '../../layouts/Bas.astro';
+const filer = import.meta.glob('./*.md', { eager: true }) as Record<string, any>;
+const forslag = Object.entries(filer)
+  .map(([fil, m]) => ({ url: m.url ?? `/policylab/${fil.slice(2, -3)}/`, ...m.frontmatter }))
+  .sort((a, b) => (a.ordning ?? 99) - (b.ordning ?? 99));
+---
+<Bas titel="Policylab">
+<div class="sub"><div class="band"><div class="wrap">
+<h1>Policylab</h1>
+<p class="lead" style="opacity:1;margin:0">Förslag som utgår från vad Sverige har för arbetskraft, material och energi. Frågan är inte om det finns pengar, utan om det finns resurser.</p>
+</div></div></div>
+<div class="band"><div class="wrap"><div class="policy">
+{forslag.map((f) => (
+  <article>
+    <div><h3><a href={f.url}>{f.titel}</a></h3><p>{f.ingress}</p></div>
+    <div><span class="tag">{f.status}</span></div>
+  </article>
+))}
+</div></div></div>
+</Bas>
