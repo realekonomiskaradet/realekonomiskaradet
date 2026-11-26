@@ -1,16 +1,15 @@
-## Hi there 👋
+# Realekonomiska rådet
 
-<!--
-**realekonomiskaradet/realekonomiskaradet** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+Källkod för realekonomiskaradet.se.
 
-Here are some ideas to get you started:
+Vi mäter Sveriges förmåga, inte bara vår bokföring.
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+## Struktur
+
+- `public/index.html` – första prototypen av sajten: start med glappräknare, resursmonitor, kunskapsbank, policylab och om RER. Alla siffror är exempelvärden.
+
+## Plan
+
+1. Flytta prototypen till Astro, med texter i Markdown.
+2. Automatisk datahämtning från SCB (AKU) och Konjunkturinstitutet via GitHub Actions.
+3. Publicering via Cloudflare Pages eller Netlify.

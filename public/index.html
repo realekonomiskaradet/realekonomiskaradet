@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Realekonomiska rådet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: sakligt, myndighetsmässigt, lugnt. Siffror först.
+   IDEA: en statlig årsredovisning där resurserna redovisas före kronorna.
+   PICTURE: glappräknaren, med förlorade arbetstimmar som stor siffra och en stapel per jämförelsenivå.
+   COLOUR and TYPE: vit botten, djup petrol (#0c4a57) i heltäckande fält, korallröd accent. Public Sans för rubriker och text, Source Serif för längre läsning.
+   LAYOUT: petrolband med rubrik och räknare, sedan sektioner med enkel spalt. Navigation via hash. */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#0b1a1e);--ink:light-dark(#10191c,#e7eef0);--mute:light-dark(#4d5d62,#9fb2b7);
+--line:light-dark(#d7e0e2,#22363b);--soft:light-dark(#eef4f5,#12262b);
+--main:light-dark(#0c4a57,#0f3b45);--onmain:#f2f8f9;--acc:light-dark(#d8442b,#ff7a5c)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.6 "Public Sans",system-ui,sans-serif;overflow-x:clip}
+a{color:inherit}
+.band{padding:clamp(28px,4vw,64px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+header.top{background:var(--main);color:var(--onmain)}
+.bar{display:flex;flex-wrap:wrap;gap:8px 28px;align-items:center;justify-content:space-between;padding:16px max(5vw,16px);max-width:1240px;margin:0 auto}
+.logo{display:flex;gap:12px;align-items:center;text-decoration:none;font-weight:700;font-size:17px;letter-spacing:.01em}
+.logo svg{flex:none}
+nav{display:flex;flex-wrap:wrap;gap:4px}
+nav a{text-decoration:none;padding:10px 12px;border-radius:4px;font-weight:600;font-size:15px;min-height:44px;display:inline-flex;align-items:center}
+nav a[aria-current=page]{background:rgba(255,255,255,.14)}
+nav a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.hero{background:var(--main);color:var(--onmain);padding-top:clamp(16px,3vw,40px)}
+h1,h2,h3{line-height:1.08;text-wrap:balance;margin:0 0 .4em;font-weight:700}
+h1{font-size:clamp(32px,4.6vw,50px)}
+h2{font-size:clamp(26px,3vw,36px)}
+h3{font-size:19px;line-height:1.3}
+.lead{font-size:19px;max-width:62ch;opacity:.92;margin:0 0 28px}
+.calc{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:clamp(20px,3vw,48px);background:var(--bg);color:var(--ink);border-radius:6px;padding:clamp(18px,3vw,36px)}
+.big{font-size:clamp(44px,7vw,84px);font-weight:700;line-height:1;color:var(--main);font-variant-numeric:tabular-nums;white-space:nowrap}
+:root[data-theme=dark] .big{color:#7fd0df}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .big{color:#7fd0df}}
+.unit{font-size:19px;font-weight:600;margin:8px 0 18px}
+.rows{display:grid;gap:12px;margin-top:8px}
+.row{display:grid;grid-template-columns:11em minmax(0,1fr) 7em;gap:10px;align-items:center;font-size:15px}
+.track{height:14px;background:var(--soft);border-radius:2px;overflow:hidden}
+.fill{height:100%;background:var(--main);transition:width .4s}
+:root[data-theme=dark] .fill{background:#5fb9c9}
+.row.on .fill{background:var(--acc)}
+.row .v{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.conv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:22px}
+.conv div{border-top:2px solid var(--line);padding-top:8px}
+.conv b{display:block;font-size:24px;font-variant-numeric:tabular-nums}
+.conv span{font-size:14px;color:var(--mute)}
+label{display:block;font-size:14px;font-weight:600;margin:0 0 4px}
+.inp{display:grid;gap:14px}
+input,select{font:inherit;font-size:16px;width:100%;min-height:44px;padding:8px 10px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{font:inherit;font-size:15px;min-height:44px;padding:8px 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:4px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--main);border-color:var(--main);color:var(--onmain)}
+.note{font-size:13.5px;color:var(--mute);margin:10px 0 0}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(20px,3vw,40px)}
+.grid3 a{text-decoration:none;display:block;border-top:3px solid var(--main);padding-top:14px}
+:root[data-theme=dark] .grid3 a{border-color:#5fb9c9}
+.grid3 a:hover h3{text-decoration:underline}
+.grid3 p{margin:0;color:var(--mute)}
+.page{display:none}.page.show{display:block}
+.prose{max-width:70ch;font-family:"Source Serif 4",Georgia,serif;font-size:18px}
+.prose h3{font-family:"Public Sans",system-ui,sans-serif;margin-top:1.6em}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:10px 12px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13.5px;color:var(--mute);font-weight:600}
+.tag{display:inline-block;font-size:13px;font-weight:600;padding:2px 8px;border-radius:3px;background:var(--soft);white-space:nowrap}
+.tag.live{background:var(--acc);color:#fff}
+.fig{position:relative;min-height:300px;max-width:760px}.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+.sub{border-bottom:1px solid var(--line);background:var(--soft)}
+.sub .band{padding-block:clamp(24px,3vw,40px)}
+footer{background:var(--main);color:var(--onmain);font-size:14.5px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 40px;justify-content:space-between}
+.policy{display:grid;gap:0}
+.policy article{display:grid;grid-template-columns:minmax(0,1fr) 9em;gap:8px 24px;padding:20px 0;border-bottom:1px solid var(--line)}
+.policy p{margin:4px 0 0;color:var(--mute)}
+html{scroll-padding-top:72px}
+.what{margin-top:24px;padding-top:18px;border-top:2px solid var(--line)}
+.what .res{font-size:clamp(30px,4.4vw,46px);font-weight:700;line-height:1.05;font-variant-numeric:tabular-nums;color:var(--acc)}
+.what .res small{display:block;font-size:16px;font-weight:600;color:var(--ink);margin-top:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.chips button{font:inherit;font-size:14.5px;min-height:40px;padding:6px 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:20px;cursor:pointer}
+.chips button[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:#fff}
+.assume{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:14px;color:var(--mute);margin-top:10px}
+.assume input{width:9em;min-height:40px}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0 0 32px;max-width:76ch}
+.steps li{counter-increment:s;position:relative;padding:0 0 22px 52px;border-left:2px solid var(--line);margin-left:16px}
+.steps li:last-child{border-left-color:transparent}
+.steps li::before{content:counter(s);position:absolute;left:-17px;top:-2px;width:32px;height:32px;border-radius:50%;background:var(--main);color:var(--onmain);display:grid;place-items:center;font-weight:700;font-size:15px}
+.steps h3{margin:2px 0 6px}
+.steps p{margin:0 0 6px}
+.src{font-size:13.5px;color:var(--mute)}
+.sim{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:clamp(20px,3vw,44px);background:var(--soft);border-radius:6px;padding:clamp(18px,3vw,32px);margin:8px 0 36px}
+.sim input[type=range]{padding:0;min-height:36px;border:0;background:none;accent-color:var(--main)}
+.sim output{font-weight:700;font-variant-numeric:tabular-nums}
+.sb{display:grid;gap:14px}
+.sbr{display:grid;grid-template-columns:10em minmax(0,1fr) 5.5em;gap:10px;align-items:center;font-size:15px}
+.axis{position:relative;height:22px;background:linear-gradient(var(--line),var(--line)) center/2px 100% no-repeat}
+.axis i{position:absolute;top:3px;height:16px;background:var(--main)}
+.axis i.neg{background:var(--acc)}
+.axis b{position:absolute;top:-3px;width:3px;height:28px;background:var(--ink)}
+.verdict{margin-top:18px;padding:14px 16px;border-radius:4px;background:var(--bg);border-left:4px solid var(--acc)}
+.verdict.ok{border-left-color:var(--main)}
+details.deep{max-width:76ch;margin:0 0 36px;border-top:1px solid var(--line);padding-top:12px}
+details.deep summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
+@media(max-width:760px){.sim{grid-template-columns:minmax(0,1fr)}.sbr{grid-template-columns:minmax(0,1fr) 5em}.sbr .axis{grid-column:1/-1;order:3}}
+@media(max-width:860px){.calc{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:8em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;white-space:normal;color:var(--mute)}.stack td:empty{display:none}
+.row{grid-template-columns:minmax(0,1fr) 6em}.row .track{grid-column:1/-1;order:3}.policy article{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){.fill{transition:none}}
+</style>
+<script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
+</head>
+<body>
+<header class="top">
+<div class="bar">
+<a class="logo" href="#start" aria-label="Realekonomiska rådet, startsida">
+<svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="7" y="18" width="4" height="9" fill="currentColor"/><rect x="15" y="12" width="4" height="15" fill="currentColor"/><rect x="23" y="7" width="4" height="20" fill="#ff7a5c"/></svg>
+Realekonomiska rådet</a>
+<nav aria-label="Huvudmeny">
+<a href="#start">Start</a><a href="#resursmonitor">Resursmonitor</a><a href="#kunskapsbank">Kunskapsbank</a><a href="#policylab">Policylab</a><a href="#om">Om RER</a>
+</nav>
+</div>
+</header>
+
+<main>
+<!-- START -->
+<section class="page" id="p-start">
+<div class="hero band"><div class="wrap">
+<h1>Från siffror till verklighet</h1>
+<p class="lead">Vi mäter Sveriges förmåga, inte bara vår bokföring. Sveriges ekonomi mäts inte i kronor, utan i vad vi kan uträtta.</p>
+
+<div class="calc" aria-labelledby="gap-h">
+<div>
+<h2 id="gap-h" style="font-size:20px;margin-bottom:12px">Arbetskraftsglappet</h2>
+<div class="big" id="g-hours">0</div>
+<div class="unit">arbetstimmar går förlorade varje arbetsdag</div>
+<div class="rows" id="g-rows" role="list"></div>
+<div class="conv" id="g-conv"></div>
+<div class="what" aria-labelledby="what-h">
+<h3 id="what-h" style="margin-bottom:10px">Vad motsvarar det?</h3>
+<div class="chips" id="w-chips" role="group" aria-label="Välj jämförelse"></div>
+<div class="res" id="w-res" aria-live="polite"></div>
+<div class="assume"><label for="w-h" style="margin:0;font-weight:400">Antagande, arbetstimmar per enhet:</label><input id="w-h" type="number" inputmode="numeric" min="1"><span id="w-note"></span></div>
+</div>
+<p class="note">Räkneexempel med exempelvärden. I drift hämtas uppgifterna från SCB:s arbetskraftsundersökningar (AKU) och Konjunkturinstitutet.</p>
+</div>
+<div class="inp">
+<div>
+<label id="lvl-l">Jämför med</label>
+<div class="seg" id="g-lvl" role="group" aria-labelledby="lvl-l"></div>
+</div>
+<div><label for="g-lf">Arbetskraften, antal personer</label><input id="g-lf" type="number" inputmode="numeric" min="0" step="10000"></div>
+<div><label for="g-u">Faktisk arbetslöshet, procent</label><input id="g-u" type="number" inputmode="decimal" min="0" max="40" step="0.1"></div>
+<div><label for="g-ki">Jämviktsarbetslöshet enligt KI, procent</label><input id="g-ki" type="number" inputmode="decimal" min="0" max="40" step="0.1"></div>
+<div><label for="g-low">Lägsta arbetslöshet sedan 1993, procent</label><input id="g-low" type="number" inputmode="decimal" min="0" max="40" step="0.1"></div>
+<div><label for="g-pw">Lägsta arbetslöshet under efterkrigstiden, procent</label><input id="g-pw" type="number" inputmode="decimal" min="0" max="40" step="0.1"></div>
+<div><label for="g-fr">Friktionsnivå, procent</label><input id="g-fr" type="number" inputmode="decimal" min="0" max="40" step="0.1"></div>
+<div><label for="g-h">Timmar per arbetsdag</label><input id="g-h" type="number" inputmode="decimal" min="1" max="12" step="0.5"></div>
+<p class="note" style="margin:0"><button type="button" id="g-reset" style="font:inherit;font-size:14px;min-height:44px;padding:6px 12px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);cursor:pointer">Återställ exempelvärden</button></p>
+</div>
+</div>
+</div></div>
+
+<div class="band"><div class="wrap grid3">
+<a href="#resursmonitor"><h3>Resursmonitor</h3><p>Arbetskraft, kapacitet, energi och material bredvid budgetsaldot. Uppdateras varje kvartal.</p></a>
+<a href="#kunskapsbank"><h3>Kunskapsbank</h3><p>Hur staten betalar, vad statsskulden är och vem som bestämmer räntan. Beskrivet med myndigheternas egna källor.</p></a>
+<a href="#policylab"><h3>Policylab</h3><p>Förslag som utgår från verkliga resurser. Arbetskraft och material först, kronor sist.</p></a>
+</div></div>
+</section>
+
+<!-- RESURSMONITOR -->
+<section class="page" id="p-resursmonitor">
+<div class="sub"><div class="band"><div class="wrap">
+<h1>Resursmonitor</h1>
+<p class="lead" style="opacity:1;margin:0">Vad har Sverige för förmåga, och hur mycket av den används? Monitorn redovisar arbetskraft, kapacitet, energi och material. Statens budgetsaldo kommer sist.</p>
+</div></div></div>
+<div class="band"><div class="wrap">
+<h2>Mått och källor</h2>
+<p style="max-width:70ch">Varje mått har en egen metodsida med definition, källa och kända svagheter. Första utgåvan publiceras i mars 2027.</p>
+<table class="stack">
+<thead><tr><th>Område</th><th>Mått</th><th>Källa</th><th>Frekvens</th><th>Status</th></tr></thead>
+<tbody id="m-tab"></tbody>
+</table>
+</div></div>
+</section>
+
+<!-- KUNSKAPSBANK -->
+<section class="page" id="p-kunskapsbank">
+<div class="sub"><div class="band"><div class="wrap">
+<h1>Kunskapsbank</h1>
+<p class="lead" style="opacity:1;margin:0">Kronan är ett statligt monopol, och hela ekonomin är byggd kring den. Här beskrivs hur statens betalningar faktiskt går till, med källor från Riksbanken, Riksgälden och Ekonomistyrningsverket.</p>
+</div></div></div>
+<div class="band"><div class="wrap">
+<h2>Varifrån kommer arbetslösheten?</h2>
+<p style="max-width:70ch">Steg för steg, från lagen och myndigheternas egna beskrivningar till en slutsats som följer av dem.</p>
+<ol class="steps">
+<li><h3>Staten har monopol på kronan</h3><p>Bara Riksbanken får ge ut sedlar och mynt. Skatter beslutas och betalas i kronor. Ingen annan än staten kan i sista hand tillföra de kronor som behövs.</p><p class="src">Källa: regeringsformen 9 kap., riksbankslagen, skatteförfarandelagen.</p></li>
+<li><h3>Kronan är ett kvitto som tas emot som betalning för skatt</h3><p>Den som är skyldig staten skatt behöver kronor. Därför arbetar och säljer vi för kronor. Skatten skapar efterfrågan på valutan.</p></li>
+<li><h3>Kronorna kommer från statens betalningar</h3><p>När staten betalar ökar saldona på bankkontona. När vi betalar skatt minskar de. Statens betalningar måste komma före skatterna, annars finns inga kronor att betala skatten med.</p><p class="src">Källa: Riksgäldens och ESV:s beskrivningar av statens centralkonto, budgetlagen.</p></li>
+<li><h3>Hushåll och företag vill också spara</h3><p>Utöver skatten vill vi spara i kronor. För att den privata sektorn som helhet ska kunna öka sitt finansiella sparande måste någon annan sektor gå med motsvarande underskott: staten eller utlandet. Det är bokföring, inte teori. Sektorernas saldon summerar alltid till noll.</p><p class="src">Källa: SCB:s finansräkenskaper och nationalräkenskaper.</p></li>
+<li><h3>Om staten tillför för lite blir resultatet arbetslöshet</h3><p>Om staten inte betalar ut tillräckligt för att täcka både skatterna och det önskade sparandet försöker hushåll och företag att spara genom att spendera mindre. Då minskar försäljningen och produktionen, och färre anställs. Alternativet är att de lånar för att hålla uppe sina utgifter, och då växer de privata skulderna. Arbetslösheten är det mekaniska resultatet av att statens nettoutgifter är för små i förhållande till skatterna och sparönskan.</p></li>
+<li><h3>Så varför håller staten arbetslösheten uppe?</h3><p>Det officiella svaret är prisstabilitet. Arbetslösheten används som buffert. Frågan är om det finns en bättre buffert. Se <a href="#policylab">Jobbgaranti som buffert</a>.</p></li>
+</ol>
+
+<h3 style="font-size:22px">Prova själv: sektorsbalanserna</h3>
+<div class="sim">
+<div class="inp">
+<div><label for="s-w">Hushållens och företagens önskade sparande, procent av BNP</label><input id="s-w" type="range" min="0" max="12" step="0.5"><output id="s-wo"></output></div>
+<div><label for="s-d">Statens underskott, procent av BNP</label><input id="s-d" type="range" min="-4" max="10" step="0.5"><output id="s-do"></output></div>
+<div><label for="s-x">Bytesbalansens överskott, procent av BNP</label><input id="s-x" type="range" min="-6" max="10" step="0.5"><output id="s-xo"></output></div>
+<p class="note" style="margin:0">Förenklad modell. Svaret gäller ett år. Startvärdena är exempel nära Sveriges läge under senare år: små underskott i staten, stort överskott mot utlandet.</p>
+</div>
+<div>
+<div class="sb" id="s-bars"></div>
+<div class="verdict" id="s-v" aria-live="polite"></div>
+</div>
+</div>
+
+<details class="deep"><summary>Fördjupning: staten som prissättare</summary>
+<p>Den som har monopol på en vara bestämmer priset. Staten har monopol på kronan. Priset sätts av staten på två sätt: genom räntan som staten betalar på sina konton och papper, och genom vad staten betalar för det den köper. Ett buffertlager av övergångsjobb till fast lön gör det andra priset tydligt. Lönen blir då kronans ankare.</p>
+</details>
+
+<h2>Så betalar staten</h2>
+<div class="fig" id="flow" role="img" aria-label="Schema: statens betalningar skapar kronor på bankkonton, skatter tar bort kronor, statspapper är en kontoflytt."><svg id="flow-s"></svg></div>
+<div class="prose">
+<p>När staten betalar ut en lön, ett barnbidrag eller en faktura för ett järnvägsbygge ökar saldot på mottagarens bankkonto. Samtidigt ökar bankens saldo hos Riksbanken. Kronorna skapas när betalningen görs. De har inte legat sparade någonstans i förväg.</p>
+<p>När vi betalar skatt sker det omvända. Saldona minskar och kronorna försvinner ur ekonomin. Skatten finansierar inte utgifterna. Den tar tillbaka en del av de kronor som statens utbetalningar har skapat.</p>
+<h3>Statsskulden är privat sparande</h3>
+<p>Ett underskott är skillnaden mellan vad staten har betalat ut och vad den har tagit in i skatt. Statsskulden är summan av alla underskott. Det är de kronor som finns kvar hos hushåll, företag och banker som sparande.</p>
+<h3>Statspapper är en kontoflytt</h3>
+<p>När Riksgälden säljer statspapper betalar bankerna med de saldon som statens utbetalningar redan har skapat. Bankerna byter ett saldo på ett transaktionskonto mot ett saldo på ett räntebärande konto. Staten får inga nya pengar att betala med.</p>
+<h3>Räntan är ett politiskt val</h3>
+<p>Om staten inte gjorde något skulle överskottet av saldon pressa bankernas räntor mot noll. En positiv ränta förutsätter att staten väljer att betala ränta, antingen på bankernas saldon hos Riksbanken eller på statspapper.</p>
+<h3>Liknelser som håller</h3>
+<p>Hushållsbudgeten är fel bild av staten. Hushållet använder kronor, staten ger ut dem. Fler liknelser och interaktiva verktyg publiceras här under 2027.</p>
+<p class="note" style="font-family:'Public Sans',sans-serif">Fördjupning: rapporten <i>Sverige – en självfinansierande stat</i> (2024).</p>
+</div>
+</div></div>
+</section>
+
+<!-- POLICYLAB -->
+<section class="page" id="p-policylab">
+<div class="sub"><div class="band"><div class="wrap">
+<h1>Policylab</h1>
+<p class="lead" style="opacity:1;margin:0">Förslag som utgår från vad Sverige har för arbetskraft, material och energi. Frågan är inte om det finns pengar, utan om det finns resurser.</p>
+</div></div></div>
+<div class="band"><div class="wrap"><div class="policy" id="pol"></div></div></div>
+</section>
+
+<!-- OM -->
+<section class="page" id="p-om">
+<div class="sub"><div class="band"><div class="wrap">
+<h1>Om Realekonomiska rådet</h1>
+<p class="lead" style="opacity:1;margin:0">Realekonomiska rådet (RER) är en oberoende ideell tankesmedja. RER är ingen myndighet och har ingen koppling till något parti.</p>
+</div></div></div>
+<div class="band"><div class="wrap prose">
+<h3>Uppdrag</h3>
+<p>RER redovisar Sveriges verkliga resurser och hur de används. Utgångspunkten är en beskrivning av betalningar, konton och resurser som ska gå att enas om oavsett ekonomisk skola.</p>
+<h3>Arbetssätt</h3>
+<p>Alla siffror hämtas från öppna källor och redovisas med metod. Fel rättas öppet, med datum.</p>
+<h3>Finansiering</h3>
+<p>RER finansieras av många små gåvor. Ingen givare får ge mer än ett fastställt tak per år. RER tar inte emot pengar från politiska partier. Bidrag från organisationer redovisas med namn. Antalet givare och den totala summan redovisas varje år.</p>
+<h3>Bakom RER</h3>
+<p>RER grundades av Erik Arnell 2026.</p>
+</div></div>
+</section>
+</main>
+
+<footer class="band"><div class="wrap">
+<div><b>Realekonomiska rådet</b><br>realekonomiskaradet.se</div>
+<div>Oberoende ideell tankesmedja.<br>Prototyp, november 2026.</div>
+</div></footer>
+
+<script>
+{
+const D={lf:5950000,u:8.7,ki:7.3,low:6.0,pw:1.6,fr:3.0,h:8};
+const ids={lf:'g-lf',u:'g-u',ki:'g-ki',low:'g-low',pw:'g-pw',fr:'g-fr',h:'g-h'};
+const LV=[['ki','KI:s jämviktsskattning'],['low','Lägsta sedan 1993'],['pw','Lägsta under efterkrigstiden'],['fr','Friktionsnivå']];
+let lvl='ki';
+const $=id=>document.getElementById(id);
+const nf=n=>Math.round(n).toLocaleString('sv-SE');
+let st={...D};
+try{const s=JSON.parse(localStorage.getItem('rer-gap')||'null');if(s)st={...D,...s}}catch(e){}
+for(const k in ids)$(ids[k]).value=st[k];
+const seg=$('g-lvl');
+seg.innerHTML=LV.map(([k,t])=>`<button type="button" data-k="${k}" aria-pressed="${k===lvl}">${t}</button>`).join('');
+const gap=(lev)=>Math.max(0,(st.u-lev)/100*st.lf);
+function draw(){
+  for(const k in ids){const v=parseFloat($(ids[k]).value);st[k]=isFinite(v)?v:D[k]}
+  try{localStorage.setItem('rer-gap',JSON.stringify(st))}catch(e){}
+  const people=gap(st[lvl]);const hrs=people*st.h;
+  $('g-hours').textContent=nf(hrs);
+  const max=Math.max(1,...LV.map(([k])=>gap(st[k])*st.h));
+  $('g-rows').innerHTML=LV.map(([k,t])=>{const v=gap(st[k])*st.h;return `<div class="row${k===lvl?' on':''}" role="listitem"><span>${t} (${String(st[k]).replace('.',',')} %)</span><div class="track"><div class="fill" style="width:${(v/max*100).toFixed(1)}%"></div></div><span class="v">${nf(v)} h</span></div>`}).join('');
+  const yr=hrs*220;
+  $('g-conv').innerHTML=[[nf(people),'personer över jämförelsenivån'],[Math.max(0,st.u-st[lvl]).toLocaleString('sv-SE',{maximumFractionDigits:1}),'procentenheter över jämförelsenivån'],[(yr/1e9).toLocaleString('sv-SE',{maximumFractionDigits:2})+' mdr','arbetstimmar per år (220 arbetsdagar)']].map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join('');
+  for(const b of seg.querySelectorAll('button'))b.setAttribute('aria-pressed',b.dataset.k===lvl);
+  cur.hrs=hrs;what();
+}
+const C=[
+['op','Höftledsoperationer','höftledsoperationer, inklusive eftervård',60,'Operation, vårdtid och rehabilitering.'],
+['lgh','Lägenheter','lägenheter på 70 kvadratmeter',1500,'Arbete på byggarbetsplatsen.'],
+['rals','Kilometer järnväg','kilometer ny dubbelspårig järnväg',60000,'Bana, el och signaler, ej projektering.'],
+['dron','Drönare','drönare för försvaret',25,'Mindre drönare, montering och test.'],
+['fsk','Förskolor','nya förskolor med sex avdelningar',45000,'Byggnaden, ej personal.'],
+['lar','Lärarår','lärare i tjänst under ett helt läsår',1700,'En heltidstjänst under ett år.'],
+['hem','Hemtjänstbesök','hemtjänstbesök på en timme',1.25,'Besöket och resan dit.']];
+const cur={k:'op',hrs:0,h:{}};
+try{const s=JSON.parse(localStorage.getItem('rer-what')||'null');if(s){cur.k=s.k||'op';cur.h=s.h||{}}}catch(e){}
+const chips=$('w-chips');
+chips.innerHTML=C.map(c=>`<button type="button" data-k="${c[0]}">${c[1]}</button>`).join('');
+function what(){
+  const c=C.find(x=>x[0]===cur.k)||C[0];
+  const per=cur.h[c[0]]||c[3];
+  const n=cur.hrs/per;
+  const fmt=v=>v>=100?nf(v):v.toLocaleString('sv-SE',{maximumFractionDigits:1});
+  $('w-res').innerHTML=`${fmt(n)} <small>${c[2]}, varje arbetsdag. På ett år: ${fmt(n*220)}.</small>`;
+  if(document.activeElement!==$('w-h'))$('w-h').value=per;
+  $('w-note').textContent=c[4]+' Grov uppskattning, ändra gärna.';
+  for(const b of chips.querySelectorAll('button'))b.setAttribute('aria-pressed',b.dataset.k===c[0]);
+  try{localStorage.setItem('rer-what',JSON.stringify({k:cur.k,h:cur.h}))}catch(e){}
+}
+chips.addEventListener('click',e=>{const b=e.target.closest('button');if(b){cur.k=b.dataset.k;what()}});
+$('w-h').addEventListener('input',()=>{const v=parseFloat($('w-h').value);if(isFinite(v)&&v>0){cur.h[cur.k]=v;what()}});
+seg.addEventListener('click',e=>{const b=e.target.closest('button');if(b){lvl=b.dataset.k;draw()}});
+for(const k in ids)$(ids[k]).addEventListener('input',draw);
+$('g-reset').addEventListener('click',()=>{for(const k in ids)$(ids[k]).value=D[k];cur.h={};draw()});
+draw();
+
+const M=[
+['Arbetskraft','Arbetslösa, undersysselsatta, latent arbetssökande, förlorade timmar','SCB, AKU','Månad','Prototyp'],
+['Arbetskraft','Inskrivna, långtidsarbetslösa, i program','Arbetsförmedlingen','Månad','Planerad'],
+['Arbetskraft','Lediga jobb','SCB, vakansstatistik','Kvartal','Planerad'],
+['Resursutnyttjande','Brist på arbetskraft, BNP-gap, jämviktsarbetslöshet','Konjunkturinstitutet','Månad, kvartal','Planerad'],
+['Industri','Kapacitetsutnyttjande','SCB','Kvartal','Planerad'],
+['Energi','Elproduktion, nettoexport, effektbalans','Energimyndigheten, Svenska kraftnät','Månad, år','Planerad'],
+['Material','Stål, cement, ballast, trä','Jernkontoret, SGU, SCB','Månad, år','Planerad'],
+['Bygg','Påbörjade bostäder mot byggbehov','SCB, Boverket','Kvartal, år','Planerad'],
+['Infrastruktur','Underhållsskuld, punktlighet','Trafikverket','År','Planerad'],
+['Välfärd','Personalbehov, vårdplatser, lärarprognoser','SKR, Socialstyrelsen, Skolverket','År','Planerad'],
+['Bokföring','Budgetsaldo, statsskuld, räntor','ESV, Riksgälden, Riksbanken','Månad','Planerad']];
+$('m-tab').innerHTML=M.map(r=>`<tr>${r.map((c,i)=>`<td>${i===4?`<span class="tag${c==='Prototyp'?' live':''}">${c}</span>`:c}</td>`).join('')}</tr>`).join('');
+
+const P=[
+['Jobbgaranti som buffert','Övergångsjobb till fast lön för alla som vill och kan arbeta. Lönen är ankare för priserna, och syftet är att deltagarna så snabbt som möjligt går tillbaka till den privata sektorn. Ersätter arbetslösheten som verktyg för prisstabilitet.','Utkast'],
+['Realekonomiskt ramverk','Mål för sysselsättning och inflation. Resurstak i stället för utgiftstak. Automatiska stabilisatorer och ett nytt uppdrag för rådet.','Planerad'],
+['Lägre skatt på låga inkomster','Mer efterfrågan där behovet är störst, som ett första steg mot full sysselsättning.','Planerad'],
+['Grön investeringsplan','Vilken energi, vilket material och vilken arbetskraft omställningen kräver, och vad som finns.','Planerad'],
+['Infrastruktur och välfärd','Underhållsskulden och personalbristen beskrivna i timmar och material.','Planerad'],
+['Återförstatligande av viss verksamhet','Vilka verksamheter som ska drivas av staten och varför.','Planerad']];
+$('pol').innerHTML=P.map(([t,d,s])=>`<article><div><h3>${t}</h3><p>${d}</p></div><div><span class="tag">${s}</span></div></article>`).join('');
+
+const fs=$('flow-s');
+function flow(){
+  const W=fs.clientWidth,H=fs.clientHeight,sm=W<520;
+  const bw=Math.min(200,W*.28),bh=64,y1=24,y2=H-bh-24;
+  const xs=[16,(W-bw)/2,W-bw-16];
+  const box=(x,y,t,s)=>`<g><rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="4" fill="var(--soft)" stroke="var(--line)"/><text x="${x+bw/2}" y="${y+28}" text-anchor="middle" font-weight="700" font-size="${sm?13:15}" fill="var(--ink)">${t}</text><text x="${x+bw/2}" y="${y+48}" text-anchor="middle" font-size="${sm?11:13}" fill="var(--mute)">${s}</text></g>`;
+  const arr=(x1,y1_,x2,y2_,c)=>`<line x1="${x1}" y1="${y1_}" x2="${x2}" y2="${y2_}" stroke="${c}" stroke-width="2.5" marker-end="url(#m${c==='var(--acc)'?'a':'b'})"/>`;
+  fs.innerHTML=`<defs><marker id="mb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--main)"/></marker><marker id="ma" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--acc)"/></marker></defs>`
+  +box(xs[0],y1,'Staten',sm?'Riksgälden':'Riksgälden, statens konto')
+  +box(xs[2],y1,'Riksbanken',sm?'bankernas saldon':'bankernas saldon')
+  +box(xs[1],y2,'Hushåll och företag','bankkonton')
+  +arr(xs[0]+bw*.55,y1+bh,xs[1]+bw*.3,y2-4,'var(--main)')
+  +arr(xs[1]+bw*.5,y2,xs[0]+bw*.85,y1+bh+4,'var(--acc)')
+  +arr(xs[0]+bw,y1+bh*.5,xs[2]-6,y1+bh*.5,'var(--main)')
+  +`<text x="${(xs[0]+xs[1])/2+bw*.05}" y="${(y1+y2)/2+bh*.2}" font-size="${sm?12:14}" fill="var(--main)" font-weight="600" text-anchor="end">Utbetalning: kronor skapas</text>`
+  +`<text x="${xs[1]+bw*.62}" y="${(y1+y2)/2+bh*.2}" font-size="${sm?12:14}" fill="var(--acc)" font-weight="600">Skatt: kronor försvinner</text>`
+  +`<text x="${(xs[0]+bw+xs[2])/2}" y="${y1+bh*.5-10}" font-size="${sm?11:13}" fill="var(--mute)" text-anchor="middle">${sm?'Statspapper: kontoflytt':'Statspapper: saldon flyttas till räntebärande konto'}</text>`;
+}
+const ro=new ResizeObserver(flow);ro.observe(fs);
+
+const SD={w:7,d:0.5,x:5};
+const sv={...SD};
+for(const k of ['w','d','x'])$('s-'+k).value=sv[k];
+const pc=v=>(v>0?'+':'')+v.toLocaleString('sv-SE',{maximumFractionDigits:1})+' %';
+function sim(){
+  for(const k of ['w','d','x']){sv[k]=parseFloat($('s-'+k).value);$('s-'+k+'o').textContent=sv[k].toLocaleString('sv-SE',{maximumFractionDigits:1})+' %'}
+  const act=sv.d+sv.x,gap=sv.w-act;
+  const R=[['Staten',-sv.d,null],['Hushåll och företag',act,sv.w],['Utlandet',-sv.x,null]];
+  const m=12,pos=v=>50+Math.max(-m,Math.min(m,v))/m*50;
+  $('s-bars').innerHTML=R.map(([t,v,w])=>{const a=pos(Math.min(0,v)),b=pos(Math.max(0,v));return `<div class="sbr"><span>${t}</span><div class="axis"><i class="${v<0?'neg':''}" style="left:${a}%;width:${b-a}%"></i>${w!==null?`<b style="left:calc(${pos(w)}% - 1px)" title="Önskat sparande"></b>`:''}</div><span class="v" style="text-align:right">${pc(v)}</span></div>`}).join('')+'<p class="note" style="margin:0">Staplarna summerar alltid till noll. Det svarta strecket visar hushållens och företagens önskade sparande.</p>';
+  const v=$('s-v');
+  if(gap>0.05){v.className='verdict';v.innerHTML=`<b>Glapp: ${gap.toLocaleString('sv-SE',{maximumFractionDigits:1})} procent av BNP.</b> Hushåll och företag vill spara mer än staten och utlandet tillför. Antingen minskar de sina utgifter, och då faller försäljning och sysselsättning tills inkomsterna har sjunkit så mycket att sparönskan krymper, eller så lånar de för att hålla uppe utgifterna, och då växer de privata skulderna.`}
+  else if(gap<-0.05){v.className='verdict ok';v.innerHTML=`<b>Överskott: ${(-gap).toLocaleString('sv-SE',{maximumFractionDigits:1})} procent av BNP.</b> Det tillförs mer än hushåll och företag vill spara. De spenderar mer. Om ekonomin redan är fullt sysselsatt stiger priserna.`}
+  else{v.className='verdict ok';v.innerHTML='<b>I balans.</b> Det sparande som tillförs motsvarar det önskade sparandet.'}
+}
+for(const k of ['w','d','x'])$('s-'+k).addEventListener('input',sim);
+sim();
+
+const pages=['start','resursmonitor','kunskapsbank','policylab','om'];
+function route(){
+  const h=location.hash.slice(1);const cur=pages.includes(h)?h:'start';
+  for(const p of pages)$('p-'+p).classList.toggle('show',p===cur);
+  for(const a of document.querySelectorAll('nav a'))a.toggleAttribute('aria-current',a.getAttribute('href')==='#'+cur),a.getAttribute('href')==='#'+cur?a.setAttribute('aria-current','page'):0;
+  if(cur==='kunskapsbank')flow();
+  window.scrollTo(0,0);
+}
+addEventListener('hashchange',route);route();
+}
+</script>
+</body>
+</html>
