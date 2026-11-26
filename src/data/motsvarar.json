@@ -1,8 +1,8 @@
 {
   "metod": {
     "krPerTimme": 749,
-    "beskrivning": "Kostnaden i kronor delas med BNP per arbetad timme i Sverige 2024 (6 443 039 mnkr / 8 607,6 miljoner timmar ≈ 749 kr). Det ger en grov uppskattning av hur många arbetstimmar i hela ekonomin, inklusive material och maskiner, som enheten motsvarar. Lärarår och hemtjänsttimmar räknas i direkt arbetstid.",
-    "kalla": "SCB, nationalräkenskaperna, tabellerna NR0103T01BNAr och NR0103ENS2010T07NA."
+    "beskrivning": "Kostnaden i kronor delas med BNP per arbetad timme i Sverige 2024 (6 443 039 mnkr / 8 607,6 miljoner timmar ≈ 749 kr). Det ger en uppskattning av hur många arbetstimmar i hela ekonomin, inklusive tillverkning av material och maskiner, som enheten motsvarar. Kontroll för bygg: byggföretagen arbetade 669 miljoner timmar 2024 och producerade för 850 128 mnkr, alltså 787 timmar per miljon kronor. Leverantörerna lägger till ungefär 0,7 jobb per byggjobb. Det ger cirka 1 340 timmar per miljon kronor, eller cirka 750 kr per timme. Lärarår och hemtjänsttimmar räknas i direkt arbetstid.",
+    "kalla": "SCB, nationalräkenskaperna, tabellerna NR0103T01BNAr, NR0103ENS2010T07NA och NR0103ENS2010T09RK. Leverantörsled: SCB:s input-output-tabeller via Byggföretagen, 2022."
   },
   "enheter": [
     {
@@ -24,10 +24,10 @@
     {
       "id": "rals",
       "namn": "Kilometer järnväg",
-      "enhet": "kilometer ny dubbelspårig järnväg",
-      "timmar": 763163,
-      "not": "Ostlänken: 91,4 miljarder kronor för 16 mil, 2021 års priser.",
-      "kalla": "Trafikverket via Dagens PS."
+      "enhet": "kilometer ny enkelspårig järnväg",
+      "timmar": 306582,
+      "not": "Norrbotniabanan: 62 miljarder kronor för 27 mil, 2025 års priser. Av timmarna utförs ungefär 180 000 av byggföretagen själva, resten hos leverantörer.",
+      "kalla": "Trafikverket, projektsidan för Norrbotniabanan."
     },
     {
       "id": "dron",
