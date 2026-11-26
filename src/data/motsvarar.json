@@ -1,7 +1,7 @@
 {
   "metod": {
     "krPerTimme": 749,
-    "beskrivning": "Kostnaden i kronor delas med BNP per arbetad timme i Sverige 2024 (6 443 039 mnkr / 8 607,6 miljoner timmar ≈ 749 kr). Det ger en uppskattning av hur många arbetstimmar i hela ekonomin, inklusive tillverkning av material och maskiner, som enheten motsvarar. Kontroll för bygg: byggföretagen arbetade 669 miljoner timmar 2024 och producerade för 850 128 mnkr, alltså 787 timmar per miljon kronor. Leverantörerna lägger till ungefär 0,7 jobb per byggjobb. Det ger cirka 1 340 timmar per miljon kronor, eller cirka 750 kr per timme. Lärarår och hemtjänsttimmar räknas i direkt arbetstid.",
+    "beskrivning": "Kostnaden i kronor delas med BNP per arbetad timme i Sverige 2024 (6 443 039 mnkr / 8 607,6 miljoner timmar ≈ 749 kr). Det ger en uppskattning av hur många arbetstimmar i hela den svenska produktionskedjan som enheten motsvarar: arbetet på plats och hos leverantörer i alla led. Import, mark och tillverkning av maskiner räknas inte. Kontroll med input-output-metoden (Leontief) för bygg: byggföretagen arbetade 669 miljoner timmar 2024 och producerade för 850 128 mnkr, alltså 787 timmar per miljon kronor. Leverantörerna lägger till ungefär 0,7 jobb per byggjobb. Det ger cirka 1 340 timmar per miljon kronor, eller cirka 750 kr per timme. Lärarår och hemtjänsttimmar räknas i direkt arbetstid.",
     "kalla": "SCB, nationalräkenskaperna, tabellerna NR0103T01BNAr, NR0103ENS2010T07NA och NR0103ENS2010T09RK. Leverantörsled: SCB:s input-output-tabeller via Byggföretagen, 2022."
   },
   "enheter": [
@@ -23,11 +23,11 @@
     },
     {
       "id": "rals",
-      "namn": "Kilometer järnväg",
-      "enhet": "kilometer ny enkelspårig järnväg",
-      "timmar": 306582,
-      "not": "Norrbotniabanan: 62 miljarder kronor för 27 mil, 2025 års priser. Av timmarna utförs ungefär 180 000 av byggföretagen själva, resten hos leverantörer.",
-      "kalla": "Trafikverket, projektsidan för Norrbotniabanan."
+      "namn": "Järnväg",
+      "enhet": "kilometer dubbelspår",
+      "timmar": 362388,
+      "not": "Dubbelspår Luleå–Boden på Malmbanan: 7,6 miljarder kronor för 28 km, prisnivå oktober 2023. Projektet saknar finansiering och finns inte i den nationella planen. Hela sträckan motsvarar cirka 10 miljoner arbetstimmar.",
+      "kalla": "Trafikverket, Finansieringslösningar för ett eventuellt dubbelspår Luleå–Boden, rapport 2024:185."
     },
     {
       "id": "dron",
