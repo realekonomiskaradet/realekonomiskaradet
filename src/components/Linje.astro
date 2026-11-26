@@ -1,0 +1,26 @@
+---
+// Enkelt linjediagram som ritas när sajten byggs. Ingen JavaScript i webbläsaren.
+interface Props { serie: [string, number][]; enhet?: string; etikett: string; referens?: { varde: number; namn: string }[] }
+const { serie, enhet = '%', etikett, referens = [] } = Astro.props;
+const B = 640, H = 260, V = 44, O = 16, N = 30, U = 14;
+const varden = serie.map((s) => s[1]).concat(referens.map((r) => r.varde));
+const min = Math.floor(Math.min(...varden) - 0.5), max = Math.ceil(Math.max(...varden) + 0.5);
+const x = (i: number) => V + (i / (serie.length - 1)) * (B - V - U);
+const y = (v: number) => O + (1 - (v - min) / (max - min)) * (H - O - N);
+const d = serie.map((s, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(s[1]).toFixed(1)}`).join('');
+const steg = max - min > 6 ? 2 : 1;
+const ytick: number[] = []; for (let v = min; v <= max; v += steg) ytick.push(v);
+const xtick = serie.map((s, i) => [s[0], i] as const).filter(([p]) => p.endsWith('M01'));
+const sista = serie[serie.length - 1];
+const fmt = (v: number) => v.toLocaleString('sv-SE', { maximumFractionDigits: 1 });
+---
+<figure class="linje">
+<svg viewBox={`0 0 ${B} ${H}`} role="img" aria-label={etikett}>
+{ytick.map((v) => <g><line x1={V} x2={B - U} y1={y(v)} y2={y(v)} class="grid" /><text x={V - 8} y={y(v) + 4} text-anchor="end">{fmt(v)}</text></g>)}
+{xtick.map(([p, i]) => <text x={x(i)} y={H - 8} text-anchor="middle">{p.slice(0, 4)}</text>)}
+{referens.map((r) => <g><line x1={V} x2={B - U} y1={y(r.varde)} y2={y(r.varde)} class="ref" /><text x={B - U} y={y(r.varde) - 6} text-anchor="end" class="reftext">{r.namn} {fmt(r.varde)} {enhet}</text></g>)}
+<path d={d} class="serie" />
+<circle cx={x(serie.length - 1)} cy={y(sista[1])} r="4" class="punkt" />
+</svg>
+<figcaption>{etikett}. Senaste värde: {fmt(sista[1])} {enhet}.</figcaption>
+</figure>

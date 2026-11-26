@@ -57,3 +57,27 @@ npm run dev
 ## Publicering
 
 Sajten byggs med `npm run build`, och resultatet hamnar i mappen `dist/`. Cloudflare Pages eller Netlify kan bygga och publicera automatiskt vid varje ändring på huvudgrenen.
+
+## Skriva en ny analys
+
+Skapa en fil i `src/pages/analys/`, till exempel `2027-02-riksbanken.md`. Filnamnet blir adressen. Börja filen så här:
+
+```
+---
+layout: ../../layouts/Analys.astro
+titel: Riksbanken höjer räntan trots att arbetslösheten är 8,6 procent
+ingress: En eller två meningar som sammanfattar texten.
+datum: 2027-02-12
+ramverk: [5, 7]
+---
+
+Texten skrivs här, med ### för mellanrubriker.
+```
+
+- `ramverk` anger vilka punkter i Ramverket texten bygger på. Raden kan tas bort.
+- För en debattartikel i en tidning, lägg till `publicerad: Dagens Nyheter` och `externLank: https://...`. Då länkar listan till tidningen.
+- Lägg till `utkast: true` för att spara en text utan att den syns i listan.
+
+## Lägga till en faktasida
+
+Faktasidorna ligger i `src/pages/fakta/`. Listan på `/fakta/` finns överst i `src/pages/fakta/index.astro`. Ändra status till `Klar` och lägg till `url` när sidan finns.

@@ -1,0 +1,26 @@
+---
+import Bas from '../../layouts/Bas.astro';
+// Lägg till en ny faktasida: skapa filen här i mappen och ändra status till 'Klar'.
+const sidor = [
+  { url: '/fakta/arbetsloshet/', titel: 'Arbetslöshet', text: 'Hur många som vill arbeta men inte får, månad för månad.', status: 'Klar' },
+  { titel: 'Statsskulden', text: 'Vad statsskulden är, vem som äger den och hur stor den är jämfört med andra länder.', status: 'Kommer' },
+  { titel: 'Sektorernas sparande', text: 'Statens underskott och hushållens, företagens och omvärldens sparande, år för år.', status: 'Kommer' },
+  { titel: 'Inflation', text: 'Prisökningstakten och vad som driver den.', status: 'Kommer' },
+  { titel: 'Räntan', text: 'Riksbankens styrränta och vad staten betalar i ränta.', status: 'Kommer' },
+  { titel: 'Produktion per arbetad timme', text: 'Vad en arbetstimme ger i Sverige, och hur det har förändrats.', status: 'Kommer' },
+];
+---
+<Bas titel="Fakta" beskrivning="Korta faktasidor med officiell statistik som uppdateras automatiskt.">
+<div class="sub"><div class="band"><div class="wrap">
+<h1>Fakta</h1>
+<p class="lead" style="opacity:1;margin:0">Officiell statistik om Sveriges ekonomi, en sida per mått. Siffrorna hämtas automatiskt från SCB och andra myndigheter. Varje sida förklarar hur siffran ska läsas.</p>
+</div></div></div>
+<div class="band"><div class="wrap"><div class="policy">
+{sidor.map((s) => (
+  <article>
+    <div><h3>{s.url ? <a href={s.url}>{s.titel}</a> : s.titel}</h3><p>{s.text}</p></div>
+    <div><span class={`tag${s.status === 'Klar' ? ' live' : ''}`}>{s.status}</span></div>
+  </article>
+))}
+</div></div></div>
+</Bas>
