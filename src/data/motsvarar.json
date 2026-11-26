@@ -1,9 +1,65 @@
-[
-  { "id": "op", "namn": "Höftledsoperationer", "enhet": "höftledsoperationer, inklusive eftervård", "timmar": 60, "not": "Operation, vårdtid och rehabilitering." },
-  { "id": "lgh", "namn": "Lägenheter", "enhet": "lägenheter på 70 kvadratmeter", "timmar": 1500, "not": "Arbete på byggarbetsplatsen." },
-  { "id": "rals", "namn": "Kilometer järnväg", "enhet": "kilometer ny dubbelspårig järnväg", "timmar": 60000, "not": "Bana, el och signaler, ej projektering." },
-  { "id": "dron", "namn": "Drönare", "enhet": "drönare för försvaret", "timmar": 25, "not": "Mindre drönare, montering och test." },
-  { "id": "fsk", "namn": "Förskolor", "enhet": "nya förskolor med sex avdelningar", "timmar": 45000, "not": "Byggnaden, ej personal." },
-  { "id": "lar", "namn": "Lärarår", "enhet": "lärare i tjänst under ett helt läsår", "timmar": 1700, "not": "En heltidstjänst under ett år." },
-  { "id": "hem", "namn": "Hemtjänstbesök", "enhet": "hemtjänstbesök på en timme", "timmar": 1.25, "not": "Besöket och resan dit." }
-]
+{
+  "metod": {
+    "krPerTimme": 749,
+    "beskrivning": "Kostnaden i kronor delas med BNP per arbetad timme i Sverige 2024 (6 443 039 mnkr / 8 607,6 miljoner timmar ≈ 749 kr). Det ger en grov uppskattning av hur många arbetstimmar i hela ekonomin, inklusive material och maskiner, som enheten motsvarar. Lärarår och hemtjänsttimmar räknas i direkt arbetstid.",
+    "kalla": "SCB, nationalräkenskaperna, tabellerna NR0103T01BNAr och NR0103ENS2010T07NA."
+  },
+  "enheter": [
+    {
+      "id": "op",
+      "namn": "Höftledsoperationer",
+      "enhet": "höftledsoperationer",
+      "timmar": 96,
+      "not": "Pris 71 955 kr per primär höftprotesoperation.",
+      "kalla": "Region Halland, pris- och åtgärdslista vårdgaranti ortopedi 2025 (H02E)."
+    },
+    {
+      "id": "lgh",
+      "namn": "Lägenheter",
+      "enhet": "lägenheter på 70 kvadratmeter",
+      "timmar": 4848,
+      "not": "Produktionspris 51 846 kr per kvadratmeter, inklusive mark och moms.",
+      "kalla": "SCB, Priser för nyproducerade bostäder 2024."
+    },
+    {
+      "id": "rals",
+      "namn": "Kilometer järnväg",
+      "enhet": "kilometer ny dubbelspårig järnväg",
+      "timmar": 763163,
+      "not": "Ostlänken: 91,4 miljarder kronor för 16 mil, 2021 års priser.",
+      "kalla": "Trafikverket via Dagens PS."
+    },
+    {
+      "id": "dron",
+      "namn": "Drönare",
+      "enhet": "FPV-drönare",
+      "timmar": 8,
+      "not": "Ukrainas upphandling 2025: 2,6 miljarder dollar för 4,5 miljoner drönare, omräknat med 10 kronor per dollar.",
+      "kalla": "Kyiv Independent, mars 2025."
+    },
+    {
+      "id": "fsk",
+      "namn": "Förskolor",
+      "enhet": "nya förskolor med sex avdelningar",
+      "timmar": 93517,
+      "not": "Lokalinvestering 70 miljoner kronor för en ny förskola med sex avdelningar.",
+      "kalla": "Göteborgs stad, tjänsteutlåtande 2024 (Solvädersbyn 60)."
+    },
+    {
+      "id": "lar",
+      "namn": "Lärarår",
+      "enhet": "lärare i tjänst under ett helt läsår",
+      "timmar": 1767,
+      "not": "Årsarbetstid för en heltidsanställd lärare: 1 767 timmar.",
+      "kalla": "Kollektivavtal, bilaga M (SKR och Sveriges Lärare)."
+    },
+    {
+      "id": "hem",
+      "namn": "Hemtjänsttimmar",
+      "enhet": "timmar hemtjänst",
+      "timmar": 1,
+      "not": "En timmes arbete i hemtjänsten.",
+      "kalla": "Direkt arbetstid."
+    }
+  ]
+}
