@@ -1,0 +1,50 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  titel?: string;
+  beskrivning?: string;
+}
+const { titel, beskrivning = 'Vi mäter Sveriges förmåga, inte bara vår bokföring.' } = Astro.props;
+const fullTitel = titel ? `${titel} – Realekonomiska rådet` : 'Realekonomiska rådet';
+const sokvag = Astro.url.pathname;
+const meny = [
+  ['/', 'Start'],
+  ['/resursmonitor/', 'Resursmonitor'],
+  ['/kunskapsbank/', 'Kunskapsbank'],
+  ['/policylab/', 'Policylab'],
+  ['/om/', 'Om RER'],
+];
+const aktiv = (href: string) => (href === '/' ? sokvag === '/' : sokvag.startsWith(href));
+---
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{fullTitel}</title>
+<meta name="description" content={beskrivning}>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+</head>
+<body>
+<header class="top">
+<div class="bar">
+<a class="logo" href="/" aria-label="Realekonomiska rådet, startsida">
+<svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><rect x="7" y="18" width="4" height="9" fill="currentColor"/><rect x="15" y="12" width="4" height="15" fill="currentColor"/><rect x="23" y="7" width="4" height="20" fill="#ff7a5c"/></svg>
+Realekonomiska rådet</a>
+<nav aria-label="Huvudmeny">
+{meny.map(([href, text]) => <a href={href} aria-current={aktiv(href) ? 'page' : undefined}>{text}</a>)}
+</nav>
+</div>
+</header>
+<main>
+<slot />
+</main>
+<footer class="band"><div class="wrap">
+<div><b>Realekonomiska rådet</b><br>realekonomiskaradet.se</div>
+<div>Oberoende ideell tankesmedja.</div>
+</div></footer>
+</body>
+</html>

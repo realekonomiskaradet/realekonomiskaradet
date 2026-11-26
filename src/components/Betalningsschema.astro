@@ -1,0 +1,27 @@
+---
+// Schema: statens betalningar skapar kronor, skatt tar bort dem, statspapper är en kontoflytt.
+---
+<div class="fig" id="flow" role="img" aria-label="Schema: statens betalningar skapar kronor på bankkonton, skatter tar bort kronor, statspapper är en kontoflytt."><svg id="flow-s"></svg></div>
+
+<script>
+  const fs = document.getElementById('flow-s') as unknown as SVGSVGElement;
+  function flow() {
+    const W = fs.clientWidth, H = fs.clientHeight, sm = W < 520;
+    const bw = Math.min(200, W * 0.28), bh = 64, y1 = 24, y2 = H - bh - 24;
+    const xs = [16, (W - bw) / 2, W - bw - 16];
+    const box = (x: number, y: number, t: string, s: string) => `<g><rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="4" fill="var(--soft)" stroke="var(--line)"/><text x="${x + bw / 2}" y="${y + 28}" text-anchor="middle" font-weight="700" font-size="${sm ? 13 : 15}" fill="var(--ink)">${t}</text><text x="${x + bw / 2}" y="${y + 48}" text-anchor="middle" font-size="${sm ? 11 : 13}" fill="var(--mute)">${s}</text></g>`;
+    const arr = (ax: number, ay: number, bx: number, by: number, acc: boolean) => `<line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke="${acc ? 'var(--acc)' : 'var(--main)'}" stroke-width="2.5" marker-end="url(#m${acc ? 'a' : 'b'})"/>`;
+    fs.innerHTML = `<defs><marker id="mb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--main)"/></marker><marker id="ma" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="var(--acc)"/></marker></defs>`
+      + box(xs[0], y1, 'Staten', sm ? 'Riksgälden' : 'Riksgälden, statens konto')
+      + box(xs[2], y1, 'Riksbanken', 'bankernas saldon')
+      + box(xs[1], y2, 'Hushåll och företag', 'bankkonton')
+      + arr(xs[0] + bw * 0.55, y1 + bh, xs[1] + bw * 0.3, y2 - 4, false)
+      + arr(xs[1] + bw * 0.5, y2, xs[0] + bw * 0.85, y1 + bh + 4, true)
+      + arr(xs[0] + bw, y1 + bh * 0.5, xs[2] - 6, y1 + bh * 0.5, false)
+      + `<text x="${Math.max(4, (xs[0] + xs[1]) / 2 + bw * 0.05)}" y="${(y1 + y2) / 2 + bh * 0.2}" font-size="${sm ? 12 : 14}" fill="var(--main)" font-weight="600" text-anchor="${sm ? 'start' : 'end'}">Utbetalning: kronor skapas</text>`
+      + `<text x="${xs[1] + bw * 0.62}" y="${(y1 + y2) / 2 + bh * 0.2 + (sm ? 18 : 0)}" font-size="${sm ? 12 : 14}" fill="var(--acc)" font-weight="600">Skatt: kronor försvinner</text>`
+      + `<text x="${(xs[0] + bw + xs[2]) / 2}" y="${y1 + bh * 0.5 - 10}" font-size="${sm ? 11 : 13}" fill="var(--mute)" text-anchor="middle">${sm ? 'Statspapper: kontoflytt' : 'Statspapper: saldon flyttas till räntebärande konto'}</text>`;
+  }
+  const ro = new ResizeObserver(flow);
+  ro.observe(fs);
+</script>

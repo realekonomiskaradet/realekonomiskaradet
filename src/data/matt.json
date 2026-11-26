@@ -1,0 +1,13 @@
+[
+  { "omrade": "Arbetskraft", "matt": "Arbetslösa, undersysselsatta, latent arbetssökande, förlorade timmar", "kalla": "SCB, AKU", "frekvens": "Månad", "status": "Prototyp" },
+  { "omrade": "Arbetskraft", "matt": "Inskrivna, långtidsarbetslösa, i program", "kalla": "Arbetsförmedlingen", "frekvens": "Månad", "status": "Planerad" },
+  { "omrade": "Arbetskraft", "matt": "Lediga jobb", "kalla": "SCB, vakansstatistik", "frekvens": "Kvartal", "status": "Planerad" },
+  { "omrade": "Resursutnyttjande", "matt": "Brist på arbetskraft, BNP-gap, jämviktsarbetslöshet", "kalla": "Konjunkturinstitutet", "frekvens": "Månad, kvartal", "status": "Planerad" },
+  { "omrade": "Industri", "matt": "Kapacitetsutnyttjande", "kalla": "SCB", "frekvens": "Kvartal", "status": "Planerad" },
+  { "omrade": "Energi", "matt": "Elproduktion, nettoexport, effektbalans", "kalla": "Energimyndigheten, Svenska kraftnät", "frekvens": "Månad, år", "status": "Planerad" },
+  { "omrade": "Material", "matt": "Stål, cement, ballast, trä", "kalla": "Jernkontoret, SGU, SCB", "frekvens": "Månad, år", "status": "Planerad" },
+  { "omrade": "Bygg", "matt": "Påbörjade bostäder mot byggbehov", "kalla": "SCB, Boverket", "frekvens": "Kvartal, år", "status": "Planerad" },
+  { "omrade": "Infrastruktur", "matt": "Underhållsskuld, punktlighet", "kalla": "Trafikverket", "frekvens": "År", "status": "Planerad" },
+  { "omrade": "Välfärd", "matt": "Personalbehov, vårdplatser, lärarprognoser", "kalla": "SKR, Socialstyrelsen, Skolverket", "frekvens": "År", "status": "Planerad" },
+  { "omrade": "Bokföring", "matt": "Budgetsaldo, statsskuld, räntor", "kalla": "ESV, Riksgälden, Riksbanken", "frekvens": "Månad", "status": "Planerad" }
+]
