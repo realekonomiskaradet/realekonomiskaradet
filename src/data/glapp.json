@@ -8,8 +8,7 @@
       "namn": "KI:s jämviktsskattning",
       "etikett": "Jämviktsarbetslöshet enligt KI, procent",
       "varde": 7.3,
-      "exempel": true,
-      "kalla": "Konjunkturinstitutet, Konjunkturläget. Uppdateras för hand."
+      "kalla": "Konjunkturinstitutet, Konjunkturläget september 2026, s. 24: \"den bedömda jämviktsnivån på 7,3 procent\"."
     },
     {
       "id": "low",
@@ -20,18 +19,17 @@
     },
     {
       "id": "pw",
-      "namn": "Lägsta under efterkrigstiden",
-      "etikett": "Lägsta arbetslöshet under efterkrigstiden, procent",
-      "varde": 1.6,
-      "exempel": true,
-      "kalla": "SCB, AKU, äldre definition. Uppdateras för hand."
+      "namn": "Lägsta sedan 1970",
+      "etikett": "Lägsta arbetslöshet sedan 1970, procent",
+      "varde": 1.9,
+      "kalla": "SCB, AKU, länkad serie 16–64 år (1970 och 1976), via Ekonomifakta."
     },
     {
       "id": "fr",
       "namn": "Friktionsnivå",
       "etikett": "Friktionsnivå, procent",
       "varde": 3.0,
-      "kalla": "Antagande."
+      "kalla": "Antagande om arbetslöshet som beror på byte av jobb."
     }
   ]
 }
