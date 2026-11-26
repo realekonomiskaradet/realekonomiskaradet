@@ -3,7 +3,7 @@
 // Kan också köras för hand: node scripts/hamta-scb.mjs
 import { writeFile } from 'node:fs/promises';
 
-const URL = 'https://api.scb.se/OV0104/v1/doris/sv/ssd/AM/AM0401/AM0401A/AKURLBefM';
+const SCB_URL = 'https://api.scb.se/OV0104/v1/doris/sv/ssd/AM/AM0401/AM0401A/AKURLBefM';
 const UT = new URL('../src/data/aku.json', import.meta.url);
 
 // Säsongrensade och utjämnade värden (trend), 15–74 år, båda könen.
@@ -17,7 +17,7 @@ const fraga = {
   response: { format: 'json' },
 };
 
-const svar = await fetch(URL, { method: 'POST', body: JSON.stringify(fraga) });
+const svar = await fetch(SCB_URL, { method: 'POST', body: JSON.stringify(fraga) });
 if (!svar.ok) throw new Error(`SCB svarade ${svar.status}`);
 const json = await svar.json();
 
