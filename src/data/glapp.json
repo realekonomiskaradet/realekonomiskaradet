@@ -1,14 +1,37 @@
 {
-  "kommentar": "Exempelvärden. Ersätts av automatiskt hämtade data från SCB och KI.",
-  "exempel": true,
-  "arbetskraft": 5950000,
-  "arbetsloshet": 8.7,
+  "kommentar": "Arbetskraft och faktisk arbetslöshet hämtas automatiskt från SCB (src/data/aku.json). Jämförelsenivåer med \"auto\": true räknas fram ur SCB-datan. Övriga nivåer uppdateras för hand.",
   "timmarPerDag": 8,
   "arbetsdagarPerAr": 220,
   "jamforelser": [
-    { "id": "ki", "namn": "KI:s jämviktsskattning", "etikett": "Jämviktsarbetslöshet enligt KI, procent", "varde": 7.3 },
-    { "id": "low", "namn": "Lägsta sedan 1993", "etikett": "Lägsta arbetslöshet sedan 1993, procent", "varde": 6.0 },
-    { "id": "pw", "namn": "Lägsta under efterkrigstiden", "etikett": "Lägsta arbetslöshet under efterkrigstiden, procent", "varde": 1.6 },
-    { "id": "fr", "namn": "Friktionsnivå", "etikett": "Friktionsnivå, procent", "varde": 3.0 }
+    {
+      "id": "ki",
+      "namn": "KI:s jämviktsskattning",
+      "etikett": "Jämviktsarbetslöshet enligt KI, procent",
+      "varde": 7.3,
+      "exempel": true,
+      "kalla": "Konjunkturinstitutet, Konjunkturläget. Uppdateras för hand."
+    },
+    {
+      "id": "low",
+      "namn": "Lägsta sedan 2001",
+      "etikett": "Lägsta arbetslöshet sedan 2001, procent",
+      "auto": true,
+      "kalla": "SCB, AKU."
+    },
+    {
+      "id": "pw",
+      "namn": "Lägsta under efterkrigstiden",
+      "etikett": "Lägsta arbetslöshet under efterkrigstiden, procent",
+      "varde": 1.6,
+      "exempel": true,
+      "kalla": "SCB, AKU, äldre definition. Uppdateras för hand."
+    },
+    {
+      "id": "fr",
+      "namn": "Friktionsnivå",
+      "etikett": "Friktionsnivå, procent",
+      "varde": 3.0,
+      "kalla": "Antagande."
+    }
   ]
 }

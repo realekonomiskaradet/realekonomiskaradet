@@ -1,9 +1,19 @@
 ---
 // Arbetskraftsglappet: förlorade arbetstimmar per dag mot vald jämförelsenivå.
-// Värdena kommer från src/data/glapp.json och src/data/motsvarar.json.
+// Värdena kommer från src/data/aku.json (SCB, hämtas automatiskt), glapp.json och motsvarar.json.
 import glapp from '../data/glapp.json';
 import motsvarar from '../data/motsvarar.json';
-const data = { glapp, motsvarar };
+import aku from '../data/aku.json';
+
+const MAN = ['januari','februari','mars','april','maj','juni','juli','augusti','september','oktober','november','december'];
+const manad = (p: string) => `${MAN[Number(p.slice(5)) - 1]} ${p.slice(0, 4)}`;
+const jamforelser = glapp.jamforelser.map((j: any) =>
+  j.auto ? { ...j, varde: aku.lagstaSedan.varde } : j);
+const exempel = jamforelser.filter((j: any) => j.exempel).map((j: any) => j.namn);
+const data = {
+  glapp: { ...glapp, jamforelser, arbetskraft: aku.arbetskraft, arbetsloshet: aku.arbetsloshet },
+  motsvarar,
+};
 ---
 <div class="calc" aria-labelledby="gap-h">
 <div>
@@ -20,18 +30,18 @@ const data = { glapp, motsvarar };
 <div class="res" id="w-res" aria-live="polite"></div>
 <div class="assume"><label for="w-h" style="margin:0;font-weight:400">Antagande, arbetstimmar per enhet:</label><input id="w-h" type="number" inputmode="numeric" min="0.1" step="any"><span id="w-note"></span></div>
 </div>
-{glapp.exempel && <p class="note">Räkneexempel med exempelvärden. I drift hämtas uppgifterna från SCB:s arbetskraftsundersökningar (AKU) och Konjunkturinstitutet.</p>}
+<p class="note">Källa: SCB, arbetskraftsundersökningarna (AKU), {manad(aku.period)}. Säsongrensade och utjämnade värden, 15–74 år. Lägsta nivå sedan 2001 uppmättes {manad(aku.lagstaSedan.period)}.{exempel.length > 0 && ` Exempelvärden som ännu inte är kontrollerade: ${exempel.join(', ')}.`} Alla värden går att ändra.</p>
 </div>
 <div class="inp">
 <div>
 <label id="lvl-l">Jämför med</label>
 <div class="seg" id="g-lvl" role="group" aria-labelledby="lvl-l">
-{glapp.jamforelser.map((j, i) => <button type="button" data-k={j.id} aria-pressed={i === 0 ? 'true' : 'false'}>{j.namn}</button>)}
+{jamforelser.map((j: any, i: number) => <button type="button" data-k={j.id} aria-pressed={i === 0 ? 'true' : 'false'}>{j.namn}</button>)}
 </div>
 </div>
 <div><label for="g-lf">Arbetskraften, antal personer</label><input id="g-lf" data-f="lf" type="number" inputmode="numeric" min="0" step="10000"></div>
 <div><label for="g-u">Faktisk arbetslöshet, procent</label><input id="g-u" data-f="u" type="number" inputmode="decimal" min="0" max="40" step="0.1"></div>
-{glapp.jamforelser.map((j) => <div><label for={`g-${j.id}`}>{j.etikett}</label><input id={`g-${j.id}`} data-f={j.id} type="number" inputmode="decimal" min="0" max="40" step="0.1"></div>)}
+{jamforelser.map((j: any) => <div><label for={`g-${j.id}`}>{j.etikett}</label><input id={`g-${j.id}`} data-f={j.id} type="number" inputmode="decimal" min="0" max="40" step="0.1"></div>)}
 <div><label for="g-h">Timmar per arbetsdag</label><input id="g-h" data-f="h" type="number" inputmode="decimal" min="1" max="12" step="0.5"></div>
 <p class="note" style="margin:0"><button type="button" id="g-reset" class="knapp">Återställ värdena</button></p>
 </div>
@@ -51,12 +61,10 @@ const data = { glapp, motsvarar };
   for (const j of LV) D[j.id] = j.varde;
   const AR = glapp.arbetsdagarPerAr;
 
-  let st: Record<string, number> = { ...D };
+  const st: Record<string, number> = { ...D };
   let lvl = LV[0].id;
   const cur: { k: string; hrs: number; h: Record<string, number> } = { k: motsvarar[0].id, hrs: 0, h: {} };
   try {
-    const s = JSON.parse(localStorage.getItem('rer-gap') || 'null');
-    if (s) st = { ...D, ...s };
     const w = JSON.parse(localStorage.getItem('rer-what') || 'null');
     if (w) { cur.k = w.k || cur.k; cur.h = w.h || {}; }
   } catch (e) {}
@@ -83,7 +91,6 @@ const data = { glapp, motsvarar };
 
   function draw() {
     for (const i of inputs) { const v = parseFloat(i.value); st[i.dataset.f!] = isFinite(v) ? v : D[i.dataset.f!]; }
-    try { localStorage.setItem('rer-gap', JSON.stringify(st)); } catch (e) {}
     const people = gap(st[lvl]);
     const hrs = people * st.h;
     $('g-hours').textContent = nf(hrs);

@@ -26,11 +26,14 @@ Markdown i korthet:
 
 | Vad | Fil |
 |---|---|
-| Arbetskraft, arbetslöshet, jämförelsenivåer | `src/data/glapp.json` |
+| Arbetskraft och arbetslöshet (hämtas automatiskt från SCB varje månad) | `src/data/aku.json` |
+| Jämförelsenivåer (KI, efterkrigstiden, friktion) | `src/data/glapp.json` |
 | "Vad motsvarar det?" (timmar per enhet) | `src/data/motsvarar.json` |
 | Måtten i resursmonitorn | `src/data/matt.json` |
 
-Siffrorna i `glapp.json` är exempelvärden. De ska ersättas av automatisk hämtning från SCB och KI.
+`aku.json` uppdateras den 25:e varje månad av GitHub Actions (`.github/workflows/hamta-data.yml`). Hämtningen kan också startas för hand under fliken **Actions** på GitHub: välj "Hämta data från SCB" och klicka på **Run workflow**.
+
+KI:s jämviktsskattning och lägsta arbetslösheten under efterkrigstiden är exempelvärden i `glapp.json` och behöver kontrolleras och föras in för hand.
 
 ## Struktur
 

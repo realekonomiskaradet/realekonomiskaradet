@@ -1,5 +1,5 @@
 [
-  { "omrade": "Arbetskraft", "matt": "Arbetslösa, undersysselsatta, latent arbetssökande, förlorade timmar", "kalla": "SCB, AKU", "frekvens": "Månad", "status": "Prototyp" },
+  { "omrade": "Arbetskraft", "matt": "Arbetslösa, undersysselsatta, latent arbetssökande, förlorade timmar", "kalla": "SCB, AKU", "frekvens": "Månad", "status": "I drift" },
   { "omrade": "Arbetskraft", "matt": "Inskrivna, långtidsarbetslösa, i program", "kalla": "Arbetsförmedlingen", "frekvens": "Månad", "status": "Planerad" },
   { "omrade": "Arbetskraft", "matt": "Lediga jobb", "kalla": "SCB, vakansstatistik", "frekvens": "Kvartal", "status": "Planerad" },
   { "omrade": "Resursutnyttjande", "matt": "Brist på arbetskraft, BNP-gap, jämviktsarbetslöshet", "kalla": "Konjunkturinstitutet", "frekvens": "Månad, kvartal", "status": "Planerad" },

@@ -16,7 +16,7 @@ import matt from '../data/matt.json';
 {matt.map((m) => (
   <tr>
     <td data-l="Område">{m.omrade}</td><td data-l="Mått">{m.matt}</td><td data-l="Källa">{m.kalla}</td><td data-l="Frekvens">{m.frekvens}</td>
-    <td data-l="Status"><span class={m.status === 'Prototyp' ? 'tag live' : 'tag'}>{m.status}</span></td>
+    <td data-l="Status"><span class={m.status === 'I drift' ? 'tag live' : 'tag'}>{m.status}</span></td>
   </tr>
 ))}
 </tbody>

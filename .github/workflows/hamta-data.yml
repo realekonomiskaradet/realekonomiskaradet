@@ -1,0 +1,31 @@
+name: Hämta data från SCB
+
+on:
+  schedule:
+    # Den 25:e varje månad kl. 06:00 UTC, efter att SCB har publicerat AKU.
+    - cron: '0 6 25 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  hamta:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/hamta-scb.mjs
+      - name: Spara om något har ändrats
+        run: |
+          if git diff --quiet src/data/aku.json; then
+            echo "Inga nya siffror."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/data/aku.json
+            git commit -m "Uppdatera AKU-data från SCB"
+            git push
+          fi
