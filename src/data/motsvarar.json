@@ -23,9 +23,9 @@
       "id": "lgh",
       "namn": "Lägenheter",
       "enhet": "lägenheter på 70 kvadratmeter",
-      "timmar": 4848,
-      "not": "Produktionspris 51 846 kr per kvadratmeter, inklusive mark och moms.",
-      "kalla": "SCB, Priser för nyproducerade bostäder 2024."
+      "timmar": 3086,
+      "not": "Byggnadspris 41 280 kr per kvadratmeter 2024, utan mark. Momsen på 25 procent är borträknad: 33 024 kr per kvadratmeter.",
+      "kalla": "SCB, Priser för nyproducerade bostäder 2024, tabell PrisPerAreorFH02 (riket, flerbostadshus)."
     },
     {
       "id": "rals",
