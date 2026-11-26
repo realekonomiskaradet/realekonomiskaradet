@@ -116,3 +116,5 @@ details.deep summary{cursor:pointer;font-weight:700;min-height:44px;display:flex
 .md-steps p em{font-style:normal;font-size:13.5px;color:var(--mute)}
 .back{display:inline-block;margin-bottom:12px;font-size:15px}
 .knapp{font:inherit;font-size:14px;min-height:44px;padding:6px 12px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);cursor:pointer}
+details.note summary{cursor:pointer;min-height:32px;display:flex;align-items:center;font-weight:600}
+details.note p{margin:4px 0}

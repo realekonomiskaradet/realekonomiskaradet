@@ -30,7 +30,12 @@ const data = {
 <div class="res" id="w-res" aria-live="polite"></div>
 <div class="assume"><label for="w-h" style="margin:0;font-weight:400">Antagande, arbetstimmar per enhet:</label><input id="w-h" type="number" inputmode="numeric" min="0.1" step="any"><span id="w-note"></span></div>
 </div>
-<p class="note">Källa: SCB, arbetskraftsundersökningarna (AKU), {manad(aku.period)}. Säsongrensade och utjämnade värden, 15–74 år. Lägsta nivå sedan 2001 uppmättes {manad(aku.lagstaSedan.period)}.{exempel.length > 0 && ` Exempelvärden som ännu inte är kontrollerade: ${exempel.join(', ')}.`} Alla värden går att ändra.</p>
+<details class="note"><summary>Källor</summary>
+<p>Faktisk arbetslöshet och arbetskraft: SCB, arbetskraftsundersökningarna (AKU), {manad(aku.period)}. Säsongrensade och utjämnade värden, 15–74 år.</p>
+{jamforelser.map((j: any) => <p>{j.namn}: {j.auto ? `SCB, AKU. Uppmättes ${manad(aku.lagstaSedan.period)}.` : j.kalla}</p>)}
+{exempel.length > 0 && <p>Exempelvärden som ännu inte är kontrollerade: {exempel.join(', ')}.</p>}
+<p>Alla värden går att ändra.</p>
+</details>
 </div>
 <div class="inp">
 <div>
