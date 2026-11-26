@@ -118,3 +118,10 @@ details.deep summary{cursor:pointer;font-weight:700;min-height:44px;display:flex
 .knapp{font:inherit;font-size:14px;min-height:44px;padding:6px 12px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--ink);cursor:pointer}
 details.note summary{cursor:pointer;min-height:32px;display:flex;align-items:center;font-weight:600}
 details.note p{margin:4px 0}
+.fraga{border-bottom:1px solid var(--line)}
+.fraga h2{color:var(--acc)}
+.fraga-text{font-size:19px;max-width:66ch;margin:0 0 20px}
+.fraga-lankar{display:flex;flex-wrap:wrap;gap:10px}
+.fraga-lankar a{display:inline-flex;align-items:center;min-height:44px;padding:8px 16px;border:2px solid var(--main);border-radius:4px;text-decoration:none;font-weight:600}
+.fraga-lankar a:hover{background:var(--soft)}
+:root[data-theme=dark] .fraga-lankar a{border-color:#5fb9c9}

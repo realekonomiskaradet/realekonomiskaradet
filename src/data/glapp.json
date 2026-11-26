@@ -29,7 +29,8 @@
       "namn": "Friktionsnivå",
       "etikett": "Friktionsnivå, procent",
       "varde": 3.0,
-      "kalla": "Antagande om arbetslöshet som beror på byte av jobb."
+      "kalla": "Antagande om arbetslöshet som beror på byte av jobb.",
+      "standard": true
     }
   ]
 }
