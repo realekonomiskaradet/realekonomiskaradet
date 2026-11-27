@@ -32,4 +32,4 @@ När inflationen bedöms bli för hög stramar Riksbanken åt, och arbetslöshet
 
 Jämviktsarbetslösheten, som Konjunkturinstitutet bedömer till 7,3 procent, är den arbetslöshet som anses förenlig med stabil inflation. Den är i praktiken storleken på den buffert av arbetslösa som politiken siktar på.
 
-Frågan är om det finns en bättre buffert. Se [Jobbgaranti som buffert](/policylab/jobbgaranti/).
+Frågan är om det finns en bättre buffert. Se [Nationell omställnings- och kompetensreserv](/policylab/omstallningsreserv/).
