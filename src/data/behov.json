@@ -1,0 +1,34 @@
+{
+  "kommentar": "Behov som myndigheter själva har beräknat. Kostnader räknas om till arbetstimmar med motsvarar.json (kr per arbetad timme). Uppdateras för hand.",
+  "hamtad": "2026-11-27",
+  "poster": [
+    {
+      "id": "jvg",
+      "namn": "Eftersatt underhåll av järnvägen",
+      "mdkr": 91,
+      "typ": "engang",
+      "text": "Det som skulle ha underhållits men inte har gjorts: spår, växlar, kontaktledningar och signaler.",
+      "kalla": "Trafikverket, ”Så här tar vi ikapp det eftersatta underhållet”, trafikverket.se.",
+      "kort": "Järnvägsunderhåll"
+    },
+    {
+      "id": "vag",
+      "namn": "Eftersatt underhåll av statliga vägar",
+      "mdkr": 35,
+      "typ": "engang",
+      "text": "Varav cirka 23 miljarder kronor gäller beläggning och vägkropp.",
+      "kalla": "Trafikverket, ”Så här tar vi ikapp det eftersatta vägunderhållet”, trafikverket.se.",
+      "kort": "Vägunderhåll"
+    },
+    {
+      "id": "bost",
+      "namn": "Nya bostäder",
+      "antal": 52300,
+      "enhet": "lgh",
+      "typ": "per år",
+      "text": "Boverket bedömer att det behövs drygt 523 000 nya bostäder 2024–2033. I bostadsmarknadsenkäten 2026 rapporterar 102 kommuner underskott på bostäder, och över hälften av befolkningen bor i en sådan kommun.",
+      "kalla": "Boverket, Behov av bostadsbyggande 2024–2033 (2025), och Bostadsmarknadsenkäten 2026.",
+      "kort": "Bostäder, ett år"
+    }
+  ]
+}

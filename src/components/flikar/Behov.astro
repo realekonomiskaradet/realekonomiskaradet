@@ -1,0 +1,38 @@
+---
+import b from '../../data/behov.json';
+import mot from '../../data/motsvarar.json';
+import aku from '../../data/aku.json';
+import glapp from '../../data/glapp.json';
+const kr = mot.metod.krPerTimme;
+const fr = glapp.jamforelser.find((j: any) => j.standard)!.varde as number;
+const glappDag = aku.arbetskraft * ((aku.arbetsloshet - fr) / 100) * glapp.timmarPerDag;
+const timPerEnhet = Object.fromEntries(mot.enheter.map((e: any) => [e.id, e.timmar]));
+const poster = b.poster.map((p: any) => {
+  const timmar = p.mdkr ? (p.mdkr * 1e9) / kr : p.antal * timPerEnhet[p.enhet];
+  return { ...p, timmar, dagar: timmar / glappDag };
+});
+const summaDagar = poster.reduce((s, p) => s + p.dagar, 0);
+const max = Math.max(...poster.map((p) => p.dagar));
+const nf = (n: number) => Math.round(n).toLocaleString('sv-SE');
+---
+<div class="panel" role="tabpanel" id="p-beh" aria-labelledby="t-beh" hidden>
+<div>
+<h2 style="font-size:20px;margin-bottom:12px">Behov</h2>
+<div class="big">{nf(summaDagar)} dagar</div>
+<div class="unit">av dagens förlorade arbetstid räcker till allt nedan</div>
+<p>Myndigheterna har själva räknat ut vad som saknas. Trafikverket har ett eftersatt underhåll på {poster[0].mdkr + poster[1].mdkr} miljarder kronor för järnväg och väg. Boverket bedömer att det behövs {nf(poster[2].antal)} nya bostäder per år.</p>
+<p>Vi har räknat om behoven till arbetstimmar och jämfört med den arbetstid som går förlorad varje arbetsdag när arbetslösheten är {aku.arbetsloshet.toLocaleString('sv-SE')} procent i stället för {fr.toLocaleString('sv-SE')} procent. Det är ungefär {(glappDag / 1e6).toLocaleString('sv-SE', { maximumFractionDigits: 1 })} miljoner timmar per dag.</p>
+<p>Hela underhållsskulden för järnväg och väg och ett års bostadsbehov motsvarar alltså {nf(summaDagar)} sådana dagar. Det är drygt hälften av ett arbetsår på {glapp.arbetsdagarPerAr} dagar.</p>
+<p class="broms">Arbetskraften finns. Det som stoppar är att utgifterna måste rymmas i en budget som styrs av saldomålet och utgiftstaket. <a href="/ramverket/">Läs ramverket</a>.</p>
+</div>
+<div>
+<div class="staplar">
+<h4>Arbetsdagar av det outnyttjade arbetet som behovet kräver</h4>
+{poster.map((p) => <div class="stapel"><span>{p.kort}</span><div class="track"><div class="fill" style={`width:${(p.dagar / max) * 100}%`}></div></div><span class="v">{nf(p.dagar)}</span></div>)}
+</div>
+<ul style="font-size:14px;padding-left:18px">
+{poster.map((p) => <li><strong>{p.namn}.</strong> {p.mdkr ? `${p.mdkr} miljarder kronor, ungefär ${nf(p.timmar / 1e6)} miljoner arbetstimmar.` : `${nf(p.antal)} bostäder, ungefär ${nf(p.timmar / 1e6)} miljoner arbetstimmar.`} {p.text}</li>)}
+</ul>
+<p class="note" style="font-size:13px;color:var(--mute)">Källor: {poster.map((p) => p.kalla).join(' ')} Omräkning: {kr} kr per arbetad timme (BNP per timme 2024) och {nf(timPerEnhet.lgh)} timmar per lägenhet på 70 kvadratmeter. Arbetslöshet och arbetskraft: SCB, AKU. Vårdköer ingår inte, eftersom det saknas en nationell siffra som går att räkna om till arbetstid.</p>
+</div>
+</div>
