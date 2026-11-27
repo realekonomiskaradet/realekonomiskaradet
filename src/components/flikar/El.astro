@@ -1,0 +1,25 @@
+---
+import el from '../../data/el.json';
+const sista = el.ar[el.ar.length - 1];
+const netto = (a: any) => a.export - a.import;
+const twh = (g: number) => (g / 1000).toLocaleString('sv-SE', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+const andel = Math.round((netto(sista) / sista.produktion) * 100);
+const max = Math.max(...el.ar.map(netto));
+---
+<div class="panel" role="tabpanel" id="p-el" aria-labelledby="t-el" hidden>
+<div>
+<h2 style="font-size:20px;margin-bottom:12px">El</h2>
+<div class="big">{twh(netto(sista))} TWh</div>
+<div class="unit">el exporterades netto {sista.ar}, en {andel === 20 ? 'femtedel' : `andel på ${andel} procent`} av all el som producerades i Sverige</div>
+<p>Sverige producerade {twh(sista.produktion)} TWh el {sista.ar}. Vi exporterade {twh(sista.export)} TWh och importerade {twh(sista.import)} TWh. Skillnaden är el som produceras här men används i andra länder. Hur mycket som exporteras ett visst år beror också på nederbörd, vind och priserna i grannländerna.</p>
+<p>Elen som exporteras är en verklig resurs som inte används i svensk industri, i svenska hem eller till ny produktion här. Det kan vara rätt att sälja den, men då bör det vara ett val och inte en följd av att efterfrågan här hålls nere.</p>
+<p class="broms">Se fliken <a href="#t-exp" data-flik="exp">Export</a>: vad får vi för det vi skickar ut?</p>
+</div>
+<div>
+<div class="staplar">
+<h4>Nettoexport av el, TWh per år</h4>
+{el.ar.map((a: any) => <div class="stapel"><span>{a.ar}</span><div class="track"><div class="fill" style={`width:${(netto(a) / max) * 100}%`}></div></div><span class="v">{twh(netto(a))}</span></div>)}
+</div>
+<p class="note" style="font-size:13px;color:var(--mute)">{el.kalla} Produktion är total tillförsel minus import. Hämtad {el.hamtad}.</p>
+</div>
+</div>

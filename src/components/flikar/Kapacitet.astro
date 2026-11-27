@@ -1,0 +1,32 @@
+---
+import k from '../../data/kapacitet.json';
+import Linjer from '../Linjer.astro';
+const s = k.sektorer;
+const sista = k.naringslivet.efterfragan[k.naringslivet.efterfragan.length - 1];
+const bristSista = k.naringslivet.bristArbetskraft[k.naringslivet.bristArbetskraft.length - 1];
+const per = (p: string) => p.includes('Q') ? `kvartal ${p.slice(5)} ${p.slice(0, 4)}` : `${['januari','februari','mars','april','maj','juni','juli','augusti','september','oktober','november','december'][Number(p.slice(5)) - 1]} ${p.slice(0, 4)}`;
+const faktorer = [['efterfragan', 'Efterfrågan'], ['arbetskraft', 'Arbetskraft'], ['material', 'Material, utrustning'], ['finansiering', 'Finansiering']] as const;
+---
+<div class="panel" role="tabpanel" id="p-kap" aria-labelledby="t-kap" hidden>
+<div>
+<h2 style="font-size:20px;margin-bottom:12px">Företagens kapacitet</h2>
+<div class="big">{sista[1]} %</div>
+<div class="unit">av företagen säger att det som begränsar produktionen är för låg efterfrågan</div>
+<p>Konjunkturinstitutet frågar varje kvartal vad som hindrar företagen från att producera mer. Bara {bristSista[1]} procent säger att de har brist på arbetskraft. Hösten 2022 var det tvärtom: hälften saknade personal och bara var femte saknade kunder.</p>
+<p>Det betyder att maskiner, lokaler och personal står delvis oanvända. Företagen kan producera mer. Det som saknas är köpare.</p>
+<p class="broms">Efterfrågan är kronor som någon spenderar. Det som håller nere den i dag är räntan och saldomålet, inte brist på resurser. <a href="/ramverket/">Läs ramverket</a>.</p>
+</div>
+<div>
+<Linjer etikett={`Hela näringslivet, andel företag i procent, ${per(k.naringslivet.efterfragan[0][0])} till ${per(sista[0])}`} min={0} max={70}
+  serier={[{ namn: 'Begränsas av efterfrågan', data: k.naringslivet.efterfragan as [string, number][], klass: 'acc' }, { namn: 'Brist på arbetskraft', data: k.naringslivet.bristArbetskraft as [string, number][], klass: '' }]} />
+<div class="staplar">
+{s.map((x: any) => (
+  <div>
+  <h4>{x.namn} <span style="font-weight:400;color:var(--mute)">({per(x.period)})</span></h4>
+  {faktorer.map(([f, namn]) => <div class={`stapel${f === 'efterfragan' ? ' ef' : ''}`}><span>{namn}</span><div class="track"><div class="fill" style={`width:${x[f]}%`}></div></div><span class="v">{x[f]} %</span></div>)}
+  </div>
+))}
+</div>
+<p class="note" style="font-size:13px;color:var(--mute)">{k.kalla} Hämtad {k.hamtad}.</p>
+</div>
+</div>
