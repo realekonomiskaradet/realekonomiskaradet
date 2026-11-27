@@ -49,5 +49,23 @@
       "kalla": "SKR, Välfärdens kompetensförsörjning. Personalprognos 2023–2033 (2024), s. 25–26."
     }
   ],
-  "heltidsar": 1760
+  "heltidsar": 1760,
+  "andraUppskattningar": [
+    {
+      "vem": "PwC (Strategy&), oktober 2026",
+      "text": "Eftersatt underhåll av väg, järnväg, vatten och energi: drygt 1 400 miljarder kronor. Nya investeringar som behövs till 2040: upp till 1 500 miljarder kronor. Totalt över 2 900 miljarder kronor. Vatten står för cirka 750 miljarder av underhållet och energi för cirka 518 miljarder.",
+      "kalla": "PwC, pressmeddelande 22 oktober 2026, ”Ny analys från Strategy&/PwC: Sveriges infrastrukturbehov skapar nya möjligheter för riskkapitalbolagen”.",
+      "mdkr": 2900
+    },
+    {
+      "vem": "Svenskt Näringsliv och Ramboll, 2023",
+      "text": "Underhållsskulden på statliga vägar och järnvägar var 77,5 miljarder kronor 2023 och väntas växa till 113 miljarder kronor 2033 med den plan som gällde då.",
+      "kalla": "Svenskt Näringsliv, ”Hur underhållsskulden på Sveriges vägar och järnvägar påverkar näringslivet”, mars 2023, s. 2."
+    },
+    {
+      "vem": "WSP, 2022",
+      "text": "Att renovera eller ersätta Sveriges befintliga kraftverk skulle kosta 600–900 miljarder kronor. Vatten- och avloppsnätet har ett återanskaffningsvärde på nära 1 000 miljarder kronor.",
+      "kalla": "WSP, ”Prioriteringar och vägval när Sverige behöver renoveras”, maj 2022."
+    }
+  ]
 }
