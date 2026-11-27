@@ -44,6 +44,11 @@ const pc = (x: number) => x.toLocaleString('sv-SE', { maximumFractionDigits: 1 }
 <ul style="font-size:14px;padding-left:18px">
 {poster.map((p) => <li><strong>{p.namn}.</strong> {p.mdkr ? `${p.mdkr} miljarder kronor${p.typ === 'per år' ? ' per år' : ''}.` : p.antal ? `${nf(p.antal)} bostäder per år.` : `${nf(p.personer)} fler anställda.`} {p.text}</li>)}
 </ul>
-<p class="note" style="font-size:13px;color:var(--mute)">Källor: {poster.map((p) => p.kalla).join(' ')} Omräkning: {kr} kr per arbetad timme (BNP per timme 2024), {nf(timPerEnhet.lgh)} timmar per lägenhet på 70 kvadratmeter och {nf(ht)} timmar per heltidsår. Arbetslöshet och arbetskraft: SCB, AKU, {aku.period}. Vårdens siffra gäller ökningen fram till 2033 och är inte omräknad, eftersom den redan anges i antal anställda.</p>
+<h4 style="margin-top:18px">Andra uppskattningar</h4>
+<p style="font-size:14px;margin:4px 0">Andra har gjort egna uppskattningar. De skiljer sig åt beroende på vilka områden och vilken tidsperiod som räknas med:</p>
+<ul style="font-size:14px;padding-left:18px">
+{b.andraUppskattningar.map((u: any) => <li><strong>{u.vem}.</strong> {u.text}{u.mdkr && ` Det motsvarar ungefär ${(u.mdkr * 1e9 / kr / ht / 1e6).toLocaleString('sv-SE', { maximumFractionDigits: 1 })} miljoner heltidsår, eller ${Math.round(u.mdkr * 1e9 / kr / ht / gap)} år för de ${tusen(gap)} personerna över friktionsnivån.`}</li>)}
+</ul>
+<p class="note" style="font-size:13px;color:var(--mute)">Källor: {[...poster.map((p) => p.kalla), ...b.andraUppskattningar.map((u: any) => u.kalla)].join(' ')} Omräkning: {kr} kr per arbetad timme (BNP per timme 2024), {nf(timPerEnhet.lgh)} timmar per lägenhet på 70 kvadratmeter och {nf(ht)} timmar per heltidsår. Arbetslöshet och arbetskraft: SCB, AKU, {aku.period}. Vårdens siffra gäller ökningen fram till 2033 och är inte omräknad, eftersom den redan anges i antal anställda.</p>
 </div>
 </div>
