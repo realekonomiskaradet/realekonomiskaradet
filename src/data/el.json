@@ -1,0 +1,13 @@
+{
+  "kalla": "SCB, tabellerna EN0105A/ElProdAr (tillförsel efter produktionsslag) och EN0108A/ElimpexpM (överföring till och från andra länder). GWh.",
+  "hamtad": "2026-11-27",
+  "ar": [
+    { "ar": 2019, "produktion": 165630, "export": 35231, "import": 9071 },
+    { "ar": 2020, "produktion": 160898, "export": 36822, "import": 11829 },
+    { "ar": 2021, "produktion": 168605, "export": 33910, "import": 8340 },
+    { "ar": 2022, "produktion": 169979, "export": 39391, "import": 6177 },
+    { "ar": 2023, "produktion": 163094, "export": 35790, "import": 7330 },
+    { "ar": 2024, "produktion": 169265, "export": 39087, "import": 5704 },
+    { "ar": 2025, "produktion": 166954, "export": 38860, "import": 5170 }
+  ]
+}

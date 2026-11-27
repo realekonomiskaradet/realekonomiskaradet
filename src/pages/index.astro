@@ -1,12 +1,22 @@
 ---
 import Bas from '../layouts/Bas.astro';
 import GlappRaknare from '../components/GlappRaknare.astro';
+import Kapacitet from '../components/flikar/Kapacitet.astro';
+import El from '../components/flikar/El.astro';
+import Export from '../components/flikar/Export.astro';
+const flikar = [['ak', 'Arbetskraft'], ['kap', 'Företagens kapacitet'], ['el', 'El'], ['exp', 'Export']];
 ---
 <Bas>
 <div class="hero band"><div class="wrap">
 <h1>Från siffror till verklighet</h1>
 <p class="lead">Vi mäter Sveriges förmåga, inte bara vår bokföring. Sveriges ekonomi mäts inte i kronor, utan i vad vi kan uträtta.</p>
-<GlappRaknare />
+<div class="flikar" role="tablist" aria-label="Resurser">
+{flikar.map(([id, namn], i) => <button type="button" role="tab" id={`t-${id}`} aria-controls={`p-${id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-flik={id}>{namn}</button>)}
+</div>
+<div role="tabpanel" id="p-ak" aria-labelledby="t-ak"><GlappRaknare /></div>
+<Kapacitet />
+<El />
+<Export />
 </div></div>
 
 <div class="band fraga"><div class="wrap">
@@ -20,8 +30,33 @@ import GlappRaknare from '../components/GlappRaknare.astro';
 </div></div>
 
 <div class="band"><div class="wrap grid3">
-<a href="/resursmonitor/"><h3>Resursmonitor</h3><p>Arbetskraft, kapacitet, energi och material bredvid budgetsaldot. Uppdateras varje kvartal.</p></a>
+<a href="/ramverket/"><h3>Ramverket</h3><p>Sju påståenden om kronan, staten och bankerna. Först myndigheternas egna ord, sedan vår slutsats.</p></a>
 <a href="/kunskapsbank/"><h3>Kunskapsbank</h3><p>Hur staten betalar, vad statsskulden är och vem som bestämmer räntan. Beskrivet med myndigheternas egna källor.</p></a>
 <a href="/policylab/"><h3>Policylab</h3><p>Förslag som utgår från verkliga resurser. Arbetskraft och material först, kronor sist.</p></a>
 </div></div>
+<script>
+  const knappar = [...document.querySelectorAll<HTMLButtonElement>('.flikar [role=tab]')];
+  function visa(id: string, fokus = false) {
+    for (const k of knappar) {
+      const pa = k.dataset.flik === id;
+      k.setAttribute('aria-selected', String(pa));
+      k.tabIndex = pa ? 0 : -1;
+      document.getElementById(`p-${k.dataset.flik}`)!.hidden = !pa;
+      if (pa && fokus) k.focus();
+    }
+    history.replaceState(null, '', id === 'ak' ? location.pathname : `#${id}`);
+  }
+  for (const k of knappar) k.addEventListener('click', () => visa(k.dataset.flik!));
+  document.querySelector('.flikar')!.addEventListener('keydown', (e) => {
+    const ev = e as KeyboardEvent; const i = knappar.findIndex((k) => k.getAttribute('aria-selected') === 'true');
+    if (ev.key === 'ArrowRight') visa(knappar[(i + 1) % knappar.length].dataset.flik!, true);
+    if (ev.key === 'ArrowLeft') visa(knappar[(i - 1 + knappar.length) % knappar.length].dataset.flik!, true);
+  });
+  document.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest('a[data-flik]') as HTMLAnchorElement | null;
+    if (a) { e.preventDefault(); visa(a.dataset.flik!, true); }
+  });
+  const start = location.hash.slice(1);
+  if (knappar.some((k) => k.dataset.flik === start)) visa(start);
+</script>
 </Bas>

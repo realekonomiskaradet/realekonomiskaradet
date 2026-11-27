@@ -1,0 +1,27 @@
+---
+// Linjediagram med flera serier. Ritas när sajten byggs.
+interface Serie { namn: string; data: [string, number][]; klass: string }
+interface Props { serier: Serie[]; enhet?: string; etikett: string; min?: number; max?: number }
+const { serier, enhet = '%', etikett } = Astro.props;
+const B = 560, H = 240, V = 40, O = 14, N = 28, U = 12;
+const alla = serier.flatMap((s) => s.data.map((d) => d[1]));
+const min = Astro.props.min ?? Math.floor(Math.min(...alla) / 10) * 10;
+const max = Astro.props.max ?? Math.ceil(Math.max(...alla) / 10) * 10;
+const n = serier[0].data.length;
+const x = (i: number) => V + (i / (n - 1)) * (B - V - U);
+const y = (v: number) => O + (1 - (v - min) / (max - min)) * (H - O - N);
+const steg = max - min > 50 ? 20 : 10;
+const yt: number[] = []; for (let v = min; v <= max; v += steg) yt.push(v);
+const xt = serier[0].data.map((d, i) => [d[0], i] as const).filter(([p]) => /Q1$|M01$/.test(p) || /^\d{4}$/.test(p));
+---
+<figure class="linje">
+<svg viewBox={`0 0 ${B} ${H}`} role="img" aria-label={etikett}>
+{yt.map((v) => <g><line x1={V} x2={B - U} y1={y(v)} y2={y(v)} class="grid" /><text x={V - 8} y={y(v) + 4} text-anchor="end">{v}</text></g>)}
+{xt.map(([p, i]) => <text x={x(i)} y={H - 8} text-anchor="middle">{p.slice(0, 4)}</text>)}
+{serier.map((s) => <path d={s.data.map((d, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(d[1]).toFixed(1)}`).join('')} class={`serie ${s.klass}`} />)}
+</svg>
+<figcaption>
+<span class="legend">{serier.map((s) => <span><i class={s.klass}></i>{s.namn}</span>)}</span>
+{etikett}.
+</figcaption>
+</figure>
