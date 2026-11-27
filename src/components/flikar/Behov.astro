@@ -4,35 +4,46 @@ import mot from '../../data/motsvarar.json';
 import aku from '../../data/aku.json';
 import glapp from '../../data/glapp.json';
 const kr = mot.metod.krPerTimme;
+const ht = b.heltidsar;
 const fr = glapp.jamforelser.find((j: any) => j.standard)!.varde as number;
-const glappDag = aku.arbetskraft * ((aku.arbetsloshet - fr) / 100) * glapp.timmarPerDag;
-const timPerEnhet = Object.fromEntries(mot.enheter.map((e: any) => [e.id, e.timmar]));
+const gap = aku.arbetskraft * ((aku.arbetsloshet - fr) / 100);
+const timPerEnhet: Record<string, number> = Object.fromEntries(mot.enheter.map((e: any) => [e.id, e.timmar]));
 const poster = b.poster.map((p: any) => {
-  const timmar = p.mdkr ? (p.mdkr * 1e9) / kr : p.antal * timPerEnhet[p.enhet];
-  return { ...p, timmar, dagar: timmar / glappDag };
+  const arsverken = p.personer ?? (p.mdkr ? (p.mdkr * 1e9) / kr : p.antal * timPerEnhet[p.enhet]) / ht;
+  return { ...p, arsverken };
 });
-const summaDagar = poster.reduce((s, p) => s + p.dagar, 0);
-const max = Math.max(...poster.map((p) => p.dagar));
+const perAr = poster.filter((p) => p.typ === 'per år');
+const engang = poster.filter((p) => p.typ === 'engang');
+const sumPerAr = perAr.reduce((s, p) => s + p.arsverken, 0);
+const sumEngang = engang.reduce((s, p) => s + p.arsverken, 0);
+const rest = gap - sumPerAr;
+const manader = rest > 0 ? Math.ceil((sumEngang / rest) * 12) : null;
+const max = Math.max(...poster.map((p) => p.arsverken));
 const nf = (n: number) => Math.round(n).toLocaleString('sv-SE');
+const tusen = (n: number) => `${nf(Math.round(n / 1000) * 1000)}`;
+const pc = (x: number) => x.toLocaleString('sv-SE', { maximumFractionDigits: 1 });
 ---
 <div class="panel" role="tabpanel" id="p-beh" aria-labelledby="t-beh" hidden>
 <div>
 <h2 style="font-size:20px;margin-bottom:12px">Behov</h2>
-<div class="big">{nf(summaDagar)} dagar</div>
-<div class="unit">av dagens förlorade arbetstid räcker till allt nedan</div>
-<p>Myndigheterna har själva räknat ut vad som saknas. Trafikverket har ett eftersatt underhåll på {poster[0].mdkr + poster[1].mdkr} miljarder kronor för järnväg och väg. Boverket bedömer att det behövs {nf(poster[2].antal)} nya bostäder per år.</p>
-<p>Vi har räknat om behoven till arbetstimmar och jämfört med den arbetstid som går förlorad varje arbetsdag när arbetslösheten är {aku.arbetsloshet.toLocaleString('sv-SE')} procent i stället för {fr.toLocaleString('sv-SE')} procent. Det är ungefär {(glappDag / 1e6).toLocaleString('sv-SE', { maximumFractionDigits: 1 })} miljoner timmar per dag.</p>
-<p>Hela underhållsskulden för järnväg och väg och ett års bostadsbehov motsvarar alltså {nf(summaDagar)} sådana dagar. Det är drygt hälften av ett arbetsår på {glapp.arbetsdagarPerAr} dagar.</p>
+<div class="big">{tusen(gap)}</div>
+<div class="unit">personer är arbetslösa utöver friktionsnivån på {pc(fr)} procent</div>
+<p>Här ställer vi dem mot det som myndigheter, kommuner och regioner själva säger saknas. Allt är omräknat till heltidsår, det vill säga en person som arbetar heltid i ett år.</p>
+<p>Varje år behövs omkring {tusen(sumPerAr)} heltidsår för att bygga de bostäder som behövs, ta igen underskottet i VA-investeringar och anställa den personal som vården och äldreomsorgen behöver. Det är {Math.round((sumPerAr / gap) * 100)} procent av de arbetslösa över friktionsnivån.</p>
+{manader && <p>Resten, omkring {tusen(rest)} personer, skulle kunna ta igen hela det eftersatta underhållet av järnväg och väg på ungefär {manader} månader. Det underhållet motsvarar {tusen(sumEngang)} heltidsår.</p>}
+<p>Alla kan inte göra allt. Det tar tid att utbilda en sjuksköterska eller en banarbetare. Räkningen visar att arbetskraften räcker, inte vem som ska göra vad. Därför behövs en plan för utbildning, se förslaget om en <a href="/policylab/omstallningsreserv/">omställnings- och kompetensreserv</a>.</p>
 <p class="broms">Arbetskraften finns. Det som stoppar är att utgifterna måste rymmas i en budget som styrs av saldomålet och utgiftstaket. <a href="/ramverket/">Läs ramverket</a> eller <a href="/fakta/underskott/">räkna på vad mer utgifter skulle ge</a>.</p>
 </div>
 <div>
 <div class="staplar">
-<h4>Arbetsdagar av det outnyttjade arbetet som behovet kräver</h4>
-{poster.map((p) => <div class="stapel"><span>{p.kort}</span><div class="track"><div class="fill" style={`width:${(p.dagar / max) * 100}%`}></div></div><span class="v">{nf(p.dagar)}</span></div>)}
+<h4>Behov varje år, antal heltidsår</h4>
+{perAr.map((p) => <div class="stapel"><span>{p.kort}</span><div class="track"><div class="fill" style={`width:${(p.arsverken / max) * 100}%`}></div></div><span class="v">{tusen(p.arsverken)}</span></div>)}
+<h4 style="margin-top:18px">Eftersatt underhåll, en gång, antal heltidsår</h4>
+{engang.map((p) => <div class="stapel"><span>{p.kort}</span><div class="track"><div class="fill" style={`width:${(p.arsverken / max) * 100}%`}></div></div><span class="v">{tusen(p.arsverken)}</span></div>)}
 </div>
 <ul style="font-size:14px;padding-left:18px">
-{poster.map((p) => <li><strong>{p.namn}.</strong> {p.mdkr ? `${p.mdkr} miljarder kronor, ungefär ${nf(p.timmar / 1e6)} miljoner arbetstimmar.` : `${nf(p.antal)} bostäder, ungefär ${nf(p.timmar / 1e6)} miljoner arbetstimmar.`} {p.text}</li>)}
+{poster.map((p) => <li><strong>{p.namn}.</strong> {p.mdkr ? `${p.mdkr} miljarder kronor${p.typ === 'per år' ? ' per år' : ''}.` : p.antal ? `${nf(p.antal)} bostäder per år.` : `${nf(p.personer)} fler anställda.`} {p.text}</li>)}
 </ul>
-<p class="note" style="font-size:13px;color:var(--mute)">Källor: {poster.map((p) => p.kalla).join(' ')} Omräkning: {kr} kr per arbetad timme (BNP per timme 2024) och {nf(timPerEnhet.lgh)} timmar per lägenhet på 70 kvadratmeter. Arbetslöshet och arbetskraft: SCB, AKU. Vårdköer ingår inte, eftersom det saknas en nationell siffra som går att räkna om till arbetstid.</p>
+<p class="note" style="font-size:13px;color:var(--mute)">Källor: {poster.map((p) => p.kalla).join(' ')} Omräkning: {kr} kr per arbetad timme (BNP per timme 2024), {nf(timPerEnhet.lgh)} timmar per lägenhet på 70 kvadratmeter och {nf(ht)} timmar per heltidsår. Arbetslöshet och arbetskraft: SCB, AKU, {aku.period}. Vårdens siffra gäller ökningen fram till 2033 och är inte omräknad, eftersom den redan anges i antal anställda.</p>
 </div>
 </div>

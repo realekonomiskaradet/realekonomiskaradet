@@ -7,10 +7,11 @@ import mot from '../../data/motsvarar.json';
 import behov from '../../data/behov.json';
 const fr = glapp.jamforelser.find((j: any) => j.standard)!.varde as number;
 const timPerEnhet: Record<string, number> = Object.fromEntries(mot.enheter.map((e: any) => [e.id, e.timmar]));
-const behovTimmar = behov.poster.reduce((s: number, p: any) => s + (p.mdkr ? (p.mdkr * 1e9) / mot.metod.krPerTimme : p.antal * timPerEnhet[p.enhet]), 0);
+const ht = behov.heltidsar;
+const behovPerAr = behov.poster.filter((p: any) => p.typ === 'per år').reduce((sum: number, p: any) => sum + (p.personer ?? (p.mdkr ? (p.mdkr * 1e9) / mot.metod.krPerTimme : p.antal * timPerEnhet[p.enhet]) / ht), 0);
 const data = {
   bnp: m.bnpMnkr / 1000, instrument: m.instrument, lf: aku.arbetskraft, u: aku.arbetsloshet, fr,
-  h: glapp.timmarPerDag, ar: glapp.arbetsdagarPerAr, kr: mot.metod.krPerTimme, behovTimmar,
+  h: glapp.timmarPerDag, ar: glapp.arbetsdagarPerAr, kr: mot.metod.krPerTimme, ht, behovPerAr,
 };
 ---
 <Bas titel="Om staten använder mer" beskrivning="Hur arbetslösheten och produktionen ändras om staten ökar sina utgifter. Räknat med Konjunkturinstitutets multiplikatorer.">
@@ -80,7 +81,7 @@ const data = {
 <script>
   type Inst = { id: string; namn: string; text: string; aktiv: { bnp: number; u: number }; passiv: { bnp: number; u: number } };
   const $ = (id: string) => document.getElementById(id)!;
-  const D = JSON.parse($('u-data').textContent || '{}') as { bnp: number; instrument: Inst[]; lf: number; u: number; fr: number; h: number; ar: number; kr: number; behovTimmar: number };
+  const D = JSON.parse($('u-data').textContent || '{}') as { bnp: number; instrument: Inst[]; lf: number; u: number; fr: number; h: number; ar: number; kr: number; ht: number; behovPerAr: number };
   let inst = D.instrument[1].id;
   let rb: 'aktiv' | 'passiv' = 'passiv';
   const nf = (n: number) => Math.round(n).toLocaleString('sv-SE');
@@ -98,8 +99,8 @@ const data = {
     const timmar = (dBnp * 1e9) / D.kr;
     const glappFore = ((D.u - D.fr) / 100) * D.lf * D.h;
     const glappEfter = ((nyU - D.fr) / 100) * D.lf * D.h;
-    const behovAr = D.behovTimmar / timmar;
-    const behovText = behovAr <= 1 ? 'De extra timmarna under ett år räcker till allt i fliken Behov' : `Med de extra timmarna tar det ungefär ${dec(behovAr)} år att klara allt i fliken Behov`;
+    const hel = timmar / D.ht;
+    const behovText = `De extra timmarna motsvarar ungefär ${nf(Math.round(hel / 1000) * 1000)} heltidsår. Det är ${nf((hel / D.behovPerAr) * 100)} procent av det som enligt fliken Behov behövs varje år till bostäder, VA och vård`;
     const tillFr = ((D.u - D.fr) / -mult.u) * D.bnp / 100;
     $('u-bv').textContent = nf(belopp);
     $('u-itext').textContent = x.text;
@@ -111,7 +112,7 @@ const data = {
       [`${nf(timmar / 1e6)} milj.`, 'fler arbetstimmar per år'],
     ].map(([b, s]) => `<div><b>${b}</b><span>${s}</span></div>`).join('');
     $('u-lyft').textContent = belopp === 0 ? '' :
-      `Den förlorade arbetstiden minskar från ${dec(glappFore / 1e6)} till ${dec(glappEfter / 1e6)} miljoner timmar per arbetsdag. ${behovText}: underhållsskulden för järnväg och väg och ett års bostadsbehov. Enligt samma räkning skulle det krävas ungefär ${nf(Math.round(tillFr / 10) * 10)} miljarder kronor per år för att nå friktionsnivån på ${dec(D.fr)} procent.`;
+      `Den förlorade arbetstiden minskar från ${dec(glappFore / 1e6)} till ${dec(glappEfter / 1e6)} miljoner timmar per arbetsdag. ${behovText}. Enligt samma räkning skulle det krävas ungefär ${nf(Math.round(tillFr / 10) * 10)} miljarder kronor per år för att nå friktionsnivån på ${dec(D.fr)} procent.`;
     for (const b of document.querySelectorAll<HTMLButtonElement>('#u-inst button')) b.setAttribute('aria-pressed', String(b.dataset.k === inst));
     for (const b of document.querySelectorAll<HTMLButtonElement>('#u-rb button')) b.setAttribute('aria-pressed', String(b.dataset.k === rb));
   }
