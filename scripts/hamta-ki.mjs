@@ -1,7 +1,7 @@
 // Hämtar begränsande faktorer och kapacitetsutnyttjande från KI:s Konjunkturbarometer
 // och sparar i src/data/kapacitet.json. Körs av GitHub Actions (.github/workflows/hamta-data.yml).
-import { readFile, writeFile } from 'node:fs/promises';
-import { hamta, idag } from './pxweb.mjs';
+import { readFile } from 'node:fs/promises';
+import { hamta, idag, spara } from './pxweb.mjs';
 
 const BAS = 'https://statistik.konj.se/PxWeb/api/v1/sv/KonjBar';
 const UT = new URL('../src/data/kapacitet.json', import.meta.url);
@@ -33,5 +33,5 @@ const serie = (f) => tot.filter((r) => r['Fråga'] === f && r.varde !== null && 
 
 const gammal = JSON.parse(await readFile(UT, 'utf8'));
 const data = { kalla: gammal.kalla, hamtad: idag(), sektorer: ut, naringslivet: { efterfragan: serie('oeft2'), bristArbetskraft: serie('brip') } };
-await writeFile(UT, JSON.stringify(data, null, 2) + '\n');
+await spara(UT, data);
 console.log('KI:', ut.map((s) => `${s.namn} ${s.period}: efterfrågan ${s.efterfragan} %`).join('; '));

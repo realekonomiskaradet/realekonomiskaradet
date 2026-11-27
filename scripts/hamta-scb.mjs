@@ -1,7 +1,7 @@
 // Hämtar arbetskraftsdata från SCB:s AKU och sparar i src/data/aku.json.
 // Körs varje månad av GitHub Actions (.github/workflows/hamta-data.yml).
 // Kan också köras för hand: node scripts/hamta-scb.mjs
-import { writeFile } from 'node:fs/promises';
+import { spara } from './pxweb.mjs';
 
 const SCB_URL = 'https://api.scb.se/OV0104/v1/doris/sv/ssd/AM/AM0401/AM0401A/AKURLBefM';
 const UT = new URL('../src/data/aku.json', import.meta.url);
@@ -45,5 +45,5 @@ const data = {
   historik: serie.ALÖSP.slice(-60),
 };
 
-await writeFile(UT, JSON.stringify(data, null, 2) + '\n');
+await spara(UT, data);
 console.log(`Sparade ${period}: arbetslöshet ${arbetsloshet} %, arbetskraft ${data.arbetskraft}.`);

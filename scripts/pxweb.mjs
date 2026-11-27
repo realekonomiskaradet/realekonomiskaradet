@@ -27,3 +27,14 @@ export async function hamta(url, urval) {
 }
 
 export const idag = () => new Date().toISOString().slice(0, 10);
+
+// Sparar bara om siffrorna har ändrats, så att hämtningsdatumet inte ger en ny version varje vecka.
+import { readFile, writeFile } from 'node:fs/promises';
+export async function spara(fil, data) {
+  let gammal = null;
+  try { gammal = JSON.parse(await readFile(fil, 'utf8')); } catch {}
+  const utan = (d) => JSON.stringify({ ...d, hamtad: undefined });
+  if (gammal && utan(gammal) === utan(data)) { console.log(`Oförändrat: ${fil.pathname.split('/').pop()}`); return false; }
+  await writeFile(fil, JSON.stringify(data, null, 2) + '\n');
+  return true;
+}

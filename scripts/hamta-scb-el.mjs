@@ -1,6 +1,6 @@
 // Hämtar elproduktion, export och import från SCB och sparar i src/data/el.json.
-import { readFile, writeFile } from 'node:fs/promises';
-import { hamta, idag } from './pxweb.mjs';
+import { readFile } from 'node:fs/promises';
+import { hamta, idag, spara } from './pxweb.mjs';
 
 const SCB = 'https://api.scb.se/OV0104/v1/doris/sv/ssd/EN';
 const UT = new URL('../src/data/el.json', import.meta.url);
@@ -25,6 +25,6 @@ for (const tid of [...new Set(prod.map((r) => r.Tid))].sort()) {
 if (!ar.length) throw new Error('Inga hela år hittades');
 
 const gammal = JSON.parse(await readFile(UT, 'utf8'));
-await writeFile(UT, JSON.stringify({ ...gammal, hamtad: idag(), ar }, null, 2) + '\n');
+await spara(UT, { ...gammal, hamtad: idag(), ar });
 const s = ar[ar.length - 1];
 console.log(`El ${s.ar}: produktion ${s.produktion} GWh, nettoexport ${s.export - s.import} GWh.`);
