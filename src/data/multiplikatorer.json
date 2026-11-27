@@ -1,0 +1,13 @@
+{
+  "kommentar": "Multiplikatorer från Konjunkturinstitutets modell SELMA. Genomsnitt över två år av effekten när utgiften höjs med 1 procent av BNP. BNP-multiplikatorn är kronor BNP per krona utgift. Arbetslöshetsmultiplikatorn är förändring i arbetslösheten i procentenheter per procent av BNP.",
+  "kalla": "Konjunkturinstitutet, KI-kommentar 2025-12-02, ”Finanspolitiska multiplikatorer”, tabell 1 och 2.",
+  "url": "https://konj.se/media/pbpjjaxt/ki-kommentar-2025-12-02-finanspolitiska-multiplikatorer.pdf",
+  "bnpMnkr": 6443039,
+  "bnpAr": 2024,
+  "bnpKalla": "SCB, nationalräkenskaperna, BNP till marknadspris 2024, löpande priser.",
+  "instrument": [
+    { "id": "kons", "namn": "Offentlig konsumtion", "text": "Till exempel fler anställda i vård, skola och omsorg.", "aktiv": { "bnp": 0.82, "u": -0.65 }, "passiv": { "bnp": 1.14, "u": -0.99 } },
+    { "id": "inv", "namn": "Offentliga investeringar", "text": "Till exempel järnväg, vägar och byggnader.", "aktiv": { "bnp": 0.99, "u": -0.72 }, "passiv": { "bnp": 1.16, "u": -0.91 } }
+  ],
+  "litteratur": "Hjelm och Stockhammar (2016), Konjunkturinstitutet Working Paper 147, finner att offentlig konsumtion, investeringar och transfereringar har betydande effekter på sysselsättningen i lågkonjunktur, och att multiplikatorn för offentliga investeringar är omkring 2 efter åtta kvartal under perioden med rörlig växelkurs."
+}

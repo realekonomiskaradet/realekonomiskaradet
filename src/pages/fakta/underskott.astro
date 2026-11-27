@@ -1,0 +1,124 @@
+---
+import Bas from '../../layouts/Bas.astro';
+import m from '../../data/multiplikatorer.json';
+import aku from '../../data/aku.json';
+import glapp from '../../data/glapp.json';
+import mot from '../../data/motsvarar.json';
+import behov from '../../data/behov.json';
+const fr = glapp.jamforelser.find((j: any) => j.standard)!.varde as number;
+const timPerEnhet: Record<string, number> = Object.fromEntries(mot.enheter.map((e: any) => [e.id, e.timmar]));
+const ht = behov.heltidsar;
+const behovPerAr = behov.poster.filter((p: any) => p.typ === 'per år').reduce((sum: number, p: any) => sum + (p.personer ?? (p.mdkr ? (p.mdkr * 1e9) / mot.metod.krPerTimme : p.antal * timPerEnhet[p.enhet]) / ht), 0);
+const data = {
+  bnp: m.bnpMnkr / 1000, instrument: m.instrument, lf: aku.arbetskraft, u: aku.arbetsloshet, fr,
+  h: glapp.timmarPerDag, ar: glapp.arbetsdagarPerAr, kr: mot.metod.krPerTimme, ht, behovPerAr,
+};
+---
+<Bas titel="Om staten använder mer" beskrivning="Hur arbetslösheten och produktionen ändras om staten ökar sina utgifter. Räknat med Konjunkturinstitutets multiplikatorer.">
+<div class="sub"><div class="band"><div class="wrap">
+<a class="back" href="/fakta/">← Fakta</a>
+<h1>Om staten använder mer</h1>
+<p class="lead" style="opacity:1;margin:0">Vad händer med arbetslösheten och produktionen om staten ökar sina utgifter? Räknaren använder Konjunkturinstitutets egna beräkningar.</p>
+</div></div></div>
+<div class="band"><div class="wrap">
+<div class="calc" aria-labelledby="u-h">
+<div>
+<h2 id="u-h" style="font-size:20px;margin-bottom:12px">Arbetslösheten blir</h2>
+<div class="big" id="u-big">0</div>
+<div class="unit" id="u-unit"></div>
+<div class="conv" id="u-conv"></div>
+<p class="lyft" id="u-lyft" aria-live="polite" style="margin-top:20px"></p>
+</div>
+<div class="inp">
+<div><label for="u-belopp">Ökade utgifter per år, miljarder kronor: <b id="u-bv"></b></label><input id="u-belopp" type="range" min="0" max="400" step="10" value="100"></div>
+<div>
+<label id="u-il">Vad pengarna används till</label>
+<div class="seg" id="u-inst" role="group" aria-labelledby="u-il">
+{m.instrument.map((x, i) => <button type="button" data-k={x.id} aria-pressed={i === 1 ? 'true' : 'false'}>{x.namn}</button>)}
+</div>
+<p class="note" id="u-itext" style="margin:6px 0 0"></p>
+</div>
+<div>
+<label id="u-rl">Riksbanken</label>
+<div class="seg" id="u-rb" role="group" aria-labelledby="u-rl">
+<button type="button" data-k="passiv" aria-pressed="true">Räntan ligger still</button>
+<button type="button" data-k="aktiv" aria-pressed="false">Räntan höjs</button>
+</div>
+<p class="note" style="margin:6px 0 0">Om Riksbanken svarar med att höja räntan blir effekten mindre.</p>
+</div>
+</div>
+</div>
+</div></div>
+<div class="band"><div class="wrap prose">
+<h2>Så räknar vi</h2>
+<p>Konjunkturinstitutet (KI) har räknat ut hur mycket BNP och arbetslösheten ändras när staten höjer en utgift med 1 procent av BNP. Måttet kallas multiplikator. Vi använder KI:s siffror för offentlig konsumtion och offentliga investeringar.</p>
+<table>
+<thead><tr><th></th><th>BNP, kronor per krona</th><th>Arbetslöshet, procentenheter per procent av BNP</th></tr></thead>
+<tbody>
+{m.instrument.flatMap((x) => [
+  <tr><td>{x.namn}, räntan ligger still</td><td>{x.passiv.bnp.toLocaleString('sv-SE')}</td><td>{x.passiv.u.toLocaleString('sv-SE')}</td></tr>,
+  <tr><td>{x.namn}, räntan höjs</td><td>{x.aktiv.bnp.toLocaleString('sv-SE')}</td><td>{x.aktiv.u.toLocaleString('sv-SE')}</td></tr>,
+])}
+</tbody>
+</table>
+<p>Räkningen går i tre steg:</p>
+<ol>
+<li>Utgiften delas med BNP ({(m.bnpMnkr / 1e6).toLocaleString('sv-SE', { maximumFractionDigits: 2 })} biljoner kronor {m.bnpAr}). 100 miljarder kronor är ungefär 1,6 procent av BNP.</li>
+<li>Andelen gånger KI:s multiplikatorer ger hur mycket BNP ökar och hur mycket arbetslösheten sjunker.</li>
+<li>Den ökade produktionen räknas om till arbetstimmar med {mot.metod.krPerTimme} kronor per timme, samma metod som på startsidan.</li>
+</ol>
+<p>De två sätten att räkna ger ungefär samma resultat. 100 miljarder kronor i offentlig konsumtion ger enligt KI omkring 90 000 färre arbetslösa. Omräknat i timmar ger samma 100 miljarder omkring 85 000 heltidsår.</p>
+<h3>Begränsningar</h3>
+<ul>
+<li>KI:s siffror är genomsnitt över två år och gäller under historiskt normala förhållanden. KI skriver själv att effekten kan vara en annan när läget är ett annat.</li>
+<li>Räkningen är linjär. Ju närmare friktionsnivån arbetslösheten kommer, desto svårare blir det att hitta folk, och effekten per krona minskar.</li>
+<li>När arbetslösheten är hög som nu talar forskningen för att effekten snarare är större. {m.litteratur}</li>
+<li>En del av utgiften kommer tillbaka till staten som skatt och lägre kostnader för arbetslöshet. Det är inte med i räkningen.</li>
+</ul>
+<p class="note">Källor: {m.kalla} <a href={m.url}>Länk till rapporten</a>. {m.bnpKalla} Arbetslöshet och arbetskraft: SCB, AKU, {aku.period}. Behov: se fliken Behov på startsidan.</p>
+</div></div>
+<script type="application/json" id="u-data" set:html={JSON.stringify(data)}></script>
+<script>
+  type Inst = { id: string; namn: string; text: string; aktiv: { bnp: number; u: number }; passiv: { bnp: number; u: number } };
+  const $ = (id: string) => document.getElementById(id)!;
+  const D = JSON.parse($('u-data').textContent || '{}') as { bnp: number; instrument: Inst[]; lf: number; u: number; fr: number; h: number; ar: number; kr: number; ht: number; behovPerAr: number };
+  let inst = D.instrument[1].id;
+  let rb: 'aktiv' | 'passiv' = 'passiv';
+  const nf = (n: number) => Math.round(n).toLocaleString('sv-SE');
+  const dec = (n: number) => n.toLocaleString('sv-SE', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const slider = $('u-belopp') as HTMLInputElement;
+  function draw() {
+    const belopp = Number(slider.value);
+    const x = D.instrument.find((i) => i.id === inst)!;
+    const mult = x[rb];
+    const andel = (belopp / D.bnp) * 100;
+    const du = mult.u * andel;
+    const nyU = Math.max(D.fr, D.u + du);
+    const fler = ((D.u - nyU) / 100) * D.lf;
+    const dBnp = mult.bnp * belopp;
+    const timmar = (dBnp * 1e9) / D.kr;
+    const glappFore = ((D.u - D.fr) / 100) * D.lf * D.h;
+    const glappEfter = ((nyU - D.fr) / 100) * D.lf * D.h;
+    const hel = timmar / D.ht;
+    const behovText = `De extra timmarna motsvarar ungefär ${nf(Math.round(hel / 1000) * 1000)} heltidsår. Det är ${nf((hel / D.behovPerAr) * 100)} procent av det som enligt fliken Behov behövs varje år till bostäder, VA och vård`;
+    const tillFr = ((D.u - D.fr) / -mult.u) * D.bnp / 100;
+    $('u-bv').textContent = nf(belopp);
+    $('u-itext').textContent = x.text;
+    $('u-big').textContent = `${dec(nyU)} %`;
+    $('u-unit').textContent = `i stället för ${dec(D.u)} procent i dag`;
+    $('u-conv').innerHTML = [
+      [nf(Math.round(fler / 1000) * 1000), 'färre arbetslösa'],
+      [`${nf(dBnp)} mdkr`, 'högre BNP per år'],
+      [`${nf(timmar / 1e6)} milj.`, 'fler arbetstimmar per år'],
+    ].map(([b, s]) => `<div><b>${b}</b><span>${s}</span></div>`).join('');
+    $('u-lyft').textContent = belopp === 0 ? '' :
+      `Den förlorade arbetstiden minskar från ${dec(glappFore / 1e6)} till ${dec(glappEfter / 1e6)} miljoner timmar per arbetsdag. ${behovText}. Enligt samma räkning skulle det krävas ungefär ${nf(Math.round(tillFr / 10) * 10)} miljarder kronor per år för att nå friktionsnivån på ${dec(D.fr)} procent.`;
+    for (const b of document.querySelectorAll<HTMLButtonElement>('#u-inst button')) b.setAttribute('aria-pressed', String(b.dataset.k === inst));
+    for (const b of document.querySelectorAll<HTMLButtonElement>('#u-rb button')) b.setAttribute('aria-pressed', String(b.dataset.k === rb));
+  }
+  slider.addEventListener('input', draw);
+  $('u-inst').addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest('button'); if (b) { inst = b.dataset.k!; draw(); } });
+  $('u-rb').addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest('button'); if (b) { rb = b.dataset.k as 'aktiv' | 'passiv'; draw(); } });
+  draw();
+</script>
+</Bas>
