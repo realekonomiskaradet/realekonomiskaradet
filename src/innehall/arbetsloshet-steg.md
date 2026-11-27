@@ -26,4 +26,4 @@ Om staten inte betalar ut tillräckligt för att täcka både skatterna och det 
 
 ### Så varför håller staten arbetslösheten uppe?
 
-Det officiella svaret är prisstabilitet. Arbetslösheten används som buffert. Frågan är om det finns en bättre buffert. Se [Jobbgaranti som buffert](/policylab/jobbgaranti/).
+Det officiella svaret är prisstabilitet. Arbetslösheten används som buffert. Frågan är om det finns en bättre buffert. Se [Nationell omställnings- och kompetensreserv](/policylab/omstallningsreserv/).
