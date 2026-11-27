@@ -2,12 +2,15 @@
 import h from '../../data/handel.json';
 import glapp from '../../data/glapp.json';
 import mot from '../../data/motsvarar.json';
+import aku from '../../data/aku.json';
 const ar = h.ar as [number, number, number][];
 const [sistaAr, ex, im] = ar[ar.length - 1];
 const netto = ex - im;
 const kr = mot.metod.krPerTimme;
 const timmar = (netto * 1e6) / kr;
 const arsverken = timmar / 1760;
+const sysselsatta = aku.arbetskraft - aku.arbetslosa;
+const dagarPerPerson = timmar / sysselsatta / glapp.timmarPerDag;
 const summa = ar.reduce((s, [, e, i]) => s + e - i, 0);
 const nf = (n: number) => Math.round(n).toLocaleString('sv-SE');
 const max = Math.max(...ar.map(([, e, i]) => e - i));
@@ -19,6 +22,7 @@ const urval = ar.filter(([a]) => a >= 2010);
 <div class="big">{nf(netto / 1000)} mdkr</div>
 <div class="unit">mer exporterade vi än vi importerade {sistaAr}</div>
 <p>Det motsvarar ungefär {nf(timmar / 1e6)} miljoner arbetstimmar, eller {nf(arsverken / 1000)} 000 heltidsår. Det är varor och tjänster som producerades här men konsumeras eller investeras i andra länder. Sedan år 2000 har nettoexporten varit {(summa / 1e6).toLocaleString('sv-SE', { maximumFractionDigits: 1 })} biljoner kronor i löpande priser.</p>
+<p>Delat på alla sysselsatta blir det ungefär {nf(dagarPerPerson)} arbetsdagar per person och år. Varje sysselsatt arbetar alltså ungefär en och en halv vecka om året för att producera sådant som lämnar landet utan att vi får varor eller tjänster tillbaka.</p>
 <p>Export är det vi ger. Import är det vi får. Det vi får för nettoexporten är fordringar på utlandet: kronor eller utländsk valuta på konton och i värdepapper.</p>
 <p>Det kan vara ett bra byte. Till exempel om exporten ger högre produktivitet här, om fordringarna används för framtida import, eller om vi säljer ett överskott som vi ändå inte kan använda. Men då behövs en plan som säger vad vi får tillbaka och när.</p>
 <p class="broms">I dag finns ingen sådan plan. När efterfrågan i Sverige hålls nere av saldomålet går en större del av produktionen på export. <a href="/ramverket/">Läs ramverket</a>, punkt 6.</p>
@@ -28,6 +32,6 @@ const urval = ar.filter(([a]) => a >= 2010);
 <h4>Nettoexport av varor och tjänster, miljarder kronor</h4>
 {urval.map(([a, e, i]) => <div class="stapel"><span>{a}</span><div class="track"><div class="fill" style={`width:${Math.max(0, ((e - i) / max) * 100)}%`}></div></div><span class="v">{nf((e - i) / 1000)}</span></div>)}
 </div>
-<p class="note" style="font-size:13px;color:var(--mute)">{h.kalla} Omräkning till timmar: {kr} kr per arbetad timme (BNP per timme 2024). Heltidsår: 1 760 timmar. Hämtad {h.hamtad}.</p>
+<p class="note" style="font-size:13px;color:var(--mute)">{h.kalla} Omräkning till timmar: {kr} kr per arbetad timme (BNP per timme 2024). Heltidsår: 1 760 timmar. Sysselsatta: arbetskraften minus arbetslösa, SCB AKU {aku.period}. Hämtad {h.hamtad}.</p>
 </div>
 </div>
