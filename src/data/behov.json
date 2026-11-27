@@ -21,6 +21,15 @@
       "kort": "Vägunderhåll"
     },
     {
+      "id": "va",
+      "namn": "Vatten och avlopp",
+      "kort": "VA-nät",
+      "mdkr": 10,
+      "typ": "per år",
+      "text": "Svenskt Vatten anger att kommunerna investerar 25 miljarder kronor per år i VA, mot ett behov på 35 miljarder. Underskottet är omkring 10 miljarder kronor per år.",
+      "kalla": "Svenskt Vatten, ”Samhällen byggs av vatten”, april 2026."
+    },
+    {
       "id": "bost",
       "namn": "Nya bostäder",
       "antal": 52300,
@@ -28,7 +37,17 @@
       "typ": "per år",
       "text": "Boverket bedömer att det behövs drygt 523 000 nya bostäder 2024–2033. I bostadsmarknadsenkäten 2026 rapporterar 102 kommuner underskott på bostäder, och över hälften av befolkningen bor i en sådan kommun.",
       "kalla": "Boverket, Behov av bostadsbyggande 2024–2033 (2025), och Bostadsmarknadsenkäten 2026.",
-      "kort": "Bostäder, ett år"
+      "kort": "Bostäder"
+    },
+    {
+      "id": "vard",
+      "namn": "Vård och äldreomsorg",
+      "kort": "Vård och omsorg",
+      "personer": 83300,
+      "typ": "per år",
+      "text": "SKR beräknar att befolkningens ålder kräver 65 600 fler anställda i äldreomsorgen och 17 700 fler i hälso- och sjukvården 2033 än 2023. Utöver det ska de som går i pension ersättas.",
+      "kalla": "SKR, Välfärdens kompetensförsörjning. Personalprognos 2023–2033 (2024), s. 25–26."
     }
-  ]
+  ],
+  "heltidsar": 1760
 }
