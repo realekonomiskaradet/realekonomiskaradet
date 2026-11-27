@@ -2,12 +2,200 @@
   "kalla": "Konjunkturinstitutet, Konjunkturbarometern. Fråga om begränsande faktorer för produktionen. Andel företag som anger respektive faktor, procent. Flera svar är möjliga. Ej säsongrensat.",
   "hamtad": "2026-11-27",
   "sektorer": [
-    { "namn": "Tillverkningsindustri", "period": "2026Q4", "efterfragan": 47, "arbetskraft": 10, "material": 26, "finansiering": 8, "inga": 15, "kapacitetsutnyttjande": 85 },
-    { "namn": "Byggverksamhet", "period": "2026M11", "efterfragan": 59, "arbetskraft": 26, "material": 3, "finansiering": 10, "inga": 14 },
-    { "namn": "Tjänstesektorn", "period": "2026Q4", "efterfragan": 48, "arbetskraft": 15, "material": 4, "finansiering": 9, "inga": 22, "resursutnyttjande": 93 }
+    {
+      "namn": "Tillverkningsindustri",
+      "period": "2026Q4",
+      "efterfragan": 47,
+      "arbetskraft": 10,
+      "material": 26,
+      "finansiering": 8,
+      "inga": 15,
+      "kapacitetsutnyttjande": 85
+    },
+    {
+      "namn": "Byggverksamhet",
+      "period": "2026M11",
+      "efterfragan": 59,
+      "arbetskraft": 26,
+      "material": 3,
+      "finansiering": 10,
+      "inga": 14
+    },
+    {
+      "namn": "Tjänstesektorn",
+      "period": "2026Q4",
+      "efterfragan": 48,
+      "arbetskraft": 15,
+      "material": 4,
+      "finansiering": 9,
+      "inga": 22,
+      "resursutnyttjande": 93
+    }
   ],
   "naringslivet": {
-    "efterfragan": [["2022Q1",27],["2022Q2",23],["2022Q3",20],["2022Q4",30],["2023Q1",39],["2023Q2",47],["2023Q3",50],["2023Q4",50],["2024Q1",55],["2024Q2",58],["2024Q3",51],["2024Q4",58],["2025Q1",61],["2025Q2",59],["2025Q3",57],["2025Q4",56],["2026Q1",61],["2026Q2",55],["2026Q3",52],["2026Q4",49]],
-    "bristArbetskraft": [["2022Q1",43],["2022Q2",45],["2022Q3",51],["2022Q4",45],["2023Q1",34],["2023Q2",32],["2023Q3",31],["2023Q4",28],["2024Q1",24],["2024Q2",24],["2024Q3",26],["2024Q4",21],["2025Q1",20],["2025Q2",19],["2025Q3",21],["2025Q4",19],["2026Q1",19],["2026Q2",19],["2026Q3",22],["2026Q4",22]]
+    "efterfragan": [
+      [
+        "2022Q1",
+        27
+      ],
+      [
+        "2022Q2",
+        23
+      ],
+      [
+        "2022Q3",
+        20
+      ],
+      [
+        "2022Q4",
+        30
+      ],
+      [
+        "2023Q1",
+        39
+      ],
+      [
+        "2023Q2",
+        47
+      ],
+      [
+        "2023Q3",
+        50
+      ],
+      [
+        "2023Q4",
+        50
+      ],
+      [
+        "2024Q1",
+        55
+      ],
+      [
+        "2024Q2",
+        58
+      ],
+      [
+        "2024Q3",
+        51
+      ],
+      [
+        "2024Q4",
+        58
+      ],
+      [
+        "2025Q1",
+        61
+      ],
+      [
+        "2025Q2",
+        59
+      ],
+      [
+        "2025Q3",
+        57
+      ],
+      [
+        "2025Q4",
+        56
+      ],
+      [
+        "2026Q1",
+        61
+      ],
+      [
+        "2026Q2",
+        55
+      ],
+      [
+        "2026Q3",
+        52
+      ],
+      [
+        "2026Q4",
+        49
+      ]
+    ],
+    "bristArbetskraft": [
+      [
+        "2022Q1",
+        43
+      ],
+      [
+        "2022Q2",
+        45
+      ],
+      [
+        "2022Q3",
+        51
+      ],
+      [
+        "2022Q4",
+        45
+      ],
+      [
+        "2023Q1",
+        34
+      ],
+      [
+        "2023Q2",
+        32
+      ],
+      [
+        "2023Q3",
+        31
+      ],
+      [
+        "2023Q4",
+        28
+      ],
+      [
+        "2024Q1",
+        24
+      ],
+      [
+        "2024Q2",
+        24
+      ],
+      [
+        "2024Q3",
+        26
+      ],
+      [
+        "2024Q4",
+        21
+      ],
+      [
+        "2025Q1",
+        20
+      ],
+      [
+        "2025Q2",
+        19
+      ],
+      [
+        "2025Q3",
+        21
+      ],
+      [
+        "2025Q4",
+        19
+      ],
+      [
+        "2026Q1",
+        19
+      ],
+      [
+        "2026Q2",
+        19
+      ],
+      [
+        "2026Q3",
+        22
+      ],
+      [
+        "2026Q4",
+        22
+      ]
+    ]
   }
 }

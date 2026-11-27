@@ -1,8 +1,10 @@
-name: Hämta data från SCB
+name: Hämta data
 
 on:
   schedule:
-    # Den 25:e varje månad kl. 06:00 UTC, efter att SCB har publicerat AKU.
+    # Varje måndag kl. 06:00 UTC. Filerna sparas bara om något har ändrats.
+    - cron: '0 6 * * 1'
+    # Den 25:e varje månad, efter att SCB har publicerat AKU.
     - cron: '0 6 25 * *'
   workflow_dispatch:
 
@@ -17,15 +19,38 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: 22
-      - run: node scripts/hamta-scb.mjs
+      # Varje källa hämtas för sig. Om en källa inte svarar behålls de gamla siffrorna för den.
+      - name: Arbetslöshet (SCB, AKU)
+        id: aku
+        continue-on-error: true
+        run: node scripts/hamta-scb.mjs
+      - name: Företagens kapacitet (KI)
+        id: ki
+        continue-on-error: true
+        run: node scripts/hamta-ki.mjs
+      - name: El (SCB)
+        id: el
+        continue-on-error: true
+        run: node scripts/hamta-scb-el.mjs
+      - name: Export och import (SCB)
+        id: handel
+        continue-on-error: true
+        run: node scripts/hamta-scb-handel.mjs
+      - name: Kontrollera att sajten går att bygga
+        run: npm ci && npm run build
       - name: Spara om något har ändrats
         run: |
-          if git diff --quiet src/data/aku.json; then
+          if git diff --quiet src/data; then
             echo "Inga nya siffror."
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src/data/aku.json
-            git commit -m "Uppdatera AKU-data från SCB"
+            git add src/data
+            git commit -m "Uppdatera data från SCB och KI"
             git push
           fi
+      - name: Varna om någon källa misslyckades
+        if: steps.aku.outcome == 'failure' || steps.ki.outcome == 'failure' || steps.el.outcome == 'failure' || steps.handel.outcome == 'failure'
+        run: |
+          echo "::error::Minst en källa kunde inte hämtas: AKU=${{ steps.aku.outcome }}, KI=${{ steps.ki.outcome }}, El=${{ steps.el.outcome }}, Handel=${{ steps.handel.outcome }}"
+          exit 1
