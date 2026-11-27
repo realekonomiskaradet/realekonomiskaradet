@@ -4,7 +4,8 @@ import GlappRaknare from '../components/GlappRaknare.astro';
 import Kapacitet from '../components/flikar/Kapacitet.astro';
 import El from '../components/flikar/El.astro';
 import Export from '../components/flikar/Export.astro';
-const flikar = [['ak', 'Arbetskraft'], ['kap', 'Företagens kapacitet'], ['el', 'El'], ['exp', 'Export']];
+import Behov from '../components/flikar/Behov.astro';
+const flikar = [['ak', 'Arbetskraft'], ['beh', 'Behov'], ['kap', 'Företagens kapacitet'], ['el', 'El'], ['exp', 'Export']];
 ---
 <Bas>
 <div class="hero band"><div class="wrap">
@@ -14,6 +15,7 @@ const flikar = [['ak', 'Arbetskraft'], ['kap', 'Företagens kapacitet'], ['el', 
 {flikar.map(([id, namn], i) => <button type="button" role="tab" id={`t-${id}`} aria-controls={`p-${id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-flik={id}>{namn}</button>)}
 </div>
 <div role="tabpanel" id="p-ak" aria-labelledby="t-ak"><GlappRaknare /></div>
+<Behov />
 <Kapacitet />
 <El />
 <Export />
