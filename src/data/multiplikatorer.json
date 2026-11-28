@@ -6,8 +6,50 @@
   "bnpAr": 2024,
   "bnpKalla": "SCB, nationalräkenskaperna, BNP till marknadspris 2024, löpande priser.",
   "instrument": [
-    { "id": "kons", "namn": "Offentlig konsumtion", "text": "Till exempel fler anställda i vård, skola och omsorg.", "aktiv": { "bnp": 0.82, "u": -0.65 }, "passiv": { "bnp": 1.14, "u": -0.99 } },
-    { "id": "inv", "namn": "Offentliga investeringar", "text": "Till exempel järnväg, vägar och byggnader.", "aktiv": { "bnp": 0.99, "u": -0.72 }, "passiv": { "bnp": 1.16, "u": -0.91 } }
+    {
+      "id": "kons",
+      "namn": "Offentlig konsumtion",
+      "text": "Till exempel fler anställda i vård, skola och omsorg.",
+      "aktiv": {
+        "bnp": 0.82,
+        "u": -0.65
+      },
+      "passiv": {
+        "bnp": 1.14,
+        "u": -0.99
+      }
+    },
+    {
+      "id": "inv",
+      "namn": "Offentliga investeringar",
+      "text": "Till exempel järnväg, vägar och byggnader.",
+      "aktiv": {
+        "bnp": 0.99,
+        "u": -0.72
+      },
+      "passiv": {
+        "bnp": 1.16,
+        "u": -0.91
+      }
+    }
   ],
-  "litteratur": "Hjelm och Stockhammar (2016), Konjunkturinstitutet Working Paper 147, finner att offentlig konsumtion, investeringar och transfereringar har betydande effekter på sysselsättningen i lågkonjunktur, och att multiplikatorn för offentliga investeringar är omkring 2 efter åtta kvartal under perioden med rörlig växelkurs."
+  "litteratur": "Hjelm och Stockhammar (2016), Konjunkturinstitutet Working Paper 147, finner att offentlig konsumtion, investeringar och transfereringar har betydande effekter på sysselsättningen i lågkonjunktur, och att multiplikatorn för offentliga investeringar är omkring 2 efter åtta kvartal under perioden med rörlig växelkurs.",
+  "transfereringar": {
+    "id": "trans",
+    "namn": "Transfereringar till hushåll",
+    "aktiv": {
+      "bnp": 0.05,
+      "u": -0.03
+    },
+    "passiv": {
+      "bnp": 0.06,
+      "u": -0.05
+    }
+  },
+  "budgetelasticitet": {
+    "hog": 0.47,
+    "lag": 0.3,
+    "text": "När BNP ökar med en krona förbättras de offentliga finanserna med 0,3–0,47 kronor, genom högre skatteintäkter och lägre utgifter för arbetslöshet.",
+    "kalla": "Almenberg och Sigonius (2021): budgetelasticiteten föll från 0,55 till 0,47 mellan 1998 och 2019. Calmfors, Hassler och Seim (2022) bedömer den snarare till 0,3–0,4. Båda via Calmfors, ”Vilken roll bör finanspolitiken spela i konjunkturstabiliseringen?”, Ekonomisk Debatt nr 7, 2023, s. 11."
+  }
 }

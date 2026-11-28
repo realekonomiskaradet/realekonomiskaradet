@@ -1,0 +1,98 @@
+---
+import Bas from '../../layouts/Bas.astro';
+import m from '../../data/multiplikatorer.json';
+import aku from '../../data/aku.json';
+import { indata, fr } from '../../lib/behov';
+const data = { utan: indata(false), med: indata(true) };
+const pc = (x: number) => x.toLocaleString('sv-SE', { maximumFractionDigits: 2 });
+---
+<Bas titel="Bemanna behoven" beskrivning="Vad händer med arbetslösheten och statens budget om staten finansierar de behov som myndigheterna själva har räknat på?">
+<div class="sub"><div class="band"><div class="wrap">
+<a class="back" href="/#beh">← Behov</a>
+<h1>Bemanna behoven</h1>
+<p class="lead" style="opacity:1;margin:0">Vad händer om staten betalar för bostäderna, vården, försvaret, VA och underhållet som myndigheterna säger behövs? Hur mycket sjunker arbetslösheten, vad kostar det och räcker arbetskraften?</p>
+</div></div></div>
+<div class="band"><div class="wrap">
+<div class="calc" aria-labelledby="b-h">
+<div>
+<h2 id="b-h" style="font-size:20px;margin-bottom:12px">Arbetslösheten blir</h2>
+<div class="big" id="b-big">0</div>
+<div class="unit" id="b-unit"></div>
+<div class="conv" id="b-conv"></div>
+<p class="lyft" id="b-lyft" aria-live="polite" style="margin-top:20px"></p>
+<p id="b-budget"></p>
+</div>
+<div class="inp">
+<div><label for="b-andel">Hur stor del av behoven som genomförs: <b id="b-av"></b></label><input id="b-andel" type="range" min="0" max="200" step="10" value="100"></div>
+<div>
+<label id="b-ul">Klimat och pensioner</label>
+<div class="seg" id="b-upp" role="group" aria-labelledby="b-ul">
+<button type="button" data-k="utan" aria-pressed="true">Utan</button>
+<button type="button" data-k="med" aria-pressed="false">Med</button>
+</div>
+<p class="note" style="margin:6px 0 0">Klimat och pensioner bygger på uppskattningar, inte myndigheternas egna beräkningar.</p>
+</div>
+<div>
+<label id="b-rl">Riksbanken</label>
+<div class="seg" id="b-rb" role="group" aria-labelledby="b-rl">
+<button type="button" data-k="passiv" aria-pressed="true">Räntan ligger still</button>
+<button type="button" data-k="aktiv" aria-pressed="false">Räntan höjs</button>
+</div>
+</div>
+</div>
+</div>
+</div></div>
+<div class="band"><div class="wrap prose">
+<h2>Så räknar vi</h2>
+<ol>
+<li><strong>Utgiften.</strong> Varje behov i fliken Behov räknas om till heltidsår per år, i snitt över tio år. Heltidsåren gånger 1 760 timmar och {data.utan.kr} kronor per timme ger utgiften i kronor.</li>
+<li><strong>Effekten på BNP och arbetslösheten.</strong> Utgiften delas med BNP och multipliceras med Konjunkturinstitutets multiplikatorer: offentliga investeringar för bostäder, försvar, VA, järnväg, väg och klimat, offentlig konsumtion för vård och omsorg, och transfereringar för pensionerna. Multiplikatorerna tar med jobb hos leverantörer och i privat sektor, men också det som läcker ut i import och sparande.</li>
+<li><strong>Arbetskraften.</strong> Arbetslösheten kan inte bli lägre än friktionsnivån på {pc(fr)} procent. Om räkningen ger en lägre nivå saknas arbetskraft. Då måste människor och material frigöras från annan användning.</li>
+<li><strong>Budgeten.</strong> När BNP ökar får staten in mer skatt och betalar mindre för arbetslösheten. {m.budgetelasticitet.text} Det som återstår är hur mycket statens underskott ökar.</li>
+</ol>
+<h3>Vad underskottet betyder</h3>
+<p>Statens underskott är kronor som staten betalar ut men inte drar tillbaka i skatt. De hamnar som inkomster och sparande hos hushåll och företag. Så länge det finns lediga arbetare och material är underskottet ingen begränsning. Begränsningen är arbetskraften. När den tar slut måste resurser frigöras, med skatter eller på andra sätt. <a href="/ramverket/">Läs ramverket</a>.</p>
+<h3>Begränsningar</h3>
+<ul>
+<li>KI:s multiplikatorer är genomsnitt under normala förhållanden och gäller små förändringar. Här används de för stora belopp. Räkningen är linjär.</li>
+<li>Arbetskraft är inte utbytbar. Sjuksköterskor, byggarbetare och ingenjörer kan ta slut långt innan arbetslösheten når friktionsnivån.</li>
+<li>Försvarets och klimatets utgifter går delvis till import. Det ingår i KI:s multiplikatorer bara som ett genomsnitt.</li>
+</ul>
+<p class="note">Källor: {m.kalla} {m.budgetelasticitet.kalla} Arbetslöshet och arbetskraft: SCB, AKU, {aku.period}. BNP: SCB, {m.bnpAr}. Behoven: se fliken Behov på startsidan.</p>
+</div></div>
+<script type="application/json" id="b-data" set:html={JSON.stringify(data)}></script>
+<script>
+  import { bemanna, type Indata } from '../../lib/bemanna';
+  const $ = (id: string) => document.getElementById(id)!;
+  const D = JSON.parse($('b-data').textContent || '{}') as { utan: Indata; med: Indata };
+  let upp: 'utan' | 'med' = 'utan';
+  let rb: 'aktiv' | 'passiv' = 'passiv';
+  const slider = $('b-andel') as HTMLInputElement;
+  const nf = (n: number) => Math.round(n).toLocaleString('sv-SE');
+  const tusen = (n: number) => nf(Math.round(n / 1000) * 1000);
+  const dec = (n: number) => n.toLocaleString('sv-SE', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  function draw() {
+    const d = D[upp];
+    const andel = Number(slider.value) / 100;
+    const r = bemanna(d, andel, rb);
+    $('b-av').textContent = `${nf(andel * 100)} procent`;
+    $('b-big').textContent = `${dec(r.nyU)} %`;
+    $('b-unit').textContent = `i stället för ${dec(d.u)} procent i dag`;
+    $('b-conv').innerHTML = [
+      [`${nf(r.utgift)} mdkr`, 'ökade utgifter per år'],
+      [tusen(r.farreArbetslosa), 'färre arbetslösa'],
+      [`${nf(r.nettoMin)}–${nf(r.nettoMax)} mdkr`, 'större underskott per år, netto'],
+    ].map(([b, s]) => `<div><b>${b}</b><span>${s}</span></div>`).join('');
+    $('b-lyft').textContent = r.forKort > 0
+      ? `Arbetskraften räcker inte. Det saknas omkring ${tusen(r.forKort)} personer. De måste frigöras från annan verksamhet, till exempel genom skatter som minskar annan efterfrågan eller genom effektivisering. Det motsvarar ungefär ${nf(r.frigoraMdkr)} miljarder kronor per år.`
+      : `Arbetskraften räcker. Allt kan genomföras utan att resurser tas från annat håll. Det finns fortfarande omkring ${tusen(r.kvarOverFr)} personer arbetslösa utöver friktionsnivån.`;
+    $('b-budget').textContent = andel === 0 ? '' : `Av utgiften på ${nf(r.utgift)} miljarder kronor kommer ${nf(r.utgift - r.nettoMax)}–${nf(r.utgift - r.nettoMin)} miljarder tillbaka som skatt och lägre kostnader för arbetslöshet. Resten blir ett större underskott, alltså mer sparande hos hushåll och företag.`;
+    for (const b of document.querySelectorAll<HTMLButtonElement>('#b-upp button')) b.setAttribute('aria-pressed', String(b.dataset.k === upp));
+    for (const b of document.querySelectorAll<HTMLButtonElement>('#b-rb button')) b.setAttribute('aria-pressed', String(b.dataset.k === rb));
+  }
+  slider.addEventListener('input', draw);
+  $('b-upp').addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest('button'); if (b) { upp = b.dataset.k as 'utan' | 'med'; draw(); } });
+  $('b-rb').addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest('button'); if (b) { rb = b.dataset.k as 'aktiv' | 'passiv'; draw(); } });
+  draw();
+</script>
+</Bas>
