@@ -24,7 +24,7 @@ const ar = rader.filter((r) => r.varde != null).map((r) => [Number(r[tid.code].s
 if (!ar.length) throw new Error('Inga år hittades');
 console.log(ar.slice(-5));
 await spara(UT, {
-  kalla: 'SCB, betalningsbalansen, tabell FM0001BetBalAr. Bytesbalansens saldo, mnkr, löpande priser.',
+  kalla: 'SCB, betalningsbalansen, tabell FM0001BetBalAr. Bytesbalansens saldo (bytesbalans, netto), miljarder kronor, löpande priser.',
   hamtad: idag(),
   ar,
 });

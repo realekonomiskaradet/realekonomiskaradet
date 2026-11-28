@@ -44,7 +44,7 @@ jobs:
         run: npm ci && npm run build
       - name: Spara om något har ändrats
         run: |
-          if git diff --quiet src/data; then
+          if [ -z "$(git status --porcelain src/data)" ]; then
             echo "Inga nya siffror."
           else
             git config user.name "github-actions[bot]"
