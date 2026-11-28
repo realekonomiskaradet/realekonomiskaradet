@@ -23,4 +23,5 @@ export const poster = b.poster.map((p: any) => {
 });
 export const summaTioAr = poster.reduce((s, p) => s + p.tioAr, 0);
 export const andra = b.andraUppskattningar;
-export const utanSiffra = b.utanSiffra;
+export const utanSiffra = b.utanSiffra.map((u: any) => ({ ...u, tioAr: u.mdkrPerAr ? (u.mdkrPerAr * 1e9 / kr / ht) * AR : 0 }));
+export const summaInklUpp = summaTioAr + utanSiffra.reduce((s: number, u: any) => s + u.tioAr, 0);

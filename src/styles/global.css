@@ -153,7 +153,7 @@ details.note p{margin:4px 0}
 .broms a{color:inherit}
 .staplar{display:grid;gap:14px;margin-bottom:12px}
 .staplar h4{margin:0 0 6px;font-size:15px}
-.stapel{display:grid;grid-template-columns:9em 1fr 3em;gap:8px;align-items:center;font-size:14px}
+.stapel{display:grid;grid-template-columns:9em 1fr 5em;gap:8px;align-items:center;font-size:14px}
 .stapel .track{height:14px;background:var(--soft);border-radius:2px;overflow:hidden}
 .stapel .fill{height:100%;background:var(--main)}
 .stapel.ef .fill{background:var(--acc)}
@@ -164,3 +164,6 @@ details.note p{margin:4px 0}
 .legend i.acc{background:var(--acc)}
 @media(max-width:860px){.panel{grid-template-columns:minmax(0,1fr)}}
 #p-ak .calc{border-top-left-radius:0}
+.stapel.upp .fill{background:repeating-linear-gradient(135deg,var(--mute) 0 6px,transparent 6px 10px);border:1px solid var(--mute)}
+.stapel.upp span:first-child{font-style:italic}
+.stapel.sum{border-top:1px solid var(--line);padding-top:6px}
