@@ -23,3 +23,4 @@ export const poster = b.poster.map((p: any) => {
 });
 export const summaTioAr = poster.reduce((s, p) => s + p.tioAr, 0);
 export const andra = b.andraUppskattningar;
+export const utanSiffra = b.utanSiffra;

@@ -1,12 +1,12 @@
 ---
 import aku from '../../data/aku.json';
-import { AR, kr, ht, fr, gap, gapTioAr, poster, summaTioAr, timmarPerLgh, andra } from '../../lib/behov';
+import { AR, kr, ht, fr, gap, gapTioAr, poster, summaTioAr, timmarPerLgh, andra, utanSiffra } from '../../lib/behov';
 const nf = (n: number) => Math.round(n).toLocaleString('sv-SE');
 const tusen = (n: number) => nf(Math.round(n / 1000) * 1000);
 const milj = (n: number) => (n / 1e6).toLocaleString('sv-SE', { maximumFractionDigits: 1 });
 const pc = (x: number) => x.toLocaleString('sv-SE', { maximumFractionDigits: 1 });
 const andel = Math.round((summaTioAr / gapTioAr) * 100);
-const ordning = ['bost', 'vard', 'va', 'jvg', 'vag'];
+const ordning = ['bost', 'vard', 'fors', 'va', 'jvg', 'vag'];
 const rader = ordning.map((id) => poster.find((p) => p.id === id)!).filter(Boolean);
 const vard = poster.find((p) => p.id === 'vard');
 const bost = poster.find((p) => p.id === 'bost');
@@ -18,9 +18,9 @@ const upp = (p: any) => p.typ === 'engang' ? 'en gång' : p.personer ? `${nf(p.p
 <div class="big">{milj(gapTioAr)} miljoner</div>
 <div class="unit">heltidsår går förlorade på tio år om arbetslösheten ligger kvar på {pc(aku.arbetsloshet)} procent</div>
 <p>Det är {tusen(gap)} personer utöver friktionsnivån på {pc(fr)} procent, varje år i tio år. Ett heltidsår är en person som arbetar heltid i ett år.</p>
-<p>Här ställer vi den förlorade arbetstiden mot det som myndigheter, kommuner och regioner själva säger behövs de kommande tio åren: bostäderna Boverket räknar med, personalen vården och äldreomsorgen behöver när befolkningen blir äldre, VA-investeringarna som saknas och det eftersatta underhållet av järnväg och väg.</p>
-<p>Allt detta kräver tillsammans omkring {milj(summaTioAr)} miljoner heltidsår. Det är {andel} procent av den arbetstid som går förlorad under samma tid.</p>
-<p>Alla kan inte göra allt. Det tar tid att utbilda en sjuksköterska eller en banarbetare. Räkningen visar att arbetskraften räcker, inte vem som ska göra vad. Därför behövs en plan för utbildning, se förslaget om en <a href="/policylab/omstallningsreserv/">omställnings- och kompetensreserv</a>.</p>
+<p>Samtidigt får vi höra att vi inte har råd. För få bostäder byggs, underhållet skjuts upp, VA-näten förnyas för långsamt och försvarets upprustning sägs kräva lån. Här ställer vi de behov som myndigheterna själva har räknat på mot den arbetstid som inte används.</p>
+<p>Behoven de kommande tio åren kräver tillsammans omkring {milj(summaTioAr)} miljoner heltidsår. Det är {andel} procent av den arbetstid som går förlorad under samma tid. Klimatet och pensionerna kommer till, men där finns ingen siffra att räkna med.</p>
+<p>Resurserna finns, om vi tillåter oss att använda dem. Alla kan inte göra allt, och det tar tid att utbilda en sjuksköterska eller en banarbetare. Därför behövs en plan för utbildning, se förslaget om en <a href="/policylab/omstallningsreserv/">omställnings- och kompetensreserv</a>.</p>
 <p class="broms">Arbetskraften finns. Det som stoppar är att utgifterna måste rymmas i en budget som styrs av saldomålet och utgiftstaket. <a href="/ramverket/">Läs ramverket</a> eller <a href="/fakta/underskott/">räkna på vad mer utgifter skulle ge</a>.</p>
 </div>
 <div>
@@ -33,11 +33,15 @@ const upp = (p: any) => p.typ === 'engang' ? 'en gång' : p.personer ? `${nf(p.p
 <ul style="font-size:14px;padding-left:18px">
 {rader.map((p) => <li><strong>{p.namn}.</strong> {p.mdkr && p.typ === 'engang' ? `${p.mdkr} miljarder kronor, en gång.` : `${upp(p)[0].toUpperCase()}${upp(p).slice(1)}.`} {p.text}</li>)}
 </ul>
+<h4 style="margin-top:18px">Behov utan siffra</h4>
+<ul style="font-size:14px;padding-left:18px">
+{utanSiffra.map((u: any) => <li><strong>{u.namn}.</strong> {u.text}</li>)}
+</ul>
 <h4 style="margin-top:18px">Andra uppskattningar</h4>
 <p style="font-size:14px;margin:4px 0">Andra har gjort egna uppskattningar. De skiljer sig åt beroende på vilka områden och vilken tidsperiod som räknas med:</p>
 <ul style="font-size:14px;padding-left:18px">
 {andra.map((u: any) => <li><strong>{u.vem}.</strong> {u.text}{u.mdkr && ` Det motsvarar ungefär ${milj(u.mdkr * 1e9 / kr / ht)} miljoner heltidsår, eller ${Math.round(u.mdkr * 1e9 / kr / ht / gap)} år av den arbetstid som går förlorad i dag.`}</li>)}
 </ul>
-<p class="note" style="font-size:13px;color:var(--mute)">Så räknar vi: kostnader delas med {kr} kr per arbetad timme (BNP per timme 2024) och {nf(ht)} timmar per heltidsår. En bostad räknas som {nf(timmarPerLgh)} timmar (70 kvadratmeter). Bostäder och VA räknas per år gånger {AR}. Vårdens och äldreomsorgens personalbehov växer till {vard ? nf(vard.personer) : ''} fler anställda år 2033; vi antar att ökningen sker jämnt, vilket i snitt blir halva nivån under tio år. Underhållsskulden räknas en gång. Källor: {[...poster.map((p) => p.kalla), ...andra.map((u: any) => u.kalla)].join(' ')} Arbetslöshet och arbetskraft: SCB, AKU, {aku.period}.</p>
+<p class="note" style="font-size:13px;color:var(--mute)">Så räknar vi: kostnader delas med {kr} kr per arbetad timme (BNP per timme 2024) och {nf(ht)} timmar per heltidsår. En bostad räknas som {nf(timmarPerLgh)} timmar (70 kvadratmeter). Bostäder och VA räknas per år gånger {AR}. Vårdens och äldreomsorgens personalbehov växer till {vard ? nf(vard.personer) : ''} fler anställda år 2033; vi antar att ökningen sker jämnt, vilket i snitt blir halva nivån under tio år. Underhållsskulden och försvarets lånefinansierade ökning räknas en gång. Källor: {[...poster.map((p) => p.kalla), ...utanSiffra.filter((u: any) => u.kalla).map((u: any) => u.kalla), ...andra.map((u: any) => u.kalla)].join(' ')} Arbetslöshet och arbetskraft: SCB, AKU, {aku.period}.</p>
 </div>
 </div>

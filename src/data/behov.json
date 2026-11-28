@@ -47,6 +47,15 @@
       "typ": "per år",
       "text": "SKR beräknar att befolkningens ålder kräver 65 600 fler anställda i äldreomsorgen och 17 700 fler i hälso- och sjukvården 2033 än 2023. Utöver det ska de som går i pension ersättas.",
       "kalla": "SKR, Välfärdens kompetensförsörjning. Personalprognos 2023–2033 (2024), s. 25–26."
+    },
+    {
+      "id": "fors",
+      "namn": "Försvaret",
+      "kort": "Försvar",
+      "mdkr": 300,
+      "typ": "engang",
+      "text": "Regeringen och riksdagspartierna har kommit överens om att försvarsutgifterna ska nå 3,5 procent av BNP år 2030, från 2,8 procent 2026. Ökningen ska lånefinansieras med högst 300 miljarder kronor 2026–2034, eftersom den inte ryms i budgeten. En del av pengarna går till import av materiel.",
+      "kalla": "Regeringen, ”Blocköverskridande överenskommelse nådd om historisk upprustning”, 19 juni 2025, och ”Ökad takt i upprustningen av det militära försvaret”, regeringen.se."
     }
   ],
   "heltidsar": 1760,
@@ -66,6 +75,18 @@
       "vem": "WSP, 2022",
       "text": "Att renovera eller ersätta Sveriges befintliga kraftverk skulle kosta 600–900 miljarder kronor. Vatten- och avloppsnätet har ett återanskaffningsvärde på nära 1 000 miljarder kronor.",
       "kalla": "WSP, ”Prioriteringar och vägval när Sverige behöver renoveras”, maj 2022."
+    }
+  ],
+  "utanSiffra": [
+    {
+      "namn": "Klimatet",
+      "text": "Klimatpolitiska rådet bedömer i sin rapport 2026 att nuvarande politik inte räcker för att nå klimatmålen för 2030, 2040 och 2045. Det saknas en samlad myndighetsberäkning av vad som behövs i kronor eller arbetstid, därför ingår klimatet inte i summan.",
+      "kalla": "Klimatpolitiska rådet, rapport 2026."
+    },
+    {
+      "namn": "Pensionerna",
+      "text": "När andelen äldre ökar behövs mer vård, omsorg, bostäder och varor till dem som inte längre arbetar. Det avgörs av hur mycket som produceras de åren, inte av hur mycket som finns i pensionsfonderna. Ju fler som arbetar i dag och bygger det som behövs, desto lättare blir det att försörja fler äldre i morgon.",
+      "kalla": ""
     }
   ]
 }
