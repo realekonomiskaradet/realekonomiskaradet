@@ -28,7 +28,7 @@ export const summaInklUpp = summaTioAr + utanSiffra.reduce((s: number, u: any) =
 
 // Indata till räknaren "Bemanna behoven". Alla poster kommer med, även de uppskattade (klimat och pensioner).
 import m from '../data/multiplikatorer.json';
-import handel from '../data/handel.json';
+import bop from '../data/bytesbalans.json';
 import type { Indata } from './bemanna';
 // Samma ordning som staplarna i fliken Behov. Okända poster hamnar först.
 const ORDNING = ['bost', 'vard', 'fors', 'va', 'jvg', 'vag'];
@@ -38,13 +38,13 @@ export function indata(): Indata {
     ...utanSiffra.filter((u: any) => u.tioAr).map((u: any) => ({ id: u.namn, namn: u.namn, heltidsarPerAr: u.tioAr / AR, instrument: u.instrument, uppskattad: true })),
   ];
   const mult: Indata['mult'] = Object.fromEntries([...m.instrument, m.transfereringar, m.forsvar].map((i: any) => [i.id, { aktiv: i.aktiv, passiv: i.passiv }]));
-  const [, ex, im] = handel.ar[handel.ar.length - 1];
+  const [bopAr, bopMdkr] = bop.ar[bop.ar.length - 1];
   const { text, kalla, url, ...importandel } = m.importandel;
   return {
     poster: lista, mult, importandel: importandel as Record<string, number>,
     bnp: m.bnpMnkr / 1000, lf: aku.arbetskraft, u: aku.arbetsloshet, fr, ht, kr,
     elasticitet: [m.budgetelasticitet.hog, m.budgetelasticitet.lag],
-    nettoexport: (ex - im) / 1000,
+    bytesbalans: bopMdkr, bytesbalansAr: bopAr,
   };
 }
 // Hela behovet utan de uppskattade posterna.

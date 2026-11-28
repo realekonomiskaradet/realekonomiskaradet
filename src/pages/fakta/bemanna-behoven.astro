@@ -4,14 +4,13 @@ import m from '../../data/multiplikatorer.json';
 import aku from '../../data/aku.json';
 import el from '../../data/el.json';
 import beg from '../../data/begransningar.json';
-import handel from '../../data/handel.json';
+import bop from '../../data/bytesbalans.json';
 import { indata, fr } from '../../lib/behov';
 const d = indata();
 const pc = (x: number) => x.toLocaleString('sv-SE', { maximumFractionDigits: 2 });
 const nf = (n: number) => Math.round(n).toLocaleString('sv-SE');
 const elSist = el.ar[el.ar.length - 1];
 const elNetto = (elSist.export - elSist.import) / 1000;
-const handelAr = handel.ar[handel.ar.length - 1][0];
 const klient = { d, elNetto, elAr: elSist.ar, elOkning: beg.el.ar2040[0] - beg.el.idagTWh };
 ---
 <Bas titel="Bemanna behoven" beskrivning="Vad händer med arbetslösheten och statens budget om staten finansierar de behov som myndigheterna själva har räknat på?">
@@ -86,7 +85,7 @@ const klient = { d, elNetto, elAr: elSist.ar, elOkning: beg.el.ar2040[0] - beg.e
 <h3>Import</h3>
 <p class="tal" id="b-imp"></p>
 <p id="b-imp-t"></p>
-<p class="note">{m.importandel.text} Källa: {m.importandel.kalla} Export och import: SCB, {handelAr}.</p>
+<p class="note">{m.importandel.text} Källa: {m.importandel.kalla} {bop.kalla}</p>
 </div>
 <div>
 <h3>El</h3>
@@ -181,7 +180,7 @@ const klient = { d, elNetto, elAr: elSist.ar, elOkning: beg.el.ar2040[0] - beg.e
     const lediga = ((d.u - d.fr) / 100) * d.lf;
     const tak = [
       ['Arbetskraft', r.bankAndel, `${tusen(Math.max(0, r.bankAndel) * lediga)} av ${tusen(lediga)} lediga personer`],
-      ['Import', r.import / d.nettoexport, `${nf(r.import)} av ${nf(d.nettoexport)} mdkr i exportöverskott`],
+      ['Import', r.import / d.bytesbalans, `${nf(r.import)} av ${nf(d.bytesbalans)} mdkr i överskott i bytesbalansen`],
       ['El', elBehov / K.elNetto, klimatA > 0 ? `minst ${nf(elBehov)} av ${dec(K.elNetto)} TWh i nettoexport` : 'Utan klimatet kräver behoven lite el'],
     ] as [string, number, string][];
     $('b-tak').innerHTML = tak.map(([n, x, t]) => {
@@ -191,7 +190,7 @@ const klient = { d, elNetto, elAr: elSist.ar, elOkning: beg.el.ar2040[0] - beg.e
     }).join('');
     // Import
     $('b-imp').textContent = `${nf(r.import)} mdkr`;
-    $('b-imp-t').textContent = `Så mycket ökar importen per år, minst. Sverige exporterade för ${nf(d.nettoexport)} miljarder kronor mer än vi importerade senaste året. Det motsvarar ${Math.round((r.import / d.nettoexport) * 100)} procent av det överskottet. Importen betalas med kronor. Om överskottet krymper mycket kan kronan försvagas och importen bli dyrare.`;
+    $('b-imp-t').textContent = `Så mycket ökar importen per år, minst. Överskottet i bytesbalansen var ${nf(d.bytesbalans)} miljarder kronor ${d.bytesbalansAr}. Bytesbalansen är allt Sverige får in från utlandet minus allt vi betalar dit: export och import, avkastning på tillgångar och överföringar. Den ökade importen motsvarar ${Math.round((r.import / d.bytesbalans) * 100)} procent av det överskottet. Importen betalas med kronor. Om överskottet krymper mycket kan kronan försvagas och importen bli dyrare.`;
     // El
     const klimat = d.poster.findIndex((p) => p.namn === 'Klimatet');
     $('b-el').textContent = klimat >= 0 && a[klimat] > 0 ? 'Klimatet är med i räkningen. Då är elen en verklig begränsning: elproduktionen måste byggas ut i takt med att industrin går över till el.' : '';

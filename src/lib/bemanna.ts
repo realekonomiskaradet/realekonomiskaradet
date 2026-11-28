@@ -5,7 +5,7 @@ export type Post = { id: string; namn: string; heltidsarPerAr: number; instrumen
 export type Indata = {
   poster: Post[]; mult: Record<string, { aktiv: Mult; passiv: Mult }>; importandel: Record<string, number>;
   bnp: number; lf: number; u: number; fr: number; ht: number; kr: number; elasticitet: [number, number];
-  nettoexport: number;
+  bytesbalans: number; bytesbalansAr: number;
 };
 export type Ovrigt = { mdkr: number; instrument: string };
 
