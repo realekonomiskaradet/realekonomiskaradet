@@ -4,11 +4,9 @@ import m from '../../data/multiplikatorer.json';
 import aku from '../../data/aku.json';
 import glapp from '../../data/glapp.json';
 import mot from '../../data/motsvarar.json';
-import behov from '../../data/behov.json';
 const fr = glapp.jamforelser.find((j: any) => j.standard)!.varde as number;
-const timPerEnhet: Record<string, number> = Object.fromEntries(mot.enheter.map((e: any) => [e.id, e.timmar]));
-const ht = behov.heltidsar;
-const behovPerAr = behov.poster.filter((p: any) => p.typ === 'per år').reduce((sum: number, p: any) => sum + (p.personer ?? (p.mdkr ? (p.mdkr * 1e9) / mot.metod.krPerTimme : p.antal * timPerEnhet[p.enhet]) / ht), 0);
+import { summaTioAr, AR, ht } from '../../lib/behov';
+const behovPerAr = summaTioAr / AR;
 const data = {
   bnp: m.bnpMnkr / 1000, instrument: m.instrument, lf: aku.arbetskraft, u: aku.arbetsloshet, fr,
   h: glapp.timmarPerDag, ar: glapp.arbetsdagarPerAr, kr: mot.metod.krPerTimme, ht, behovPerAr,
@@ -100,7 +98,7 @@ const data = {
     const glappFore = ((D.u - D.fr) / 100) * D.lf * D.h;
     const glappEfter = ((nyU - D.fr) / 100) * D.lf * D.h;
     const hel = timmar / D.ht;
-    const behovText = `De extra timmarna motsvarar ungefär ${nf(Math.round(hel / 1000) * 1000)} heltidsår. Det är ${nf((hel / D.behovPerAr) * 100)} procent av det som enligt fliken Behov behövs varje år till bostäder, VA och vård`;
+    const behovText = `De extra timmarna motsvarar ungefär ${nf(Math.round(hel / 1000) * 1000)} heltidsår. Det är ${nf((hel / D.behovPerAr) * 100)} procent av det som enligt fliken Behov behövs i genomsnitt per år de kommande tio åren`;
     const tillFr = ((D.u - D.fr) / -mult.u) * D.bnp / 100;
     $('u-bv').textContent = nf(belopp);
     $('u-itext').textContent = x.text;
