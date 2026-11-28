@@ -15,7 +15,8 @@ const ind = kap.sektorer.find((s) => s.namn === 'Tillverkningsindustri')!;
 const elSist = el.ar[el.ar.length - 1];
 const elNetto = (elSist.export - elSist.import) / 1000;
 const handelAr = handel.ar[handel.ar.length - 1][0];
-const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar };
+const byggMarg = beg.bygg.produktionMdkr * beg.bygg.minskningProcent / (100 - beg.bygg.minskningProcent);
+const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar, byggMarg, elOkning: beg.el.ar2040[0] - beg.el.idagTWh };
 ---
 <Bas titel="Bemanna behoven" beskrivning="Vad händer med arbetslösheten och statens budget om staten finansierar de behov som myndigheterna själva har räknat på?">
 <div class="sub"><div class="band"><div class="wrap">
@@ -34,14 +35,13 @@ const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar };
 <p id="b-budget"></p>
 </div>
 <div class="inp">
-<div><label for="b-andel">Alla behov samtidigt: <b id="b-av"></b></label><input id="b-andel" type="range" min="0" max="200" step="10" value="100">
-<p class="note" style="margin:4px 0 0">Flyttar alla behov i samma proportion. Dra i varje behov nedan för att satsa olika mycket.</p></div>
 <div>
 <label id="b-rl">Riksbanken</label>
 <div class="seg" id="b-rb" role="group" aria-labelledby="b-rl">
 <button type="button" data-k="passiv" aria-pressed="true">Räntan ligger still</button>
-<button type="button" data-k="aktiv" aria-pressed="false">Räntan höjs</button>
+<button type="button" data-k="aktiv" aria-pressed="false">Räntan följer Riksbankens vanliga regel</button>
 </div>
+<p class="note" style="margin:6px 0 0" id="b-rb-t"></p>
 </div>
 <button type="button" class="aterstall" id="b-reset">Återställ till hela behovet</button>
 </div>
@@ -49,35 +49,42 @@ const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar };
 
 <div class="calc bemanna" style="margin-top:20px;display:block">
 <h2 style="font-size:20px;margin-bottom:4px">Behoven, ett i taget</h2>
-<p class="note" style="margin:0 0 16px">Varje reglage visar hur stor del av behovet som genomförs, från 0 till 300 procent. Siffran till höger är heltidsår per år, i snitt över tio år. Klimat och pensioner bygger på uppskattningar och är avstängda från början.</p>
+<p class="note" style="margin:0 0 16px">Det översta reglaget flyttar alla behov i samma proportion. De andra visar hur stor del av varje behov som genomförs, från 0 till 300 procent. Siffran till höger är heltidsår per år, i snitt över tio år. Klimat och pensioner bygger på uppskattningar och är avstängda från början.</p>
 <div class="brader" id="b-rader">
+<div class="brad tot">
+<label for="b-andel"><span><strong>Alla behov</strong></span> <b id="b-av"></b></label>
+<input id="b-andel" type="range" min="0" max="200" step="10" value="100">
+<span class="v" id="b-tot-v"></span>
+</div>
 {d.poster.map((p, i) => (
-<div class:list={['brad', { upp: p.uppskattad }]}>
-<label for={`b-p${i}`}><span>{p.namn}{p.uppskattad ? ', uppskattat' : ''}</span> <b data-pct={i}></b></label>
+<div class:list={['brad', { upp: p.uppskattad }]} style={`--c:var(--k${i})`}>
+<label for={`b-p${i}`}><span><i class="sw"></i>{p.namn}{p.uppskattad ? ', uppskattat' : ''}</span> <b data-pct={i}></b></label>
 <input id={`b-p${i}`} data-i={i} type="range" min="0" max="300" step="5" value={p.uppskattad ? 0 : 100}>
 <span class="v" data-v={i}></span>
 </div>
 ))}
-<div class="brad ovr">
-<label for="b-ovr"><span>Övriga satsningar</span> <b id="b-ovr-v"></b></label>
+<div class="brad ovr" style="--c:var(--ko)">
+<label for="b-ovr"><span><i class="sw"></i>Övriga satsningar</span> <b id="b-ovr-v"></b></label>
 <input id="b-ovr" type="range" min="0" max="300" step="5" value="0">
 <select id="b-ovr-i" aria-label="Typ av övrig satsning">
-<option value="kons">Personal (som vård och skola)</option>
-<option value="inv">Investeringar (som bygg)</option>
-<option value="trans">Pengar till hushåll</option>
+<option value="kons">Personal (som vård och skola), per år</option>
+<option value="inv">Investeringar (som bygg), per år</option>
+<option value="trans">Pengar till hushåll, per år</option>
 </select>
 </div>
 </div>
 <h3 style="font-size:16px;margin:26px 0 6px">Hur mycket av de lediga som behövs</h3>
-<p class="note" style="margin:0 0 8px">Hela stapeln är de omkring {nf(Math.round(((d.u - fr) / 100) * d.lf / 1000) * 1000)} personer som i dag är arbetslösa utöver friktionsnivån. Varje del visar hur många av dem ett behov ger jobb, enligt Konjunkturinstitutets multiplikatorer.</p>
+<p class="note" style="margin:0 0 8px">Färgerna är desamma som vid reglagen. Hela stapeln är de omkring {nf(Math.round(((d.u - fr) / 100) * d.lf / 1000) * 1000)} personer som i dag är arbetslösa utöver friktionsnivån. Varje del visar hur många av dem ett behov ger jobb, enligt Konjunkturinstitutets multiplikatorer.</p>
 <div class="bank" id="b-bank" role="img"></div>
 <div class="bank-leg" id="b-bank-leg"></div>
 </div>
 </div></div>
 
 <div class="band"><div class="wrap">
-<h2>Andra begränsningar än arbetskraft</h2>
-<p style="max-width:70ch">Arbetskraften är den viktigaste begränsningen, men inte den enda. Här är tre till som går att räkna på. Siffrorna följer reglagen ovan.</p>
+<h2>Hur nära taket kommer vi?</h2>
+<p style="max-width:70ch">Arbetskraften är den viktigaste begränsningen, men inte den enda. Staplarna visar hur stor del av marginalen som behoven använder. Strecket är taket. Det som går över taket måste frigöras från annat håll eller byggas ut. Staplarna följer reglagen ovan.</p>
+<div class="tak" id="b-tak" aria-live="polite"></div>
+<p class="note" style="margin:6px 0 28px">Skalan går till 200 procent. Längre staplar klipps.</p>
 <div class="grid3 beg">
 <div>
 <h3>Import</h3>
@@ -90,12 +97,14 @@ const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar };
 <p class="tal" id="b-bygg"></p>
 <p id="b-bygg-t"></p>
 <p>I Konjunkturinstitutets barometer anger {bygg.efterfragan} av 100 byggföretag att svag efterfrågan begränsar dem, {bygg.arbetskraft} av 100 brist på arbetskraft och {bygg.material} av 100 brist på material. Inom industrin anger {ind.material} av 100 brist på material eller utrustning.</p>
-<p class="note">Byggproduktion: {beg.bygg.kalla} Barometern: {kap.kalla} {bygg.period} och {ind.period}.</p>
+<p>Taket i stapeln är vad byggföretagen skulle producera om de hade lika många anställda som ett år tidigare: omkring {nf(byggMarg)} miljarder kronor mer per år. Byggbranschen hade {nf(beg.bygg.sysselsatta)} sysselsatta i {beg.bygg.sysselsattaPeriod}, {pc(beg.bygg.minskningProcent)} procent färre än året innan. Över taket måste byggföretagen anställa och utbilda fler.</p>
+<p class="note">Byggproduktion: {beg.bygg.kalla} Sysselsatta: {beg.bygg.sysselsattaKalla} Barometern: {kap.kalla} {bygg.period} och {ind.period}.</p>
 </div>
 <div>
 <h3>El</h3>
 <p class="tal">{pc(Math.round(elNetto * 10) / 10)} TWh</p>
 <p>Så mycket mer el exporterade Sverige än vi importerade {elSist.ar}. Bostäder, vård och underhåll kräver lite el. Klimatomställningen kräver mycket. {beg.el.text}</p>
+<p>Taket i stapeln är nettoexporten. Med klimatet påslaget visar stapeln ökningen till 2040 i Svenska kraftnäts lägsta scenario, {beg.el.ar2040[0] - beg.el.idagTWh} TWh, i proportion till hur stor del av klimatbehovet som genomförs.</p>
 <p id="b-el" class="lyft" style="margin:8px 0 0"></p>
 <p class="note">Källor: {el.kalla} {beg.el.kalla}</p>
 </div>
@@ -126,7 +135,7 @@ const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar };
 <script>
   import { bemanna, type Indata } from '../../lib/bemanna';
   const $ = (id: string) => document.getElementById(id)!;
-  const K = JSON.parse($('b-data').textContent || '{}') as { d: Indata; elNetto: number; elAr: number; byggAr: number };
+  const K = JSON.parse($('b-data').textContent || '{}') as { d: Indata; elNetto: number; elAr: number; byggAr: number; byggMarg: number; elOkning: number };
   const d = K.d;
   let rb: 'aktiv' | 'passiv' = 'passiv';
   const total = $('b-andel') as HTMLInputElement;
@@ -145,7 +154,8 @@ const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar };
   function draw() {
     const a = andelar();
     const r = bemanna(d, a, rb, { mdkr: Number(ovr.value), instrument: ovrI.value });
-    $('b-av').textContent = `${total.value} procent`;
+    $('b-av').textContent = `${total.value} %`;
+    $('b-tot-v').textContent = hundra(a.reduce((x, f, i) => x + f * d.poster[i].heltidsarPerAr, 0));
     rader.forEach((el, i) => {
       el.value = String(Math.round(a[i] * 100));
       fyll(el);
@@ -153,7 +163,7 @@ const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar };
       document.querySelector(`[data-v="${i}"]`)!.textContent = hundra(a[i] * d.poster[i].heltidsarPerAr);
     });
     fyll(ovr); fyll(total);
-    $('b-ovr-v').textContent = `${ovr.value} mdkr per år`;
+    $('b-ovr-v').textContent = `${ovr.value} mdkr`;
     $('b-big').textContent = `${dec(r.nyU)} %`;
     $('b-unit').textContent = `i stället för ${dec(d.u)} procent i dag`;
     $('b-conv').innerHTML = [
@@ -170,11 +180,28 @@ const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar };
     const namn = [...d.poster.map((p) => p.namn), 'Övriga satsningar'];
     const skala = Math.max(1, r.bankAndel);
     const delar = r.duPer.map((x, i) => ({ i, namn: namn[i], w: (-x / bank) * 100 / skala, upp: i < d.poster.length ? !!d.poster[i].uppskattad : false })).filter((x) => x.w > 0.05);
-    $('b-bank').innerHTML = delar.map((x, k) => `<i class="${x.upp ? 'upp' : ''} n${k % 4}" style="width:${x.w}%" title="${x.namn}"></i>`).join('')
+    const farg = (i: number) => `--c:var(--k${i < d.poster.length ? i : 'o'})`;
+    $('b-bank').innerHTML = delar.map((x) => `<i class="${x.upp ? 'upp' : ''}" style="width:${x.w}%;${farg(x.i)}" title="${x.namn}"></i>`).join('')
       + (r.bankAndel > 1 ? `<b class="grans" style="left:${100 / skala}%"></b>` : '');
     $('b-bank').setAttribute('aria-label', `Behoven använder ${Math.round(r.bankAndel * 100)} procent av de lediga.`);
     $('b-bank-leg').innerHTML = `<span><strong>${Math.round(r.bankAndel * 100)} procent</strong> av de lediga behövs${r.bankAndel > 1 ? '. Strecket visar var de tar slut' : ''}.</span> `
-      + delar.map((x, k) => `<span><i class="${x.upp ? 'upp' : ''} n${k % 4}"></i>${x.namn}</span>`).join('');
+      + delar.map((x) => `<span><i class="${x.upp ? 'upp' : ''}" style="${farg(x.i)}"></i>${x.namn}</span>`).join('');
+    // Taken
+    const klimatI = d.poster.findIndex((p) => p.namn === 'Klimatet');
+    const klimatA = klimatI >= 0 ? a[klimatI] : 0;
+    const elBehov = K.elOkning * klimatA;
+    const lediga = ((d.u - d.fr) / 100) * d.lf;
+    const tak = [
+      ['Arbetskraft', r.bankAndel, `${tusen(Math.max(0, r.bankAndel) * lediga)} av ${tusen(lediga)} lediga personer`],
+      ['Import', r.import / d.nettoexport, `${nf(r.import)} av ${nf(d.nettoexport)} mdkr i exportöverskott`],
+      ['Byggföretagen', r.bygg / K.byggMarg, `${nf(r.bygg)} av ${nf(K.byggMarg)} mdkr om de anställer som året innan`],
+      ['El', elBehov / K.elNetto, klimatA > 0 ? `minst ${nf(elBehov)} av ${dec(K.elNetto)} TWh i nettoexport` : 'Utan klimatet kräver behoven lite el'],
+    ] as [string, number, string][];
+    $('b-tak').innerHTML = tak.map(([n, x, t]) => {
+      const v = Math.max(0, x);
+      const under = Math.min(v, 1) * 50, over = Math.min(Math.max(v - 1, 0), 1) * 50;
+      return `<div class="takrad${v > 1 ? ' over' : ''}"><span class="n">${n}</span><div class="track"><i class="u" style="width:${under}%"></i><i class="o" style="width:${over}%"></i><b class="grans"></b></div><span class="v">${Math.round(v * 100)} %</span><span class="t">${t}</span></div>`;
+    }).join('');
     // Import
     $('b-imp').textContent = `${nf(r.import)} mdkr`;
     $('b-imp-t').textContent = `Så mycket ökar importen per år, minst. Sverige exporterade för ${nf(d.nettoexport)} miljarder kronor mer än vi importerade senaste året. Det motsvarar ${Math.round((r.import / d.nettoexport) * 100)} procent av det överskottet. Importen betalas med kronor. Om överskottet krymper mycket kan kronan försvagas och importen bli dyrare.`;
@@ -184,6 +211,9 @@ const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar };
     // El
     const klimat = d.poster.findIndex((p) => p.namn === 'Klimatet');
     $('b-el').textContent = klimat >= 0 && a[klimat] > 0 ? 'Klimatet är med i räkningen. Då är elen en verklig begränsning: elproduktionen måste byggas ut i takt med att industrin går över till el.' : '';
+    $('b-rb-t').textContent = rb === 'passiv'
+      ? 'Riksbanken låter räntan ligga still i två år, oavsett vad som händer. Då får utgifterna full effekt.'
+      : 'Riksbanken gör som den brukar: höjer räntan när arbetslösheten sjunker och inflationen stiger. Det dämpar effekten. Hur mycket räntan höjs beror på hur stor satsningen är. Konjunkturinstitutet anger ingen siffra.';
     for (const b of document.querySelectorAll<HTMLButtonElement>('#b-rb button')) b.setAttribute('aria-pressed', String(b.dataset.k === rb));
   }
   total.addEventListener('input', draw);
