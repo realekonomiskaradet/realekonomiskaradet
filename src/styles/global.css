@@ -167,3 +167,37 @@ details.note p{margin:4px 0}
 .stapel.upp .fill{background:repeating-linear-gradient(135deg,var(--mute) 0 6px,transparent 6px 10px);border:1px solid var(--mute)}
 .stapel.upp span:first-child{font-style:italic}
 .stapel.sum{border-top:1px solid var(--line);padding-top:6px}
+/* Bemanna behoven: reglage per behov och avbytarbänken */
+.brader{display:grid;gap:10px}
+.brad{display:grid;grid-template-columns:minmax(9em,13em) minmax(0,1fr) 6.5em;gap:12px;align-items:center}
+.brad label{margin:0;font-weight:400;font-size:15px;display:flex;justify-content:space-between;gap:8px}
+.brad label b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.brad .v{text-align:right;font-variant-numeric:tabular-nums;font-size:15px}
+.brad.upp label span{font-style:italic}
+.brad.ovr{border-top:1px solid var(--line);padding-top:10px;grid-template-columns:minmax(9em,13em) minmax(0,1fr) minmax(6.5em,14em)}
+.brad.ovr select{min-height:36px;font-size:14px;padding:4px 6px}
+.bemanna input[type=range]{-webkit-appearance:none;appearance:none;padding:0;border:0;min-height:30px;background:transparent;--p:0%}
+.bemanna input[type=range]::-webkit-slider-runnable-track{height:14px;border-radius:2px;background:linear-gradient(90deg,var(--main) var(--p),var(--soft) var(--p))}
+.bemanna input[type=range]::-moz-range-track{height:14px;border-radius:2px;background:linear-gradient(90deg,var(--main) var(--p),var(--soft) var(--p))}
+.bemanna .brad.upp input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90deg,transparent var(--p),var(--soft) var(--p)),repeating-linear-gradient(135deg,var(--mute) 0 6px,transparent 6px 10px)}
+.bemanna .brad.upp input[type=range]::-moz-range-track{background:linear-gradient(90deg,transparent var(--p),var(--soft) var(--p)),repeating-linear-gradient(135deg,var(--mute) 0 6px,transparent 6px 10px)}
+.bemanna .brad.ovr input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90deg,var(--acc) var(--p),var(--soft) var(--p))}
+.bemanna .brad.ovr input[type=range]::-moz-range-track{background:linear-gradient(90deg,var(--acc) var(--p),var(--soft) var(--p))}
+.bemanna input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:-4px;border-radius:50%;background:var(--bg);border:2px solid var(--ink);cursor:pointer}
+.bemanna input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--bg);border:2px solid var(--ink);cursor:pointer}
+.bemanna input[type=range]:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.aterstall{align-self:start;font:inherit;font-size:14px;justify-self:start;min-height:40px;padding:6px 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:4px;cursor:pointer}
+.bank{position:relative;display:flex;height:26px;background:var(--soft);border-radius:2px;overflow:visible}
+.bank i{display:block;height:100%;border-right:1px solid var(--bg)}
+.bank i.n0,.bank-leg i.n0{background:var(--main)}
+.bank i.n1,.bank-leg i.n1{background:color-mix(in srgb,var(--main) 72%,var(--bg))}
+.bank i.n2,.bank-leg i.n2{background:color-mix(in srgb,var(--main) 50%,var(--bg))}
+.bank i.n3,.bank-leg i.n3{background:color-mix(in srgb,var(--main) 32%,var(--bg))}
+.bank i.upp,.bank-leg i.upp{background:repeating-linear-gradient(135deg,var(--mute) 0 6px,transparent 6px 10px)}
+.bank .grans{position:absolute;top:-5px;bottom:-5px;width:3px;background:var(--acc)}
+.bank-leg{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;font-size:14px}
+.bank-leg span:first-child{flex-basis:100%}
+.bank-leg i{display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:-1px}
+.beg .tal{font-size:32px;font-weight:700;color:var(--main);font-variant-numeric:tabular-nums;margin:6px 0 8px}
+.beg p{margin:0 0 10px}
+@media(max-width:640px){.brad,.brad.ovr{grid-template-columns:1fr 5.5em}.brad label{grid-column:1/-1}}

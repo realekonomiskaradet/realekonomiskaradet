@@ -1,13 +1,14 @@
 ---
 import aku from '../../data/aku.json';
 import { bemanna } from '../../lib/bemanna';
-import { indata, AR, kr, ht, fr, gap, gapTioAr, poster, summaTioAr, timmarPerLgh, andra, utanSiffra, summaInklUpp } from '../../lib/behov';
+import { indata, andelarFull, AR, kr, ht, fr, gap, gapTioAr, poster, summaTioAr, timmarPerLgh, andra, utanSiffra, summaInklUpp } from '../../lib/behov';
 const nf = (n: number) => Math.round(n).toLocaleString('sv-SE');
 const tusen = (n: number) => nf(Math.round(n / 1000) * 1000);
 const milj = (n: number) => (n / 1e6).toLocaleString('sv-SE', { maximumFractionDigits: 1 });
 const pc = (x: number) => x.toLocaleString('sv-SE', { maximumFractionDigits: 1 });
 const andel = Math.round((summaTioAr / gapTioAr) * 100);
-const full = bemanna(indata(false), 1, 'passiv');
+const d0 = indata();
+const full = bemanna(d0, andelarFull(d0), 'passiv');
 const ordning = ['bost', 'vard', 'fors', 'va', 'jvg', 'vag'];
 const rader = ordning.map((id) => poster.find((p) => p.id === id)!).filter(Boolean);
 const vard = poster.find((p) => p.id === 'vard');

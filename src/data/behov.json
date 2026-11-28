@@ -10,7 +10,8 @@
       "text": "Det som skulle ha underhållits men inte har gjorts: spår, växlar, kontaktledningar och signaler.",
       "kalla": "Trafikverket, ”Så här tar vi ikapp det eftersatta underhållet”, trafikverket.se.",
       "kort": "Järnvägsunderhåll",
-      "instrument": "inv"
+      "instrument": "inv",
+      "bygg": true
     },
     {
       "id": "vag",
@@ -20,7 +21,8 @@
       "text": "Varav cirka 23 miljarder kronor gäller beläggning och vägkropp.",
       "kalla": "Trafikverket, ”Så här tar vi ikapp det eftersatta vägunderhållet”, trafikverket.se.",
       "kort": "Vägunderhåll",
-      "instrument": "inv"
+      "instrument": "inv",
+      "bygg": true
     },
     {
       "id": "va",
@@ -30,7 +32,8 @@
       "typ": "per år",
       "text": "Svenskt Vatten anger att kommunerna investerar 25 miljarder kronor per år i VA, mot ett behov på 35 miljarder. Underskottet är omkring 10 miljarder kronor per år.",
       "kalla": "Svenskt Vatten, ”Samhällen byggs av vatten”, april 2026.",
-      "instrument": "inv"
+      "instrument": "inv",
+      "bygg": true
     },
     {
       "id": "bost",
@@ -41,7 +44,8 @@
       "text": "Boverket bedömer att det behövs drygt 523 000 nya bostäder 2024–2033. I bostadsmarknadsenkäten 2026 rapporterar 102 kommuner underskott på bostäder, och över hälften av befolkningen bor i en sådan kommun.",
       "kalla": "Boverket, Behov av bostadsbyggande 2024–2033 (2025), och Bostadsmarknadsenkäten 2026.",
       "kort": "Bostäder",
-      "instrument": "inv"
+      "instrument": "inv",
+      "bygg": true
     },
     {
       "id": "vard",
@@ -61,7 +65,7 @@
       "typ": "engang",
       "text": "Regeringen och riksdagspartierna har kommit överens om att försvarsutgifterna ska nå 3,5 procent av BNP år 2030, från 2,8 procent 2026. Ökningen ska lånefinansieras med högst 300 miljarder kronor 2026–2034, eftersom den inte ryms i budgeten. En del av pengarna går till import av materiel.",
       "kalla": "Regeringen, ”Blocköverskridande överenskommelse nådd om historisk upprustning”, 19 juni 2025, och ”Ökad takt i upprustningen av det militära försvaret”, regeringen.se.",
-      "instrument": "inv"
+      "instrument": "fors"
     }
   ],
   "heltidsar": 1760,
