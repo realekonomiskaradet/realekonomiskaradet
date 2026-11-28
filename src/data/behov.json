@@ -47,6 +47,15 @@
       "typ": "per år",
       "text": "SKR beräknar att befolkningens ålder kräver 65 600 fler anställda i äldreomsorgen och 17 700 fler i hälso- och sjukvården 2033 än 2023. Utöver det ska de som går i pension ersättas.",
       "kalla": "SKR, Välfärdens kompetensförsörjning. Personalprognos 2023–2033 (2024), s. 25–26."
+    },
+    {
+      "id": "fors",
+      "namn": "Försvaret",
+      "kort": "Försvar",
+      "mdkr": 300,
+      "typ": "engang",
+      "text": "Regeringen och riksdagspartierna har kommit överens om att försvarsutgifterna ska nå 3,5 procent av BNP år 2030, från 2,8 procent 2026. Ökningen ska lånefinansieras med högst 300 miljarder kronor 2026–2034, eftersom den inte ryms i budgeten. En del av pengarna går till import av materiel.",
+      "kalla": "Regeringen, ”Blocköverskridande överenskommelse nådd om historisk upprustning”, 19 juni 2025, och ”Ökad takt i upprustningen av det militära försvaret”, regeringen.se."
     }
   ],
   "heltidsar": 1760,
@@ -58,6 +67,15 @@
       "mdkr": 2900
     },
     {
+      "vem": "Arena Idé, oktober 2024",
+      "mdkrPerAr": [
+        49,
+        171
+      ],
+      "text": "Skuggöversynen av det finanspolitiska ramverket räknar med att den offentliga sektorns utgifter behöver öka med 49–171 miljarder kronor per år, eller 0,8–2,7 procent av BNP, för VA, elnät, elproduktion, väg och järnväg, nya stambanor, bostäder, livsmedelsförsörjning, arbetsmarknadspolitik och stöd till Ukraina. Ökningen är tillfällig: en investeringspuckel som tar igen tidigare underskott.",
+      "kalla": "Arena Idé, Elinor Odeberg och Vilgot Österlund, ”Det finanspolitiska ramverket. En skuggöversyn”, oktober 2024, s. 28."
+    },
+    {
       "vem": "Svenskt Näringsliv och Ramboll, 2023",
       "text": "Underhållsskulden på statliga vägar och järnvägar var 77,5 miljarder kronor 2023 och väntas växa till 113 miljarder kronor 2033 med den plan som gällde då.",
       "kalla": "Svenskt Näringsliv, ”Hur underhållsskulden på Sveriges vägar och järnvägar påverkar näringslivet”, mars 2023, s. 2."
@@ -66,6 +84,22 @@
       "vem": "WSP, 2022",
       "text": "Att renovera eller ersätta Sveriges befintliga kraftverk skulle kosta 600–900 miljarder kronor. Vatten- och avloppsnätet har ett återanskaffningsvärde på nära 1 000 miljarder kronor.",
       "kalla": "WSP, ”Prioriteringar och vägval när Sverige behöver renoveras”, maj 2022."
+    }
+  ],
+  "utanSiffra": [
+    {
+      "namn": "Klimatet",
+      "mdkrPerAr": 50,
+      "perArText": "1 000 miljarder kronor fram till 2045",
+      "text": "Klimatpolitiska rådet bedömer i sin rapport 2026 att nuvarande politik inte räcker för att nå klimatmålen för 2030, 2040 och 2045. Riksbanken hänvisar till en beräkning från Sweco: elproduktion och elnät kräver investeringar på cirka 1 000 miljarder kronor fram till 2045, ungefär 0,6 procent av BNP per år. Svenskt Näringsliv uppger att företagen är beredda att investera nästan 1 300 miljarder kronor i klimatomställningen. Det mesta är privata investeringar, men de kräver arbetskraft här. {omr}",
+      "kalla": "Klimatpolitiska rådet, rapport 2026. Riksbanken, Ekonomisk kommentar, Kvarfordt och Löf, ”Ökar investeringarna med den gröna omställningen?”, juli 2025 (Sweco, Elnätsrapporten 2023). Svenskt Näringsliv, ”Näringslivet redo satsa 1 300 miljarder i klimatomställningen”, juni 2024."
+    },
+    {
+      "namn": "Pensionerna",
+      "mdkrPerAr": 20,
+      "perArText": "20 miljarder kronor per år",
+      "text": "Pensionsmyndigheten har beräknat att en höjning av pensionsavgiften från 17,21 till 18,5 procent kostar staten cirka 20 miljarder kronor per år. På sikt höjer det den allmänna pensionen med cirka 7 procent, enligt Pensionsavgiftsutredningen. {omr} Men pensioner är i grunden en rätt till en del av det som produceras de åren. När andelen äldre ökar behövs mer vård, omsorg, bostäder och varor till dem som inte längre arbetar. Det avgörs av hur mycket som produceras, inte av hur mycket som finns i pensionsfonderna.",
+      "kalla": "Pensionsmyndigheten, ”Effekter av höjda avgifter till det allmänna pensionssystemet”, 2021. SOU 2025:41, Pensionsnivåer och pensionsavgiften, s. 15–16."
     }
   ]
 }
