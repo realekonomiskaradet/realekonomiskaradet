@@ -213,7 +213,7 @@ const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar, byggMarg, elO
     $('b-el').textContent = klimat >= 0 && a[klimat] > 0 ? 'Klimatet är med i räkningen. Då är elen en verklig begränsning: elproduktionen måste byggas ut i takt med att industrin går över till el.' : '';
     $('b-rb-t').textContent = rb === 'passiv'
       ? 'Riksbanken låter räntan ligga still i två år, oavsett vad som händer. Då får utgifterna full effekt.'
-      : 'Riksbanken höjer räntan när arbetslösheten sjunker, så som den har gjort förut. Det dämpar effekten. I Konjunkturinstitutets modell stiger inflationen när arbetslösheten sjunker, även om det finns lediga resurser. Det antagandet delar inte RER. Konjunkturinstitutet anger inte hur mycket räntan höjs.';
+      : 'Riksbanken höjer räntan när arbetslösheten sjunker, så som den har gjort förut. Högre ränta gör lån dyrare och stärker kronan. Då minskar hushållens och företagens köp och exporten, och arbetslösheten sjunker mindre. I Konjunkturinstitutets modell stiger inflationen när arbetslösheten sjunker, även om det finns lediga resurser. Det antagandet delar inte RER. Konjunkturinstitutet anger inte hur mycket räntan höjs.';
     for (const b of document.querySelectorAll<HTMLButtonElement>('#b-rb button')) b.setAttribute('aria-pressed', String(b.dataset.k === rb));
   }
   total.addEventListener('input', draw);
