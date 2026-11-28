@@ -51,5 +51,29 @@
     "lag": 0.3,
     "text": "När BNP ökar med en krona förbättras de offentliga finanserna med 0,3–0,47 kronor, genom högre skatteintäkter och lägre utgifter för arbetslöshet.",
     "kalla": "Almenberg och Sigonius (2021): budgetelasticiteten föll från 0,55 till 0,47 mellan 1998 och 2019. Calmfors, Hassler och Seim (2022) bedömer den snarare till 0,3–0,4. Båda via Calmfors, ”Vilken roll bör finanspolitiken spela i konjunkturstabiliseringen?”, Ekonomisk Debatt nr 7, 2023, s. 11."
+  },
+  "forsvar": {
+    "id": "fors",
+    "namn": "Försvarsutgifter",
+    "aktiv": {
+      "bnp": 0.61,
+      "u": -0.45
+    },
+    "passiv": {
+      "bnp": 0.72,
+      "u": -0.56
+    },
+    "text": "Försvarsutgifter har högre importinnehåll och mer kapital än andra offentliga utgifter. Konjunkturinstitutet sänker därför multiplikatorerna med 38 procent. Här sänks multiplikatorerna för offentliga investeringar med lika mycket.",
+    "kalla": "Konjunkturinstitutet, KI-kommentar 2025-09-24 om försvarsmultiplikatorn, s. 10–12.",
+    "url": "https://www.konj.se/media/c1cdpmij/ki-kommentar-2025-09-24-forsvarsmultiplikator.pdf"
+  },
+  "importandel": {
+    "kons": 12,
+    "inv": 38.9,
+    "fors": 38.9,
+    "trans": 30.7,
+    "text": "Andel av utgiften som går till import, direkt och via leverantörer, år 2023. Offentlig konsumtion 12,0 procent, fasta investeringar 38,9 procent och hushållens konsumtion 30,7 procent. Transfereringar räknas som hushållens konsumtion. Försvaret räknas som investeringar, men andelen är troligen högre.",
+    "kalla": "Konjunkturinstitutet, ”Tillförsel och användning i den svenska ekonomin”, 11 november 2025, tabell 1.",
+    "url": "https://www.konj.se/media/urblekie/2025-11-11-tillforsel-och-anvandning-i-den-svenska-ekonomin.pdf"
   }
 }

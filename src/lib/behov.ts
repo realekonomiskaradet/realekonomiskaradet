@@ -26,14 +26,26 @@ export const andra = b.andraUppskattningar;
 export const utanSiffra = b.utanSiffra.map((u: any) => ({ ...u, tioAr: u.mdkrPerAr ? (u.mdkrPerAr * 1e9 / kr / ht) * AR : 0 }));
 export const summaInklUpp = summaTioAr + utanSiffra.reduce((s: number, u: any) => s + u.tioAr, 0);
 
-// Indata till räknaren "Bemanna behoven".
+// Indata till räknaren "Bemanna behoven". Alla poster kommer med, även de uppskattade (klimat och pensioner).
 import m from '../data/multiplikatorer.json';
+import bop from '../data/bytesbalans.json';
 import type { Indata } from './bemanna';
-export function indata(medUppskattade: boolean): Indata {
+// Samma ordning som staplarna i fliken Behov. Okända poster hamnar först.
+const ORDNING = ['bost', 'vard', 'fors', 'va', 'jvg', 'vag'];
+export function indata(): Indata {
   const lista = [
-    ...poster.map((p: any) => ({ namn: p.kort, heltidsarPerAr: p.tioAr / AR, instrument: p.instrument })),
-    ...(medUppskattade ? utanSiffra.filter((u: any) => u.tioAr).map((u: any) => ({ namn: u.namn, heltidsarPerAr: u.tioAr / AR, instrument: u.instrument })) : []),
+    ...[...poster].sort((a: any, b: any) => ORDNING.indexOf(a.id) - ORDNING.indexOf(b.id)).map((p: any) => ({ id: p.id, namn: p.kort, heltidsarPerAr: p.tioAr / AR, instrument: p.instrument })),
+    ...utanSiffra.filter((u: any) => u.tioAr).map((u: any) => ({ id: u.namn, namn: u.namn, heltidsarPerAr: u.tioAr / AR, instrument: u.instrument, uppskattad: true })),
   ];
-  const mult: Indata['mult'] = Object.fromEntries([...m.instrument, m.transfereringar].map((i: any) => [i.id, { aktiv: i.aktiv, passiv: i.passiv }]));
-  return { poster: lista, mult, bnp: m.bnpMnkr / 1000, lf: aku.arbetskraft, u: aku.arbetsloshet, fr, ht, kr, elasticitet: [m.budgetelasticitet.hog, m.budgetelasticitet.lag] };
+  const mult: Indata['mult'] = Object.fromEntries([...m.instrument, m.transfereringar, m.forsvar].map((i: any) => [i.id, { aktiv: i.aktiv, passiv: i.passiv }]));
+  const [bopAr, bopMdkr] = bop.ar[bop.ar.length - 1];
+  const { text, kalla, url, ...importandel } = m.importandel;
+  return {
+    poster: lista, mult, importandel: importandel as Record<string, number>,
+    bnp: m.bnpMnkr / 1000, lf: aku.arbetskraft, u: aku.arbetsloshet, fr, ht, kr,
+    elasticitet: [m.budgetelasticitet.hog, m.budgetelasticitet.lag],
+    bytesbalans: bopMdkr, bytesbalansAr: bopAr,
+  };
 }
+// Hela behovet utan de uppskattade posterna.
+export const andelarFull = (d: Indata) => d.poster.map((p) => (p.uppskattad ? 0 : 1));

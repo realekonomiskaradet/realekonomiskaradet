@@ -1,0 +1,14 @@
+{
+  "kommentar": "Andra reala begränsningar än arbetskraft, för räknaren Bemanna behoven. Uppdateras för hand.",
+  "hamtad": "2026-11-28",
+  "el": {
+    "idagTWh": 136,
+    "ar2040": [
+      186,
+      290
+    ],
+    "text": "Svenska kraftnät räknar med att elanvändningen ökar från 136 TWh år 2026 till 186–290 TWh år 2040, främst när industri och transporter går över till el.",
+    "kalla": "Svenska kraftnät, Långsiktig marknadsanalys 2026, s. 45.",
+    "url": "https://www.svk.se/49e8f3/siteassets/om-oss/rapporter/langsiktig-marknadsanalys/langsiktig-marknadsanalys-2026.pdf"
+  }
+}

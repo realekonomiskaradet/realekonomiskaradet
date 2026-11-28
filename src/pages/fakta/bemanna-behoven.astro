@@ -2,18 +2,25 @@
 import Bas from '../../layouts/Bas.astro';
 import m from '../../data/multiplikatorer.json';
 import aku from '../../data/aku.json';
+import el from '../../data/el.json';
+import beg from '../../data/begransningar.json';
+import bop from '../../data/bytesbalans.json';
 import { indata, fr } from '../../lib/behov';
-const data = { utan: indata(false), med: indata(true) };
+const d = indata();
 const pc = (x: number) => x.toLocaleString('sv-SE', { maximumFractionDigits: 2 });
+const nf = (n: number) => Math.round(n).toLocaleString('sv-SE');
+const elSist = el.ar[el.ar.length - 1];
+const elNetto = (elSist.export - elSist.import) / 1000;
+const klient = { d, elNetto, elAr: elSist.ar, elOkning: beg.el.ar2040[0] - beg.el.idagTWh };
 ---
 <Bas titel="Bemanna behoven" beskrivning="Vad händer med arbetslösheten och statens budget om staten finansierar de behov som myndigheterna själva har räknat på?">
 <div class="sub"><div class="band"><div class="wrap">
 <a class="back" href="/#beh">← Behov</a>
 <h1>Bemanna behoven</h1>
-<p class="lead" style="opacity:1;margin:0">Vad händer om staten betalar för bostäderna, vården, försvaret, VA och underhållet som myndigheterna säger behövs? Hur mycket sjunker arbetslösheten, vad kostar det och räcker arbetskraften?</p>
+<p class="lead" style="opacity:1;margin:0">Vad händer om staten betalar för bostäderna, vården, försvaret, VA och underhållet som myndigheterna säger behövs? Hur mycket sjunker arbetslösheten, vad kostar det och räcker arbetskraften, importen och elen?</p>
 </div></div></div>
 <div class="band"><div class="wrap">
-<div class="calc" aria-labelledby="b-h">
+<div class="calc bemanna" aria-labelledby="b-h">
 <div>
 <h2 id="b-h" style="font-size:20px;margin-bottom:12px">Arbetslösheten blir</h2>
 <div class="big" id="b-big">0</div>
@@ -23,32 +30,83 @@ const pc = (x: number) => x.toLocaleString('sv-SE', { maximumFractionDigits: 2 }
 <p id="b-budget"></p>
 </div>
 <div class="inp">
-<div><label for="b-andel">Hur stor del av behoven som genomförs: <b id="b-av"></b></label><input id="b-andel" type="range" min="0" max="200" step="10" value="100"></div>
-<div>
-<label id="b-ul">Klimat och pensioner</label>
-<div class="seg" id="b-upp" role="group" aria-labelledby="b-ul">
-<button type="button" data-k="utan" aria-pressed="true">Utan</button>
-<button type="button" data-k="med" aria-pressed="false">Med</button>
-</div>
-<p class="note" style="margin:6px 0 0">Klimat och pensioner bygger på uppskattningar, inte myndigheternas egna beräkningar.</p>
-</div>
 <div>
 <label id="b-rl">Riksbanken</label>
 <div class="seg" id="b-rb" role="group" aria-labelledby="b-rl">
 <button type="button" data-k="passiv" aria-pressed="true">Räntan ligger still</button>
-<button type="button" data-k="aktiv" aria-pressed="false">Räntan höjs</button>
+<button type="button" data-k="aktiv" aria-pressed="false">Räntan följer Riksbankens vanliga regel</button>
+</div>
+<p class="note" style="margin:6px 0 0" id="b-rb-t"></p>
+</div>
+<button type="button" class="aterstall" id="b-reset">Återställ till hela behovet</button>
 </div>
 </div>
+
+<div class="calc bemanna" style="margin-top:20px;display:block">
+<h2 style="font-size:20px;margin-bottom:4px">Behoven, ett i taget</h2>
+<p class="note" style="margin:0 0 16px">Det översta reglaget flyttar alla behov i samma proportion. De andra visar hur stor del av varje behov som genomförs, från 0 till 300 procent. Siffran till höger är heltidsår per år, i snitt över tio år. Klimat och pensioner bygger på uppskattningar och är avstängda från början.</p>
+<div class="brader" id="b-rader">
+<div class="brad tot">
+<label for="b-andel"><span><strong>Alla behov</strong></span> <b id="b-av"></b></label>
+<input id="b-andel" type="range" min="0" max="200" step="10" value="100">
+<span class="v" id="b-tot-v"></span>
+</div>
+{d.poster.map((p, i) => (
+<div class:list={['brad', { upp: p.uppskattad }]} style={`--c:var(--k${i})`}>
+<label for={`b-p${i}`}><span><i class="sw"></i>{p.namn}{p.uppskattad ? ', uppskattat' : ''}</span> <b data-pct={i}></b></label>
+<input id={`b-p${i}`} data-i={i} type="range" min="0" max="300" step="5" value={p.uppskattad ? 0 : 100}>
+<span class="v" data-v={i}></span>
+</div>
+))}
+<div class="brad ovr" style="--c:var(--ko)">
+<label for="b-ovr"><span><i class="sw"></i>Övriga satsningar</span> <b id="b-ovr-v"></b></label>
+<input id="b-ovr" type="range" min="0" max="300" step="5" value="0">
+<select id="b-ovr-i" aria-label="Typ av övrig satsning">
+<option value="kons">Personal (som vård och skola), per år</option>
+<option value="inv">Investeringar (som bygg), per år</option>
+<option value="trans">Pengar till hushåll, per år</option>
+</select>
+</div>
+</div>
+<h3 style="font-size:16px;margin:26px 0 6px">Hur mycket av de lediga som behövs</h3>
+<p class="note" style="margin:0 0 8px">Färgerna är desamma som vid reglagen. Hela stapeln är de omkring {nf(Math.round(((d.u - fr) / 100) * d.lf / 1000) * 1000)} personer som i dag är arbetslösa utöver friktionsnivån. Varje del visar hur många av dem ett behov ger jobb, enligt Konjunkturinstitutets multiplikatorer.</p>
+<div class="bank" id="b-bank" role="img"></div>
+<div class="bank-leg" id="b-bank-leg"></div>
+</div>
+</div></div>
+
+<div class="band"><div class="wrap">
+<h2>Hur nära taket kommer vi?</h2>
+<p style="max-width:70ch">Arbetskraften är den viktigaste begränsningen, men inte den enda. Staplarna visar hur stor del av marginalen som behoven använder. Strecket är taket. Det som går över taket måste frigöras från annat håll eller byggas ut. Staplarna följer reglagen ovan.</p>
+<div class="tak" id="b-tak" aria-live="polite"></div>
+<p class="note" style="margin:6px 0 28px">Skalan går till 200 procent. Längre staplar klipps.</p>
+<div class="grid3 beg">
+<div>
+<h3>Import</h3>
+<p class="tal" id="b-imp"></p>
+<p id="b-imp-t"></p>
+<p class="note">{m.importandel.text} Källa: {m.importandel.kalla} {bop.kalla}</p>
+</div>
+<div>
+<h3>El</h3>
+<p class="tal">{pc(Math.round(elNetto * 10) / 10)} TWh</p>
+<p>Så mycket mer el exporterade Sverige än vi importerade {elSist.ar}. Bostäder, vård och underhåll kräver lite el. Klimatomställningen kräver mycket. {beg.el.text}</p>
+<p>Taket i stapeln är nettoexporten. Med klimatet påslaget visar stapeln ökningen till 2040 i Svenska kraftnäts lägsta scenario, {beg.el.ar2040[0] - beg.el.idagTWh} TWh, i proportion till hur stor del av klimatbehovet som genomförs.</p>
+<p id="b-el" class="lyft" style="margin:8px 0 0"></p>
+<p class="note">Källor: {el.kalla} {beg.el.kalla}</p>
 </div>
 </div>
 </div></div>
+
 <div class="band"><div class="wrap prose">
 <h2>Så räknar vi</h2>
 <ol>
-<li><strong>Utgiften.</strong> Varje behov i fliken Behov räknas om till heltidsår per år, i snitt över tio år. Heltidsåren gånger 1 760 timmar och {data.utan.kr} kronor per timme ger utgiften i kronor.</li>
-<li><strong>Effekten på BNP och arbetslösheten.</strong> Utgiften delas med BNP och multipliceras med Konjunkturinstitutets multiplikatorer: offentliga investeringar för bostäder, försvar, VA, järnväg, väg och klimat, offentlig konsumtion för vård och omsorg, och transfereringar för pensionerna. Multiplikatorerna tar med jobb hos leverantörer och i privat sektor, men också det som läcker ut i import och sparande.</li>
+<li><strong>Utgiften.</strong> Varje behov i fliken Behov räknas om till heltidsår per år, i snitt över tio år. Heltidsåren gånger 1 760 timmar och {d.kr} kronor per timme ger utgiften i kronor.</li>
+<li><strong>Effekten på BNP och arbetslösheten.</strong> Utgiften delas med BNP och multipliceras med Konjunkturinstitutets multiplikatorer: offentliga investeringar för bostäder, VA, järnväg, väg och klimat, offentlig konsumtion för vård och omsorg, och transfereringar för pensionerna. Multiplikatorerna tar med jobb hos leverantörer och i privat sektor, men också det som läcker ut i import och sparande.</li>
+<li><strong>Försvaret.</strong> {m.forsvar.text}</li>
 <li><strong>Arbetskraften.</strong> Arbetslösheten kan inte bli lägre än friktionsnivån på {pc(fr)} procent. Om räkningen ger en lägre nivå saknas arbetskraft. Då måste människor och material frigöras från annan användning.</li>
 <li><strong>Budgeten.</strong> När BNP ökar får staten in mer skatt och betalar mindre för arbetslösheten. {m.budgetelasticitet.text} Det som återstår är hur mycket statens underskott ökar.</li>
+<li><strong>Importen.</strong> Utgiften för varje behov gånger importandelen för samma slags utgift. Importen från den ökade privata konsumtionen kommer till, så siffran är en undre gräns.</li>
 </ol>
 <h3>Vad underskottet betyder</h3>
 <p>Statens underskott är kronor som staten betalar ut men inte drar tillbaka i skatt. De hamnar som inkomster och sparande hos hushåll och företag. Så länge det finns lediga arbetare och material är underskottet ingen begränsning. Begränsningen är arbetskraften. När den tar slut måste resurser frigöras, med skatter eller på andra sätt. <a href="/ramverket/">Läs ramverket</a>.</p>
@@ -56,26 +114,43 @@ const pc = (x: number) => x.toLocaleString('sv-SE', { maximumFractionDigits: 2 }
 <ul>
 <li>KI:s multiplikatorer är genomsnitt under normala förhållanden och gäller små förändringar. Här används de för stora belopp. Räkningen är linjär.</li>
 <li>Arbetskraft är inte utbytbar. Sjuksköterskor, byggarbetare och ingenjörer kan ta slut långt innan arbetslösheten når friktionsnivån.</li>
-<li>Försvarets och klimatets utgifter går delvis till import. Det ingår i KI:s multiplikatorer bara som ett genomsnitt.</li>
+<li>Vi har inte hittat bra svenska siffror på flaskhalsar för material som stål och betong. De ingår därför inte.</li>
 </ul>
-<p class="note">Källor: {m.kalla} {m.budgetelasticitet.kalla} Arbetslöshet och arbetskraft: SCB, AKU, {aku.period}. BNP: SCB, {m.bnpAr}. Behoven: se fliken Behov på startsidan.</p>
+<p class="note">Källor: {m.kalla} {m.forsvar.kalla} {m.budgetelasticitet.kalla} Arbetslöshet och arbetskraft: SCB, AKU, {aku.period}. BNP: SCB, {m.bnpAr}. Behoven: se fliken Behov på startsidan.</p>
 </div></div>
-<script type="application/json" id="b-data" set:html={JSON.stringify(data)}></script>
+<script type="application/json" id="b-data" set:html={JSON.stringify(klient)}></script>
 <script>
   import { bemanna, type Indata } from '../../lib/bemanna';
   const $ = (id: string) => document.getElementById(id)!;
-  const D = JSON.parse($('b-data').textContent || '{}') as { utan: Indata; med: Indata };
-  let upp: 'utan' | 'med' = 'utan';
+  const K = JSON.parse($('b-data').textContent || '{}') as { d: Indata; elNetto: number; elAr: number; elOkning: number };
+  const d = K.d;
   let rb: 'aktiv' | 'passiv' = 'passiv';
-  const slider = $('b-andel') as HTMLInputElement;
+  const total = $('b-andel') as HTMLInputElement;
+  const rader = [...document.querySelectorAll<HTMLInputElement>('#b-rader input[data-i]')];
+  const ovr = $('b-ovr') as HTMLInputElement;
+  const ovrI = $('b-ovr-i') as HTMLSelectElement;
+  const start = d.poster.map((p) => (p.uppskattad ? 0 : 1));
+  // Varje behovs egen nivå relativt totalreglaget. Andelen = total × faktor.
+  let faktor = [...start];
   const nf = (n: number) => Math.round(n).toLocaleString('sv-SE');
   const tusen = (n: number) => nf(Math.round(n / 1000) * 1000);
+  const hundra = (n: number) => nf(Math.round(n / 100) * 100);
   const dec = (n: number) => n.toLocaleString('sv-SE', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  const andelar = () => faktor.map((f) => Math.min(3, (Number(total.value) / 100) * f));
+  const fyll = (el: HTMLInputElement) => el.style.setProperty('--p', `${(Number(el.value) / Number(el.max)) * 100}%`);
   function draw() {
-    const d = D[upp];
-    const andel = Number(slider.value) / 100;
-    const r = bemanna(d, andel, rb);
-    $('b-av').textContent = `${nf(andel * 100)} procent`;
+    const a = andelar();
+    const r = bemanna(d, a, rb, { mdkr: Number(ovr.value), instrument: ovrI.value });
+    $('b-av').textContent = `${total.value} %`;
+    $('b-tot-v').textContent = hundra(a.reduce((x, f, i) => x + f * d.poster[i].heltidsarPerAr, 0));
+    rader.forEach((el, i) => {
+      el.value = String(Math.round(a[i] * 100));
+      fyll(el);
+      document.querySelector(`[data-pct="${i}"]`)!.textContent = `${Math.round(a[i] * 100)} %`;
+      document.querySelector(`[data-v="${i}"]`)!.textContent = hundra(a[i] * d.poster[i].heltidsarPerAr);
+    });
+    fyll(ovr); fyll(total);
+    $('b-ovr-v').textContent = `${ovr.value} mdkr`;
     $('b-big').textContent = `${dec(r.nyU)} %`;
     $('b-unit').textContent = `i stället för ${dec(d.u)} procent i dag`;
     $('b-conv').innerHTML = [
@@ -85,13 +160,55 @@ const pc = (x: number) => x.toLocaleString('sv-SE', { maximumFractionDigits: 2 }
     ].map(([b, s]) => `<div><b>${b}</b><span>${s}</span></div>`).join('');
     $('b-lyft').textContent = r.forKort > 0
       ? `Arbetskraften räcker inte. Det saknas omkring ${tusen(r.forKort)} personer. De måste frigöras från annan verksamhet, till exempel genom skatter som minskar annan efterfrågan eller genom effektivisering. Det motsvarar ungefär ${nf(r.frigoraMdkr)} miljarder kronor per år.`
-      : `Arbetskraften räcker. Allt kan genomföras utan att resurser tas från annat håll. Det finns fortfarande omkring ${tusen(r.kvarOverFr)} personer arbetslösa utöver friktionsnivån.`;
-    $('b-budget').textContent = andel === 0 ? '' : `Av utgiften på ${nf(r.utgift)} miljarder kronor kommer ${nf(r.utgift - r.nettoMax)}–${nf(r.utgift - r.nettoMin)} miljarder tillbaka som skatt och lägre kostnader för arbetslöshet. Resten blir ett större underskott, alltså mer sparande hos hushåll och företag.`;
-    for (const b of document.querySelectorAll<HTMLButtonElement>('#b-upp button')) b.setAttribute('aria-pressed', String(b.dataset.k === upp));
+      : r.utgift === 0 ? '' : `Arbetskraften räcker. Allt kan genomföras utan att resurser tas från annat håll. Det finns fortfarande omkring ${tusen(r.kvarOverFr)} personer arbetslösa utöver friktionsnivån.`;
+    $('b-budget').textContent = r.utgift === 0 ? '' : `Av utgiften på ${nf(r.utgift)} miljarder kronor kommer ${nf(r.utgift - r.nettoMax)}–${nf(r.utgift - r.nettoMin)} miljarder tillbaka som skatt och lägre kostnader för arbetslöshet. Resten blir ett större underskott, alltså mer sparande hos hushåll och företag.`;
+    // Avbytarbänken: varje behovs del av de lediga.
+    const bank = d.u - d.fr;
+    const namn = [...d.poster.map((p) => p.namn), 'Övriga satsningar'];
+    const skala = Math.max(1, r.bankAndel);
+    const delar = r.duPer.map((x, i) => ({ i, namn: namn[i], w: (-x / bank) * 100 / skala, upp: i < d.poster.length ? !!d.poster[i].uppskattad : false })).filter((x) => x.w > 0.05);
+    const farg = (i: number) => `--c:var(--k${i < d.poster.length ? i : 'o'})`;
+    $('b-bank').innerHTML = delar.map((x) => `<i class="${x.upp ? 'upp' : ''}" style="width:${x.w}%;${farg(x.i)}" title="${x.namn}"></i>`).join('')
+      + (r.bankAndel > 1 ? `<b class="grans" style="left:${100 / skala}%"></b>` : '');
+    $('b-bank').setAttribute('aria-label', `Behoven använder ${Math.round(r.bankAndel * 100)} procent av de lediga.`);
+    $('b-bank-leg').innerHTML = `<span><strong>${Math.round(r.bankAndel * 100)} procent</strong> av de lediga behövs${r.bankAndel > 1 ? '. Strecket visar var de tar slut' : ''}.</span> `
+      + delar.map((x) => `<span><i class="${x.upp ? 'upp' : ''}" style="${farg(x.i)}"></i>${x.namn}</span>`).join('');
+    // Taken
+    const klimatI = d.poster.findIndex((p) => p.namn === 'Klimatet');
+    const klimatA = klimatI >= 0 ? a[klimatI] : 0;
+    const elBehov = K.elOkning * klimatA;
+    const lediga = ((d.u - d.fr) / 100) * d.lf;
+    const tak = [
+      ['Arbetskraft', r.bankAndel, `${tusen(Math.max(0, r.bankAndel) * lediga)} av ${tusen(lediga)} lediga personer`],
+      ['Import', r.import / d.bytesbalans, `${nf(r.import)} av ${nf(d.bytesbalans)} mdkr i överskott i bytesbalansen`],
+      ['El', elBehov / K.elNetto, klimatA > 0 ? `minst ${nf(elBehov)} av ${dec(K.elNetto)} TWh i nettoexport` : 'Utan klimatet kräver behoven lite el'],
+    ] as [string, number, string][];
+    $('b-tak').innerHTML = tak.map(([n, x, t]) => {
+      const v = Math.max(0, x);
+      const under = Math.min(v, 1) * 50, over = Math.min(Math.max(v - 1, 0), 1) * 50;
+      return `<div class="takrad${v > 1 ? ' over' : ''}"><span class="n">${n}</span><div class="track"><i class="u" style="width:${under}%"></i><i class="o" style="width:${over}%"></i><b class="grans"></b></div><span class="v">${Math.round(v * 100)} %</span><span class="t">${t}</span></div>`;
+    }).join('');
+    // Import
+    $('b-imp').textContent = `${nf(r.import)} mdkr`;
+    $('b-imp-t').textContent = `Så mycket ökar importen per år, minst. Överskottet i bytesbalansen var ${nf(d.bytesbalans)} miljarder kronor ${d.bytesbalansAr}. Bytesbalansen är allt Sverige får in från utlandet minus allt vi betalar dit: export och import, avkastning på tillgångar och överföringar. Den ökade importen motsvarar ${Math.round((r.import / d.bytesbalans) * 100)} procent av det överskottet. Importen betalas med kronor. Om överskottet krymper mycket kan kronan försvagas och importen bli dyrare.`;
+    // El
+    const klimat = d.poster.findIndex((p) => p.namn === 'Klimatet');
+    $('b-el').textContent = klimat >= 0 && a[klimat] > 0 ? 'Klimatet är med i räkningen. Då är elen en verklig begränsning: elproduktionen måste byggas ut i takt med att industrin går över till el.' : '';
+    $('b-rb-t').innerHTML = rb === 'passiv'
+      ? 'Riksbanken låter räntan ligga still i två år, oavsett vad som händer. Då får utgifterna full effekt.'
+      : '<strong>Konjunkturinstitutets bedömning:</strong> Riksbanken höjer räntan när arbetslösheten sjunker, så som den har gjort förut. Högre ränta gör lån dyrare och stärker kronan. Hushåll och företag köper mindre, exporten minskar och arbetslösheten sjunker mindre. I KI:s modell stiger också inflationen när arbetslösheten sjunker, även om det finns lediga resurser. KI anger inte hur mycket räntan höjs.<br><strong>RER:s bedömning:</strong> Högre ränta betyder också att staten och Riksbanken betalar mer ränta till hushåll och företag. Det ökar deras inkomster. I Sverige väger det troligen lätt. Hushållen har stora lån med rörlig ränta och statsskulden är låg, så räntehöjningen tar mer från hushållen än staten betalar ut. Det är därför rimligt att tro att höjd ränta dämpar efterfrågan i Sverige. Vi delar däremot inte antagandet att inflationen stiger när lediga resurser tas i bruk.';
     for (const b of document.querySelectorAll<HTMLButtonElement>('#b-rb button')) b.setAttribute('aria-pressed', String(b.dataset.k === rb));
   }
-  slider.addEventListener('input', draw);
-  $('b-upp').addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest('button'); if (b) { upp = b.dataset.k as 'utan' | 'med'; draw(); } });
+  total.addEventListener('input', draw);
+  rader.forEach((el, i) => el.addEventListener('input', () => {
+    let t = Number(total.value);
+    if (t === 0) { faktor = faktor.map(() => 0); total.value = '100'; t = 100; }
+    faktor[i] = Number(el.value) / t;
+    draw();
+  }));
+  ovr.addEventListener('input', draw);
+  ovrI.addEventListener('change', draw);
+  $('b-reset').addEventListener('click', () => { faktor = [...start]; total.value = '100'; ovr.value = '0'; draw(); });
   $('b-rb').addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest('button'); if (b) { rb = b.dataset.k as 'aktiv' | 'passiv'; draw(); } });
   draw();
 </script>

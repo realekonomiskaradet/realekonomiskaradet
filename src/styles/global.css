@@ -167,3 +167,50 @@ details.note p{margin:4px 0}
 .stapel.upp .fill{background:repeating-linear-gradient(135deg,var(--mute) 0 6px,transparent 6px 10px);border:1px solid var(--mute)}
 .stapel.upp span:first-child{font-style:italic}
 .stapel.sum{border-top:1px solid var(--line);padding-top:6px}
+/* Bemanna behoven: reglage per behov och avbytarbänken */
+.brader{display:grid;gap:10px}
+.brad{display:grid;grid-template-columns:minmax(9em,13em) minmax(0,1fr) 6.5em;gap:12px;align-items:center}
+.brad label{margin:0;font-weight:400;font-size:15px;display:flex;justify-content:space-between;gap:8px}
+.brad label b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.brad .v{text-align:right;font-variant-numeric:tabular-nums;font-size:15px}
+.brad.upp label span{font-style:italic}
+.brad.ovr{border-top:1px solid var(--line);padding-top:10px;grid-template-columns:minmax(9em,13em) minmax(0,1fr) minmax(6.5em,14em)}
+.brad.ovr select{min-height:36px;font-size:14px;padding:4px 6px}
+.bemanna input[type=range]{-webkit-appearance:none;appearance:none;padding:0;border:0;min-height:30px;background:transparent;--p:0%}
+.bemanna input[type=range]::-webkit-slider-runnable-track{height:14px;border-radius:2px;background:linear-gradient(90deg,var(--c,var(--main)) var(--p),var(--soft) var(--p))}
+.bemanna input[type=range]::-moz-range-track{height:14px;border-radius:2px;background:linear-gradient(90deg,var(--c,var(--main)) var(--p),var(--soft) var(--p))}
+.bemanna .brad.upp input[type=range]::-webkit-slider-runnable-track{background:linear-gradient(90deg,transparent var(--p),var(--soft) var(--p)),repeating-linear-gradient(135deg,var(--c) 0 6px,transparent 6px 10px)}
+.bemanna .brad.upp input[type=range]::-moz-range-track{background:linear-gradient(90deg,transparent var(--p),var(--soft) var(--p)),repeating-linear-gradient(135deg,var(--c) 0 6px,transparent 6px 10px)}
+.bemanna input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;margin-top:-4px;border-radius:50%;background:var(--bg);border:2px solid var(--ink);cursor:pointer}
+.bemanna input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--bg);border:2px solid var(--ink);cursor:pointer}
+.bemanna input[type=range]:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.aterstall{align-self:start;font:inherit;font-size:14px;justify-self:start;min-height:40px;padding:6px 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:4px;cursor:pointer}
+.bank{position:relative;display:flex;height:26px;background:var(--soft);border-radius:2px;overflow:visible}
+.bank i{display:block;height:100%;border-right:1px solid var(--bg)}
+.bank .grans{position:absolute;top:-5px;bottom:-5px;width:3px;background:var(--acc)}
+.bank-leg{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;font-size:14px}
+.bank-leg span:first-child{flex-basis:100%}
+.bank-leg i{display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:-1px}
+.beg .tal{font-size:32px;font-weight:700;color:var(--main);font-variant-numeric:tabular-nums;margin:6px 0 8px}
+.beg p{margin:0 0 10px}
+@media(max-width:640px){.brad,.brad.ovr{grid-template-columns:1fr 5.5em}.brad label{grid-column:1/-1}}
+.bemanna{--k0:light-dark(#0c4a57,#5fb9c9);--k1:light-dark(#b07a12,#e3ac4a);--k2:light-dark(#6a4c93,#b297dc);--k3:light-dark(#6f7f12,#b8c95a);--k4:light-dark(#2b67b0,#76a8ea);--k5:light-dark(#8f4f2f,#d39a7a);--k6:light-dark(#2f7d3f,#6cc27c);--k7:light-dark(#5b6770,#a9b4bb);--ko:var(--acc)}
+.sw{display:inline-block;width:12px;height:12px;margin-right:8px;vertical-align:-1px;background:var(--c)}
+.brad.upp .sw,.bank i.upp,.bank-leg i.upp{background:repeating-linear-gradient(135deg,var(--c) 0 3px,transparent 3px 6px);outline:1px solid var(--c);outline-offset:-1px}
+.bank i,.bank-leg i{background:var(--c)}
+.bank i.upp{background:repeating-linear-gradient(135deg,var(--c) 0 6px,transparent 6px 10px)}
+.brad.tot{border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:4px}
+.brad.tot label{font-size:16px}
+.tak{display:grid;gap:14px;max-width:900px}
+.takrad{display:grid;grid-template-columns:9em minmax(0,1fr) 4.5em;column-gap:10px;align-items:center;font-size:15px}
+.takrad .track{position:relative;display:flex;height:18px;background:var(--soft);border-radius:2px;overflow:visible}
+.takrad .track i{display:block;height:100%}
+.takrad .track i.u{background:var(--main)}
+:root[data-theme=dark] .takrad .track i.u{background:#5fb9c9}
+.takrad .track i.o{background:var(--acc)}
+.takrad .grans{position:absolute;left:50%;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+.takrad .v{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.takrad.over .v{color:var(--acc)}
+.takrad .t{grid-column:2/4;font-size:13.5px;color:var(--mute)}
+@media(max-width:640px){.takrad{grid-template-columns:6.5em minmax(0,1fr) 4em}}
+.bemanna .inp{align-content:start}
