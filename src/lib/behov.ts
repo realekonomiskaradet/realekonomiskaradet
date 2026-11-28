@@ -25,3 +25,15 @@ export const summaTioAr = poster.reduce((s, p) => s + p.tioAr, 0);
 export const andra = b.andraUppskattningar;
 export const utanSiffra = b.utanSiffra.map((u: any) => ({ ...u, tioAr: u.mdkrPerAr ? (u.mdkrPerAr * 1e9 / kr / ht) * AR : 0 }));
 export const summaInklUpp = summaTioAr + utanSiffra.reduce((s: number, u: any) => s + u.tioAr, 0);
+
+// Indata till räknaren "Bemanna behoven".
+import m from '../data/multiplikatorer.json';
+import type { Indata } from './bemanna';
+export function indata(medUppskattade: boolean): Indata {
+  const lista = [
+    ...poster.map((p: any) => ({ namn: p.kort, heltidsarPerAr: p.tioAr / AR, instrument: p.instrument })),
+    ...(medUppskattade ? utanSiffra.filter((u: any) => u.tioAr).map((u: any) => ({ namn: u.namn, heltidsarPerAr: u.tioAr / AR, instrument: u.instrument })) : []),
+  ];
+  const mult: Indata['mult'] = Object.fromEntries([...m.instrument, m.transfereringar].map((i: any) => [i.id, { aktiv: i.aktiv, passiv: i.passiv }]));
+  return { poster: lista, mult, bnp: m.bnpMnkr / 1000, lf: aku.arbetskraft, u: aku.arbetsloshet, fr, ht, kr, elasticitet: [m.budgetelasticitet.hog, m.budgetelasticitet.lag] };
+}

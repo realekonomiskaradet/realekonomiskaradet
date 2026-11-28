@@ -1,11 +1,13 @@
 ---
 import aku from '../../data/aku.json';
-import { AR, kr, ht, fr, gap, gapTioAr, poster, summaTioAr, timmarPerLgh, andra, utanSiffra, summaInklUpp } from '../../lib/behov';
+import { bemanna } from '../../lib/bemanna';
+import { indata, AR, kr, ht, fr, gap, gapTioAr, poster, summaTioAr, timmarPerLgh, andra, utanSiffra, summaInklUpp } from '../../lib/behov';
 const nf = (n: number) => Math.round(n).toLocaleString('sv-SE');
 const tusen = (n: number) => nf(Math.round(n / 1000) * 1000);
 const milj = (n: number) => (n / 1e6).toLocaleString('sv-SE', { maximumFractionDigits: 1 });
 const pc = (x: number) => x.toLocaleString('sv-SE', { maximumFractionDigits: 1 });
 const andel = Math.round((summaTioAr / gapTioAr) * 100);
+const full = bemanna(indata(false), 1, 'passiv');
 const ordning = ['bost', 'vard', 'fors', 'va', 'jvg', 'vag'];
 const rader = ordning.map((id) => poster.find((p) => p.id === id)!).filter(Boolean);
 const vard = poster.find((p) => p.id === 'vard');
@@ -21,6 +23,7 @@ const upp = (p: any) => p.typ === 'engang' ? 'en gång' : p.personer ? `${nf(p.p
 <p>Samtidigt får vi höra att vi inte har råd. För få bostäder byggs, underhållet skjuts upp, VA-näten förnyas för långsamt och försvarets upprustning sägs kräva lån. Här ställer vi de behov som myndigheterna själva har räknat på mot den arbetstid som inte används.</p>
 <p>Behoven de kommande tio åren kräver tillsammans omkring {milj(summaTioAr)} miljoner heltidsår. Det är {andel} procent av den arbetstid som går förlorad under samma tid. Klimatet och pensionerna kommer till. Där finns bara uppskattningar från organisationer och utredningar. Med dem blir behovet omkring {milj(summaInklUpp)} miljoner heltidsår, eller {Math.round((summaInklUpp / gapTioAr) * 100)} procent av den förlorade arbetstiden.</p>
 <p>Resurserna finns, om vi tillåter oss att använda dem. Alla kan inte göra allt, och det tar tid att utbilda en sjuksköterska eller en banarbetare. Därför behövs en plan för utbildning och omställning.</p>
+<p class="lyft">Om staten betalade för allt detta skulle utgifterna öka med omkring {nf(full.utgift)} miljarder kronor per år. Enligt Konjunkturinstitutets beräkningar skulle arbetslösheten då sjunka till ungefär {pc(Math.round(full.nyU * 10) / 10)} procent, och arbetskraften skulle räcka. <a href="/fakta/bemanna-behoven/">Räkna själv på vad det skulle kosta och om det kan ske med underskott</a>.</p>
 <p class="broms">Arbetskraften finns. Det som stoppar är att utgifterna måste rymmas i en budget som styrs av saldomålet och utgiftstaket. <a href="/ramverket/">Läs ramverket</a> eller <a href="/fakta/underskott/">räkna på vad mer utgifter skulle ge</a>.</p>
 </div>
 <div>
