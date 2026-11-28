@@ -1,17 +1,6 @@
 {
   "kommentar": "Andra reala begränsningar än arbetskraft, för räknaren Bemanna behoven. Uppdateras för hand.",
   "hamtad": "2026-11-28",
-  "bygg": {
-    "produktionMdkr": 850,
-    "timmarMiljoner": 669,
-    "ar": 2024,
-    "kalla": "SCB, nationalräkenskaperna: byggföretagens produktion 850 128 mnkr och 669 miljoner arbetade timmar 2024 (se motsvarar.json).",
-    "sysselsatta": 354000,
-    "sysselsattaPeriod": "mars 2024",
-    "minskningProcent": 3.91,
-    "sysselsattaKalla": "SCB, ”Sysselsättningen minskar mest i byggbranschen”, fördjupningsartikel: 354 000 sysselsatta i mars 2024, 3,91 procent färre än ett år tidigare.",
-    "sysselsattaUrl": "https://www.scb.se/hitta-statistik/temaomraden/sveriges-ekonomi/fordjupningsartiklar_Sveriges_ekonomi/sysselsattningen-minskar-mest-i-byggbranschen/"
-  },
   "el": {
     "idagTWh": 136,
     "ar2040": [

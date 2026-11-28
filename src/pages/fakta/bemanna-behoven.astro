@@ -2,7 +2,6 @@
 import Bas from '../../layouts/Bas.astro';
 import m from '../../data/multiplikatorer.json';
 import aku from '../../data/aku.json';
-import kap from '../../data/kapacitet.json';
 import el from '../../data/el.json';
 import beg from '../../data/begransningar.json';
 import handel from '../../data/handel.json';
@@ -10,19 +9,16 @@ import { indata, fr } from '../../lib/behov';
 const d = indata();
 const pc = (x: number) => x.toLocaleString('sv-SE', { maximumFractionDigits: 2 });
 const nf = (n: number) => Math.round(n).toLocaleString('sv-SE');
-const bygg = kap.sektorer.find((s) => s.namn === 'Byggverksamhet')!;
-const ind = kap.sektorer.find((s) => s.namn === 'Tillverkningsindustri')!;
 const elSist = el.ar[el.ar.length - 1];
 const elNetto = (elSist.export - elSist.import) / 1000;
 const handelAr = handel.ar[handel.ar.length - 1][0];
-const byggMarg = beg.bygg.produktionMdkr * beg.bygg.minskningProcent / (100 - beg.bygg.minskningProcent);
-const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar, byggMarg, elOkning: beg.el.ar2040[0] - beg.el.idagTWh };
+const klient = { d, elNetto, elAr: elSist.ar, elOkning: beg.el.ar2040[0] - beg.el.idagTWh };
 ---
 <Bas titel="Bemanna behoven" beskrivning="Vad händer med arbetslösheten och statens budget om staten finansierar de behov som myndigheterna själva har räknat på?">
 <div class="sub"><div class="band"><div class="wrap">
 <a class="back" href="/#beh">← Behov</a>
 <h1>Bemanna behoven</h1>
-<p class="lead" style="opacity:1;margin:0">Vad händer om staten betalar för bostäderna, vården, försvaret, VA och underhållet som myndigheterna säger behövs? Hur mycket sjunker arbetslösheten, vad kostar det och räcker arbetskraften, importen, byggföretagen och elen?</p>
+<p class="lead" style="opacity:1;margin:0">Vad händer om staten betalar för bostäderna, vården, försvaret, VA och underhållet som myndigheterna säger behövs? Hur mycket sjunker arbetslösheten, vad kostar det och räcker arbetskraften, importen och elen?</p>
 </div></div></div>
 <div class="band"><div class="wrap">
 <div class="calc bemanna" aria-labelledby="b-h">
@@ -93,14 +89,6 @@ const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar, byggMarg, elO
 <p class="note">{m.importandel.text} Källa: {m.importandel.kalla} Export och import: SCB, {handelAr}.</p>
 </div>
 <div>
-<h3>Byggföretagen och material</h3>
-<p class="tal" id="b-bygg"></p>
-<p id="b-bygg-t"></p>
-<p>I Konjunkturinstitutets barometer anger {bygg.efterfragan} av 100 byggföretag att svag efterfrågan begränsar dem, {bygg.arbetskraft} av 100 brist på arbetskraft och {bygg.material} av 100 brist på material. Inom industrin anger {ind.material} av 100 brist på material eller utrustning.</p>
-<p>Taket i stapeln är vad byggföretagen skulle producera om de hade lika många anställda som ett år tidigare: omkring {nf(byggMarg)} miljarder kronor mer per år. Byggbranschen hade {nf(beg.bygg.sysselsatta)} sysselsatta i {beg.bygg.sysselsattaPeriod}, {pc(beg.bygg.minskningProcent)} procent färre än året innan. Över taket måste byggföretagen anställa och utbilda fler.</p>
-<p class="note">Byggproduktion: {beg.bygg.kalla} Sysselsatta: {beg.bygg.sysselsattaKalla} Barometern: {kap.kalla} {bygg.period} och {ind.period}.</p>
-</div>
-<div>
 <h3>El</h3>
 <p class="tal">{pc(Math.round(elNetto * 10) / 10)} TWh</p>
 <p>Så mycket mer el exporterade Sverige än vi importerade {elSist.ar}. Bostäder, vård och underhåll kräver lite el. Klimatomställningen kräver mycket. {beg.el.text}</p>
@@ -127,7 +115,7 @@ const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar, byggMarg, elO
 <ul>
 <li>KI:s multiplikatorer är genomsnitt under normala förhållanden och gäller små förändringar. Här används de för stora belopp. Räkningen är linjär.</li>
 <li>Arbetskraft är inte utbytbar. Sjuksköterskor, byggarbetare och ingenjörer kan ta slut långt innan arbetslösheten når friktionsnivån.</li>
-<li>Byggbehoven jämförs med byggföretagens hela produktion. En del av behoven görs av andra, till exempel tillverkare av spår och rör.</li>
+<li>Vi har inte hittat bra svenska siffror på flaskhalsar för material som stål och betong. De ingår därför inte.</li>
 </ul>
 <p class="note">Källor: {m.kalla} {m.forsvar.kalla} {m.budgetelasticitet.kalla} Arbetslöshet och arbetskraft: SCB, AKU, {aku.period}. BNP: SCB, {m.bnpAr}. Behoven: se fliken Behov på startsidan.</p>
 </div></div>
@@ -135,7 +123,7 @@ const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar, byggMarg, elO
 <script>
   import { bemanna, type Indata } from '../../lib/bemanna';
   const $ = (id: string) => document.getElementById(id)!;
-  const K = JSON.parse($('b-data').textContent || '{}') as { d: Indata; elNetto: number; elAr: number; byggAr: number; byggMarg: number; elOkning: number };
+  const K = JSON.parse($('b-data').textContent || '{}') as { d: Indata; elNetto: number; elAr: number; elOkning: number };
   const d = K.d;
   let rb: 'aktiv' | 'passiv' = 'passiv';
   const total = $('b-andel') as HTMLInputElement;
@@ -194,7 +182,6 @@ const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar, byggMarg, elO
     const tak = [
       ['Arbetskraft', r.bankAndel, `${tusen(Math.max(0, r.bankAndel) * lediga)} av ${tusen(lediga)} lediga personer`],
       ['Import', r.import / d.nettoexport, `${nf(r.import)} av ${nf(d.nettoexport)} mdkr i exportöverskott`],
-      ['Byggföretagen', r.bygg / K.byggMarg, `${nf(r.bygg)} av ${nf(K.byggMarg)} mdkr om de anställer som året innan`],
       ['El', elBehov / K.elNetto, klimatA > 0 ? `minst ${nf(elBehov)} av ${dec(K.elNetto)} TWh i nettoexport` : 'Utan klimatet kräver behoven lite el'],
     ] as [string, number, string][];
     $('b-tak').innerHTML = tak.map(([n, x, t]) => {
@@ -205,15 +192,12 @@ const klient = { d, elNetto, elAr: elSist.ar, byggAr: beg.bygg.ar, byggMarg, elO
     // Import
     $('b-imp').textContent = `${nf(r.import)} mdkr`;
     $('b-imp-t').textContent = `Så mycket ökar importen per år, minst. Sverige exporterade för ${nf(d.nettoexport)} miljarder kronor mer än vi importerade senaste året. Det motsvarar ${Math.round((r.import / d.nettoexport) * 100)} procent av det överskottet. Importen betalas med kronor. Om överskottet krymper mycket kan kronan försvagas och importen bli dyrare.`;
-    // Bygg
-    $('b-bygg').textContent = `${nf(r.bygg)} mdkr`;
-    $('b-bygg-t').textContent = `Så mycket per år kostar bostäderna, VA och underhållet av väg och järnväg. Det är ${Math.round((r.bygg / d.byggMdkr) * 100)} procent av vad byggföretagen producerade ${K.byggAr} (${nf(d.byggMdkr)} miljarder kronor).`;
     // El
     const klimat = d.poster.findIndex((p) => p.namn === 'Klimatet');
     $('b-el').textContent = klimat >= 0 && a[klimat] > 0 ? 'Klimatet är med i räkningen. Då är elen en verklig begränsning: elproduktionen måste byggas ut i takt med att industrin går över till el.' : '';
-    $('b-rb-t').textContent = rb === 'passiv'
+    $('b-rb-t').innerHTML = rb === 'passiv'
       ? 'Riksbanken låter räntan ligga still i två år, oavsett vad som händer. Då får utgifterna full effekt.'
-      : 'Riksbanken höjer räntan när arbetslösheten sjunker, så som den har gjort förut. Högre ränta gör lån dyrare och stärker kronan. Då minskar hushållens och företagens köp och exporten, och arbetslösheten sjunker mindre. Det är Konjunkturinstitutets bedömning. Högre ränta betyder också att staten och Riksbanken betalar mer ränta till hushåll och företag. Det ökar deras inkomster och kan verka åt andra hållet. I Konjunkturinstitutets modell stiger inflationen när arbetslösheten sjunker, även om det finns lediga resurser. Det antagandet delar inte RER. Konjunkturinstitutet anger inte hur mycket räntan höjs.';
+      : '<strong>Konjunkturinstitutets bedömning:</strong> Riksbanken höjer räntan när arbetslösheten sjunker, så som den har gjort förut. Högre ränta gör lån dyrare och stärker kronan. Hushåll och företag köper mindre, exporten minskar och arbetslösheten sjunker mindre. I KI:s modell stiger också inflationen när arbetslösheten sjunker, även om det finns lediga resurser. KI anger inte hur mycket räntan höjs.<br><strong>RER:s bedömning:</strong> Högre ränta betyder också att staten och Riksbanken betalar mer ränta till hushåll och företag. Det ökar deras inkomster. I Sverige väger det troligen lätt. Hushållen har stora lån med rörlig ränta och statsskulden är låg, så räntehöjningen tar mer från hushållen än staten betalar ut. Det är därför rimligt att tro att höjd ränta dämpar efterfrågan i Sverige. Vi delar däremot inte antagandet att inflationen stiger när lediga resurser tas i bruk.';
     for (const b of document.querySelectorAll<HTMLButtonElement>('#b-rb button')) b.setAttribute('aria-pressed', String(b.dataset.k === rb));
   }
   total.addEventListener('input', draw);

@@ -10,8 +10,7 @@
       "text": "Det som skulle ha underhållits men inte har gjorts: spår, växlar, kontaktledningar och signaler.",
       "kalla": "Trafikverket, ”Så här tar vi ikapp det eftersatta underhållet”, trafikverket.se.",
       "kort": "Järnvägsunderhåll",
-      "instrument": "inv",
-      "bygg": true
+      "instrument": "inv"
     },
     {
       "id": "vag",
@@ -21,8 +20,7 @@
       "text": "Varav cirka 23 miljarder kronor gäller beläggning och vägkropp.",
       "kalla": "Trafikverket, ”Så här tar vi ikapp det eftersatta vägunderhållet”, trafikverket.se.",
       "kort": "Vägunderhåll",
-      "instrument": "inv",
-      "bygg": true
+      "instrument": "inv"
     },
     {
       "id": "va",
@@ -32,8 +30,7 @@
       "typ": "per år",
       "text": "Svenskt Vatten anger att kommunerna investerar 25 miljarder kronor per år i VA, mot ett behov på 35 miljarder. Underskottet är omkring 10 miljarder kronor per år.",
       "kalla": "Svenskt Vatten, ”Samhällen byggs av vatten”, april 2026.",
-      "instrument": "inv",
-      "bygg": true
+      "instrument": "inv"
     },
     {
       "id": "bost",
@@ -44,8 +41,7 @@
       "text": "Boverket bedömer att det behövs drygt 523 000 nya bostäder 2024–2033. I bostadsmarknadsenkäten 2026 rapporterar 102 kommuner underskott på bostäder, och över hälften av befolkningen bor i en sådan kommun.",
       "kalla": "Boverket, Behov av bostadsbyggande 2024–2033 (2025), och Bostadsmarknadsenkäten 2026.",
       "kort": "Bostäder",
-      "instrument": "inv",
-      "bygg": true
+      "instrument": "inv"
     },
     {
       "id": "vard",
