@@ -19,8 +19,8 @@ const upp = (p: any) => p.typ === 'engang' ? 'en gång' : p.personer ? `${nf(p.p
 <div class="unit">heltidsår går förlorade på tio år om arbetslösheten ligger kvar på {pc(aku.arbetsloshet)} procent</div>
 <p>Det är {tusen(gap)} personer utöver friktionsnivån på {pc(fr)} procent, varje år i tio år. Ett heltidsår är en person som arbetar heltid i ett år.</p>
 <p>Samtidigt får vi höra att vi inte har råd. För få bostäder byggs, underhållet skjuts upp, VA-näten förnyas för långsamt och försvarets upprustning sägs kräva lån. Här ställer vi de behov som myndigheterna själva har räknat på mot den arbetstid som inte används.</p>
-<p>Behoven de kommande tio åren kräver tillsammans omkring {milj(summaTioAr)} miljoner heltidsår. Det är {andel} procent av den arbetstid som går förlorad under samma tid. Klimatet och pensionerna kommer till, men där finns ingen siffra att räkna med.</p>
-<p>Resurserna finns, om vi tillåter oss att använda dem. Alla kan inte göra allt, och det tar tid att utbilda en sjuksköterska eller en banarbetare. Därför behövs en plan för utbildning, se förslaget om en <a href="/policylab/omstallningsreserv/">omställnings- och kompetensreserv</a>.</p>
+<p>Behoven de kommande tio åren kräver tillsammans omkring {milj(summaTioAr)} miljoner heltidsår. Det är {andel} procent av den arbetstid som går förlorad under samma tid. Klimatet och pensionerna kommer till. Där finns uppskattningar, men ingen myndighet har räknat på vad som saknas, så de ingår inte i summan.</p>
+<p>Resurserna finns, om vi tillåter oss att använda dem. Alla kan inte göra allt, och det tar tid att utbilda en sjuksköterska eller en banarbetare. Därför behövs en plan för utbildning och omställning.</p>
 <p class="broms">Arbetskraften finns. Det som stoppar är att utgifterna måste rymmas i en budget som styrs av saldomålet och utgiftstaket. <a href="/ramverket/">Läs ramverket</a> eller <a href="/fakta/underskott/">räkna på vad mer utgifter skulle ge</a>.</p>
 </div>
 <div>
@@ -33,9 +33,9 @@ const upp = (p: any) => p.typ === 'engang' ? 'en gång' : p.personer ? `${nf(p.p
 <ul style="font-size:14px;padding-left:18px">
 {rader.map((p) => <li><strong>{p.namn}.</strong> {p.mdkr && p.typ === 'engang' ? `${p.mdkr} miljarder kronor, en gång.` : `${upp(p)[0].toUpperCase()}${upp(p).slice(1)}.`} {p.text}</li>)}
 </ul>
-<h4 style="margin-top:18px">Behov utan siffra</h4>
+<h4 style="margin-top:18px">Klimatet och pensionerna</h4>
 <ul style="font-size:14px;padding-left:18px">
-{utanSiffra.map((u: any) => <li><strong>{u.namn}.</strong> {u.text}</li>)}
+{utanSiffra.map((u: any) => <li><strong>{u.namn}.</strong> {u.text.replace('{omr}', u.mdkrPerAr ? `${u.perArText[0].toUpperCase()}${u.perArText.slice(1)} motsvarar ungefär ${tusen(u.mdkrPerAr * 1e9 / kr / ht)} heltidsår per år, eller ${Math.round(u.mdkrPerAr * 1e9 / kr / ht / gap * 100)} procent av de ${tusen(gap)} personerna över friktionsnivån.` : '')}</li>)}
 </ul>
 <h4 style="margin-top:18px">Andra uppskattningar</h4>
 <p style="font-size:14px;margin:4px 0">Andra har gjort egna uppskattningar. De skiljer sig åt beroende på vilka områden och vilken tidsperiod som räknas med:</p>

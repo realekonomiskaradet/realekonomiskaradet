@@ -89,13 +89,17 @@
   "utanSiffra": [
     {
       "namn": "Klimatet",
-      "text": "Klimatpolitiska rådet bedömer i sin rapport 2026 att nuvarande politik inte räcker för att nå klimatmålen för 2030, 2040 och 2045. Det saknas en samlad myndighetsberäkning av vad som behövs i kronor eller arbetstid, därför ingår klimatet inte i summan.",
-      "kalla": "Klimatpolitiska rådet, rapport 2026."
+      "mdkrPerAr": 50,
+      "perArText": "1 000 miljarder kronor fram till 2045",
+      "text": "Klimatpolitiska rådet bedömer i sin rapport 2026 att nuvarande politik inte räcker för att nå klimatmålen för 2030, 2040 och 2045. Riksbanken hänvisar till en beräkning från Sweco: elproduktion och elnät kräver investeringar på cirka 1 000 miljarder kronor fram till 2045, ungefär 0,6 procent av BNP per år. Svenskt Näringsliv uppger att företagen är beredda att investera nästan 1 300 miljarder kronor i klimatomställningen. Det mesta är privata investeringar, men de kräver arbetskraft här. {omr}",
+      "kalla": "Klimatpolitiska rådet, rapport 2026. Riksbanken, Ekonomisk kommentar, Kvarfordt och Löf, ”Ökar investeringarna med den gröna omställningen?”, juli 2025 (Sweco, Elnätsrapporten 2023). Svenskt Näringsliv, ”Näringslivet redo satsa 1 300 miljarder i klimatomställningen”, juni 2024."
     },
     {
       "namn": "Pensionerna",
-      "text": "När andelen äldre ökar behövs mer vård, omsorg, bostäder och varor till dem som inte längre arbetar. Det avgörs av hur mycket som produceras de åren, inte av hur mycket som finns i pensionsfonderna. Ju fler som arbetar i dag och bygger det som behövs, desto lättare blir det att försörja fler äldre i morgon.",
-      "kalla": ""
+      "mdkrPerAr": 20,
+      "perArText": "20 miljarder kronor per år",
+      "text": "Pensionsmyndigheten har beräknat att en höjning av pensionsavgiften från 17,21 till 18,5 procent kostar staten cirka 20 miljarder kronor per år. På sikt höjer det den allmänna pensionen med cirka 7 procent, enligt Pensionsavgiftsutredningen. {omr} Men pensioner är i grunden en rätt till en del av det som produceras de åren. När andelen äldre ökar behövs mer vård, omsorg, bostäder och varor till dem som inte längre arbetar. Det avgörs av hur mycket som produceras, inte av hur mycket som finns i pensionsfonderna.",
+      "kalla": "Pensionsmyndigheten, ”Effekter av höjda avgifter till det allmänna pensionssystemet”, 2021. SOU 2025:41, Pensionsnivåer och pensionsavgiften, s. 15–16."
     }
   ]
 }
