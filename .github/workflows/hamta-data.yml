@@ -36,6 +36,10 @@ jobs:
         id: handel
         continue-on-error: true
         run: node scripts/hamta-scb-handel.mjs
+      - name: Bytesbalans (SCB)
+        id: bop
+        continue-on-error: true
+        run: node scripts/hamta-scb-bytesbalans.mjs
       - name: Kontrollera att sajten går att bygga
         run: npm ci && npm run build
       - name: Spara om något har ändrats
@@ -50,7 +54,7 @@ jobs:
             git push
           fi
       - name: Varna om någon källa misslyckades
-        if: steps.aku.outcome == 'failure' || steps.ki.outcome == 'failure' || steps.el.outcome == 'failure' || steps.handel.outcome == 'failure'
+        if: steps.aku.outcome == 'failure' || steps.ki.outcome == 'failure' || steps.el.outcome == 'failure' || steps.handel.outcome == 'failure' || steps.bop.outcome == 'failure'
         run: |
-          echo "::error::Minst en källa kunde inte hämtas: AKU=${{ steps.aku.outcome }}, KI=${{ steps.ki.outcome }}, El=${{ steps.el.outcome }}, Handel=${{ steps.handel.outcome }}"
+          echo "::error::Minst en källa kunde inte hämtas: AKU=${{ steps.aku.outcome }}, KI=${{ steps.ki.outcome }}, El=${{ steps.el.outcome }}, Handel=${{ steps.handel.outcome }}, Bytesbalans=${{ steps.bop.outcome }}"
           exit 1
